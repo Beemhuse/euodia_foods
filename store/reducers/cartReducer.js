@@ -17,7 +17,7 @@ const cartSlice = createSlice({
     toggleCartItemQuantity: (state, action) => {
       const { id, value, product, quantity } = action.payload;
       const itemToToggle = state.cartItems.find((item) => item._id === id);
-    
+
       if (!itemToToggle) {
         // If item is not in the cart, add it to the cartItems and increment totalQuantities
         state.cartItems.push({ ...product, quantity });
@@ -30,54 +30,54 @@ const cartSlice = createSlice({
           itemToToggle.quantity -= quantity;
         }
       }
-    
+
       // Update total price
       state.totalPrice += product.price * quantity;
     },
-    
+
     addCartItem: (state, action) => {
       const { product, quantity } = action.payload;
 
-      const existingItem = state.cartItems.find((item) => item._id === product._id);
+      const existingItem = state.cartItems.find(
+        (item) => item._id === product._id,
+      );
 
       if (!existingItem) {
         // If item does not exist, add it to cartItems and increment totalQuantities
         state.cartItems.push({ ...product, quantity });
         state.totalQuantities += 1;
       } else {
-
-
       }
 
       // Update total price
       // state.totalPrice += product.price * quantity;
       state.totalPrice += product.price * (existingItem ? 0 : quantity);
-
     },
     removeCartItem: (state, action) => {
       const { product } = action.payload;
-      const itemToRemove = state.cartItems.find((item) => item?._id === product?._id);
-    
+      const itemToRemove = state.cartItems.find(
+        (item) => item?._id === product?._id,
+      );
+
       if (itemToRemove) {
         state.totalPrice -= itemToRemove.price * itemToRemove.quantity;
         state.totalQuantities -= 1; // Decrement totalQuantities when an item is removed
-        state.cartItems = state.cartItems.filter((item) => item._id !== product._id);
-    
+        state.cartItems = state.cartItems.filter(
+          (item) => item._id !== product._id,
+        );
+
         // If cartItems is now empty, reset totalPrice to 0
         if (state.cartItems.length === 0) {
           state.totalPrice = 0;
         }
       }
     },
-    
-   
-   
 
     incrementQuantity: (state, action) => {
       const { id } = action.payload;
-      console.log(id)
+      console.log(id);
       const itemToIncrement = state.cartItems.find((item) => item?._id === id);
-      console.log(itemToIncrement)
+      console.log(itemToIncrement);
 
       if (itemToIncrement) {
         itemToIncrement.quantity += 1;
@@ -98,10 +98,17 @@ const cartSlice = createSlice({
       state.totalPrice = 0;
       state.totalQuantities = 0;
     },
-  
   },
 });
 
-export const { toggleCart,clearCart, addCartItem, removeCartItem,toggleCartItemQuantity, incrementQuantity, decrementQuantity } = cartSlice.actions;
+export const {
+  toggleCart,
+  clearCart,
+  addCartItem,
+  removeCartItem,
+  toggleCartItemQuantity,
+  incrementQuantity,
+  decrementQuantity,
+} = cartSlice.actions;
 
 export default cartSlice.reducer;

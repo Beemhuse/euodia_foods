@@ -2,8 +2,13 @@
   "extends": [
     "next",
     "next/core-web-vitals",
-    "plugin:jsx-a11y/recommended"
+    "plugin:jsx-a11y/recommended",
+    "plugin:prettier/recommended"
   ],
+  "parserOptions": {
+    "babelOptions": {
+      "presets": ["next/babel"]
+    }
+  },
   "plugins": ["jsx-a11y"]
-
 }

@@ -1,5 +1,5 @@
-"use client"
-import { client } from '@/utils/sanity/cient';
+'use client';
+import { client } from '@/utils/sanity/client';
 // Import necessary modules and dependencies
 import { useState, useEffect } from 'react';
 
@@ -45,7 +45,11 @@ export default function Home() {
               ))}
             </ul>
             {dish.image && (
-              <img src={dish.image.asset.url} alt={dish.title} className="w-full h-auto" />
+              <img
+                src={dish.image.asset.url}
+                alt={dish.title}
+                className="w-full h-auto"
+              />
             )}
           </div>
         ))}
