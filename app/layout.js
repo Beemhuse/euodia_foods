@@ -15,7 +15,7 @@ export const metadata = {
     siteName: 'Euodia Services',
     images: [
       {
-        url: 'https://nanocodes.com.ng/og-image.jpg', // Ensure this URL points to a valid image
+        // url: 'https://nanocodes.com.ng/og-image.jpg', // Ensure this URL points to a valid image
         width: 800,
         height: 600,
         alt: 'Euodia OpenGraph Image',
