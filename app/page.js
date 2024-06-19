@@ -1,5 +1,6 @@
 'use client';
 import { client } from '@/utils/sanity/client';
+import Image from 'next/image';
 // Import necessary modules and dependencies
 import { useState, useEffect } from 'react';
 
@@ -45,7 +46,7 @@ export default function Home() {
               ))}
             </ul>
             {dish.image && (
-              <img
+              <Image
                 src={dish.image.asset.url}
                 alt={dish.title}
                 className="w-full h-auto"
