@@ -1,7 +1,6 @@
 'use client';
 import { client } from '@/utils/sanity/client';
 import Image from 'next/image';
-// Import necessary modules and dependencies
 import { useState, useEffect } from 'react';
 
 // Define async function to fetch content from Sanity
@@ -31,6 +30,7 @@ export default function Home() {
     });
   }, []);
 
+  
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <h1>Hello</h1>
@@ -49,6 +49,8 @@ export default function Home() {
               <Image
                 src={dish.image.asset.url}
                 alt={dish.title}
+                width={500}
+                height={500}
                 className="w-full h-auto"
               />
             )}
