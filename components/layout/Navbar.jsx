@@ -3,10 +3,12 @@ import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { FiMenu, FiX, FiShoppingCart, FiUser } from 'react-icons/fi'; // Import icons from react-icons
+import Button from '../reusables/buttons/Button';
+import { useRouter } from 'next/navigation';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-
+const router = useRouter()
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
   };
@@ -15,7 +17,7 @@ const Navbar = () => {
     <nav className="bg-white shadow-md">
       <div className="container mx-auto flex justify-between items-center p-4">
         <div className="flex items-center">
-          <Image src="/path-to-your-logo.png" alt="Euodia Logo" width={40} height={40} />
+          <Image src="/next.svg" alt="Euodia Logo" width={40} height={40} />
           {/* <span className="ml-2 text-xl font-bold">Euodia WholeFoods</span> */}
         </div>
         <div className="hidden md:flex space-x-6">
@@ -29,6 +31,7 @@ const Navbar = () => {
             <span className="hover:text-green-800">Contact us</span>
           </Link>
           <div className="flex items-center space-x-4">
+            {/* <Button /> */}
             <button className="hover:text-green-800">
               <FiShoppingCart className="h-5 w-5" />
             </button>
@@ -36,9 +39,9 @@ const Navbar = () => {
               <FiUser className="h-5 w-5" />
             </button>
           </div>
-          <button className="text-green-600 border border-green-600 rounded-lg px-4 py-2 hover:bg-green-600 hover:text-white">
-            Log In
-          </button>
+          <Button title='Login'  isBorder hoverAnimation={"gradientSlide"} onClick={() =>router.push("/login")}  />
+
+     
         </div>
         <div className="md:hidden flex items-center">
           <button onClick={toggleSidebar}>
@@ -61,9 +64,10 @@ const Navbar = () => {
           <Link href="/contact">
             <span className="hover:text-green-800">Contact us</span>
           </Link>
-          <button className="text-green-600 border border-green-600 rounded-lg px-4 py-2 hover:bg-green-600 hover:text-white">
+          <Button title='Login' color='accent' isBorder onClick={() =>router.push("/login")} />
+          {/* <button className="text-green-600 border border-green-600 rounded-lg px-4 py-2 hover:bg-green-600 hover:text-white">
             Log In
-          </button>
+          </button> */}
         </div>
       )}
     </nav>

@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import classNames from "classnames";
 import DottedLoader from "@/components/layout/loader/DottedLoader";
-// import DottedLoader from "@/components/layout/loader/DottedLoader";
+import "./animations.css"; // Import the custom CSS animations
 
 const Button = ({
   title,
@@ -14,6 +14,7 @@ const Button = ({
   onClick = () => {},
   icon,
   iconProps = {},
+  hoverAnimation = "none",
 }) => {
   const baseStyles = "font-poppins rounded-lg transition-all duration-200";
   const sizeStyles = {
@@ -30,7 +31,18 @@ const Button = ({
     accent: "bg-accent text-white hover:bg-accent-400",
   };
 
-  const borderStyles = isBorder ? "border border-gray-300" : "";
+  const borderStyles = isBorder
+    ? "border bg-white border-accent text-black hover:border-accent hover:bg-accent hover:text-white"
+    : "";
+
+  const hoverAnimations = {
+    none: "",
+    scale: "hover:scale-105",
+    rotate: "hover:rotate-6",
+    bounce: "hover:animate-bounce",
+    gradientSlide: "hover:gradient-slide",
+
+  };
 
   return (
     <button
@@ -42,6 +54,7 @@ const Button = ({
         sizeStyles[size],
         colorStyles[color],
         borderStyles,
+        hoverAnimations[hoverAnimation],
         "flex items-center justify-center gap-2 text-center"
       )}
     >
@@ -67,6 +80,7 @@ Button.propTypes = {
   onClick: PropTypes.func,
   icon: PropTypes.element,
   iconProps: PropTypes.object,
+  hoverAnimation: PropTypes.oneOf(["none", "scale", "rotate", "bounce", "gradientSlide"]),
 };
 
 export default Button;

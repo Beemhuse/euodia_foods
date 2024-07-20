@@ -1,3 +1,4 @@
+"use client"
 import React, { useState, forwardRef } from 'react';
 import PropTypes from 'prop-types';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';

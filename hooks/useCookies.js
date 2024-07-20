@@ -7,7 +7,7 @@ const useCookies = () => {
 
   const getAllCookies = useCallback(() => {
     const cookies = {};
-    document.cookie.split(";").forEach((cookie) => {
+    document.cookie?.split(";").forEach((cookie) => {
       const [name, value] = cookie.split("=").map((c) => c.trim());
       cookies[name] = value;
     });
