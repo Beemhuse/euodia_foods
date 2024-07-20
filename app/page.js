@@ -1,4 +1,6 @@
 'use client';
+import Navbar from '@/components/layout/Navbar';
+import Button from '@/components/reusables/buttons/Button';
 import { client } from '@/utils/sanity/client';
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
@@ -29,11 +31,12 @@ export default function Home() {
       setContent(data);
     });
   }, []);
-
+console.log(content);
   
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <h1>Hello</h1>
+      <Button title='hello' color='accent' />
       {/* Render fetched content */}
       <div className="grid grid-cols-3 gap-4">
         {content.map((dish) => (
@@ -51,7 +54,7 @@ export default function Home() {
                 alt={dish.title}
                 width={500}
                 height={500}
-                className="w-full h-auto"
+                className="w-full h-auto object-contain"
               />
             )}
           </div>
