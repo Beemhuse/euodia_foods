@@ -85,7 +85,7 @@ export default function Page() {
         </button>
         <p className="text-center mt-4">
           already have an account?{" "}
-          <a href="/login" className="text-green-500">
+          <a href="/auth/login" className="text-green-500">
             Log in
           </a>
         </p>

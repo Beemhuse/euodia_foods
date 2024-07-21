@@ -17,10 +17,10 @@ const router = useRouter()
     <nav className="bg-white shadow-md">
       <div className="container mx-auto flex justify-between items-center p-4">
         <div className="flex items-center">
-          <Image src="/next.svg" alt="Euodia Logo" width={40} height={40} />
-          {/* <span className="ml-2 text-xl font-bold">Euodia WholeFoods</span> */}
+          <Image src="/logo.svg" alt="Euodia Logo" width={40} height={40} />
+          <span className="ml-2 text-md font-bold">Euodia WholeFoods</span>
         </div>
-        <div className="hidden md:flex space-x-6">
+        <div className="hidden md:flex items-center space-x-6">
           <Link href="/" className="text-green-600 hover:text-green-800">
             Home
           </Link>
@@ -39,7 +39,7 @@ const router = useRouter()
               <FiUser className="h-5 w-5" />
             </button>
           </div>
-          <Button title='Login'  isBorder hoverAnimation={"gradientSlide"} onClick={() =>router.push("/login")}  />
+          <Button title='Login'  isBorder hoverAnimation={"bounce"} onClick={() =>router.push("/auth/login")}  />
 
      
         </div>
@@ -64,7 +64,7 @@ const router = useRouter()
           <Link href="/contact">
             <span className="hover:text-green-800">Contact us</span>
           </Link>
-          <Button title='Login' color='accent' isBorder onClick={() =>router.push("/login")} />
+          <Button title='Login' color='accent' isBorder onClick={() =>router.push("/auth/   login")} />
           {/* <button className="text-green-600 border border-green-600 rounded-lg px-4 py-2 hover:bg-green-600 hover:text-white">
             Log In
           </button> */}

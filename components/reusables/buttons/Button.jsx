@@ -32,7 +32,7 @@ const Button = ({
   };
 
   const borderStyles = isBorder
-    ? "border bg-white border-accent text-black hover:border-accent hover:bg-accent hover:text-white"
+    ? "border bg-white border-accent text-black hover:border-accent hover:bg-[#219653] hover:text-white"
     : "";
 
   const hoverAnimations = {

@@ -13,11 +13,11 @@ export const metadata = {
     title: 'Euodia Foods',
     description:
       'Welcome to Euodia foods, get your next meal with just a click of a button',
-    url: 'https://nanocodes.com.ng',
+    url: 'https://euodiafoods.com',
     siteName: 'Euodia Services',
     images: [
       {
-        // url: 'https://nanocodes.com.ng/og-image.jpg', // Ensure this URL points to a valid image
+        url: 'https://euodiafoods.com',
         width: 800,
         height: 600,
         alt: 'Euodia OpenGraph Image',
@@ -63,13 +63,14 @@ export function generateViewport() {
 }
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <body className={"bg-[#FF9E0C]/5"}>
+    <html lang="en" className="h-full">
+    <body className="bg-[#FF9E0C]/5 flex flex-col min-h-screen h-full">
       <Navbar />
-        
+      <div  className="flex-grow">
         {children}
-        <Footer />
-        </body>
-    </html>
+      </div>
+      <Footer />
+    </body>
+  </html>
   );
 }
