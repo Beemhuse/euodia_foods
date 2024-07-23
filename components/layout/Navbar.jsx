@@ -23,7 +23,7 @@ const router = useRouter()
     <nav className="bg-white shadow-md">
       <div className="container mx-auto flex justify-between items-center p-4">
         <div className="flex items-center">
-          <Image src="/logo.svg" alt="Euodia Logo" width={40} height={40} lazyBoundary="" />
+          <Image src="/logo.svg" alt="Euodia Logo" width={40} height={40}  />
           <span className="ml-2 text-md text-accent font-bold">Euodia WholeFoods</span>
         </div>
         <div className="hidden md:flex items-center space-x-6">
