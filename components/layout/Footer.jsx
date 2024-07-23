@@ -1,6 +1,6 @@
 import { FiArrowRight } from 'react-icons/fi';
 
-export default function Footer  ()  {
+export default function Footer() {
   return (
     <footer className="bg-white py-8 border-t mt-auto ">
       <div className="container mx-auto px-4">
@@ -47,16 +47,16 @@ export default function Footer  ()  {
               <li className="mb-2">Service</li>
             </ul>
           </div>
-          <div className="md:col-span-1 flex flex-col md:flex-row md:justify-between md:items-center">
-            <div className="flex space-x-4">
-              <a href="#" className="text-gray-600 hover:underline">Privacy</a>
-              <a href="#" className="text-gray-600 hover:underline">Terms of use</a>
-              <a href="#" className="text-gray-600 hover:underline">Refund Policy</a>
-            </div>
-            <p className="text-gray-600 mt-4 md:mt-0">
-              © 2024 All Rights Reserved. Euodia Whole Foods
-            </p>
+        </div>
+        <div className="md:col-span-1 flex flex-col md:flex-row md:justify-between md:items-center">
+          <div className="flex space-x-4">
+            <a href="#" className="text-gray-600 hover:underline">Privacy</a>
+            <a href="#" className="text-gray-600 hover:underline">Terms of use</a>
+            <a href="#" className="text-gray-600 hover:underline">Refund Policy</a>
           </div>
+          <p className="text-gray-600 mt-4 md:mt-0">
+            © 2024 All Rights Reserved. Euodia Whole Foods
+          </p>
         </div>
       </div>
     </footer>

@@ -18,7 +18,7 @@ const router = useRouter()
       <div className="container mx-auto flex justify-between items-center p-4">
         <div className="flex items-center">
           <Image src="/logo.svg" alt="Euodia Logo" width={40} height={40} />
-          <span className="ml-2 text-md font-bold">Euodia WholeFoods</span>
+          <span className="ml-2 text-md font-bold text-green-600">Euodia WholeFoods</span>
         </div>
         <div className="hidden md:flex items-center space-x-6">
           <Link href="/" className="text-green-600 hover:text-green-800">
