@@ -8,6 +8,7 @@ import Button from "@/components/reusables/buttons/Button";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { handleGenericError } from "@/utils/errorHandler";
+import useCookies from "@/hooks/useCookies";
 
 const schema = yup.object().shape({
   email: yup.string().email("Invalid email").required("Email is required"),
@@ -21,6 +22,7 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState('');
   const [error, setError] = useState('');
+  const { setCookie } = useCookies();
 
   const {
     register,
@@ -32,13 +34,19 @@ export default function Login() {
 
   const onSubmit = async (data) => {
     const { email, password } = data;
-    console.log(data)
     try {
       setLoading(true);
       const response = await axios.post('/api/login', { email, password });
+      if(response){
+
+        console.log(response)
+        setCookie("euodia_token", response?.data?.token)
+      }
+
       setLoading(false);
       setSuccess('Login successful');
       router.push('/');
+      window.location.reload()
     } catch (error) {
       const errMsg = handleGenericError(error);
       setError(errMsg);
@@ -59,15 +67,18 @@ export default function Login() {
         {/* {success && <p className="text-green-500 text-center">{success}</p>} */}
         
         <InputComponent
-          label="Email"
-          // name="email"
-          {...register("email")}
+          // label="Email"
+          placeholder="johndoe@gmail.com"
+
+          name="email"
+          register={register}
           error={errors.email?.message}
         />
         <InputComponent
           label="Password"
           // name="password"
-          {...register("password")}
+          name="password"
+          register={register}
           error={errors.password?.message}
           type="password"
         />

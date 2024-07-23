@@ -1,10 +1,11 @@
 "use client"
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { FiMenu, FiX, FiShoppingCart, FiUser } from 'react-icons/fi'; // Import icons from react-icons
 import Button from '../reusables/buttons/Button';
 import { useRouter } from 'next/navigation';
+import useCookies from '@/hooks/useCookies';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -12,13 +13,18 @@ const router = useRouter()
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
   };
+  const {getCookie} = useCookies()
+  let euodia_token = getCookie("euodia_token")
 
+  useEffect(()=>{
+    
+  }, [euodia_token])
   return (
     <nav className="bg-white shadow-md">
       <div className="container mx-auto flex justify-between items-center p-4">
         <div className="flex items-center">
-          <Image src="/logo.svg" alt="Euodia Logo" width={40} height={40} />
-          <span className="ml-2 text-md font-bold">Euodia WholeFoods</span>
+          <Image src="/logo.svg" alt="Euodia Logo" width={40} height={40} lazyBoundary="" />
+          <span className="ml-2 text-md text-accent font-bold">Euodia WholeFoods</span>
         </div>
         <div className="hidden md:flex items-center space-x-6">
           <Link href="/" className="text-green-600 hover:text-green-800">
@@ -35,11 +41,15 @@ const router = useRouter()
             <button className="hover:text-green-800">
               <FiShoppingCart className="h-5 w-5" />
             </button>
+            {
+              euodia_token ? 
             <button className="hover:text-green-800">
               <FiUser className="h-5 w-5" />
-            </button>
+            </button> : 
+
+          <Button title='Login'    hoverAnimation={"bounce"} isBorder onClick={() =>router.push("/auth/login")}  />
+            }
           </div>
-          <Button title='Login'  isBorder hoverAnimation={"bounce"} onClick={() =>router.push("/auth/login")}  />
 
      
         </div>

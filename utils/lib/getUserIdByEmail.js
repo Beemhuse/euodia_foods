@@ -1,8 +1,18 @@
 import { client } from "../sanity/client";
 
 export async function getUserIdByEmail(email) {
-  const query = `*[_type == "user" && email == $email][0]._id`;
-  const params = { email };
-  const userId = await client.fetch(query, params);
-  return userId;
+  try {
+    const query = `*[_type == "customer" && email == $email][0] {
+      _id,
+      email,
+      password // Ensure you include password if stored
+    }`;
+    const params = { email };
+
+    const user = await client.fetch(query, params);
+    return user;
+  } catch (error) {
+    console.error('Error fetching user by email:', error);  // Log the error for debugging
+    throw new Error('Error fetching user');
+  }
 }

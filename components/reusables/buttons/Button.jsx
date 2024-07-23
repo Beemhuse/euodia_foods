@@ -8,7 +8,7 @@ const Button = ({
   title,
   type = "button",
   size = "medium",
-  color = "gray",
+  color = "accent",
   isBorder = false,
   isLoading = false,
   onClick = () => {},
@@ -32,7 +32,7 @@ const Button = ({
   };
 
   const borderStyles = isBorder
-    ? "border bg-white border-accent text-black hover:border-accent hover:bg-[#219653] hover:text-white"
+    ? "border bg-white border-accent text-[#000] hover:border-accent hover:bg-[#219653] hover:text-white"
     : "";
 
   const hoverAnimations = {

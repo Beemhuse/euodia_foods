@@ -1,10 +1,12 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import InputComponent from "@/components/reusables/input/InputComponent";
+import axios from "axios";
+import { useRouter } from "next/navigation";
 
 const schema = yup.object().shape({
   name: yup.string().required("Name is required"),
@@ -19,14 +21,31 @@ const schema = yup.object().shape({
 });
 
 export default function Page() {
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState('');
+  const [error, setError] = useState('');
+  const router = useRouter();
+  console.log(process.env.NEXT_PUBLIC_SANITY_TOKEN)
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm({ resolver: yupResolver(schema) });
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit = async (data) => {
+    const {name, email, password } = data;
+    try {
+      setLoading(true);
+      const response = await axios.post('/api/signup', {name, email, password });
+      setLoading(false);
+      setSuccess('Login successful');
+      router.push('/');
+    } catch (error) {
+      const errMsg = handleGenericError(error);
+      setError(errMsg);
+      setLoading(false);
+    }
   };
 
   return (
@@ -41,7 +60,7 @@ export default function Page() {
       >
         <InputComponent
           label="Name"
-          {...register("name")}
+          register={register}
           errors={errors}
           name="name"
           error={errors.name?.message}
@@ -50,14 +69,14 @@ export default function Page() {
         <InputComponent
           label="Email"
           name="email"
-          {...register("email")}
+          register={register}
           type="email"
           error={errors.email?.message}
 
         />
         <InputComponent
           label="Password"
-          {...register("password")}
+          register={register}
           name="password"
           type="password"
           error={errors.password?.message}
