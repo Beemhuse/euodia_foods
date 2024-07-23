@@ -3,7 +3,11 @@ import Navbar from '@/components/layout/Navbar';
 import Button from '@/components/reusables/buttons/Button';
 import { client } from '@/utils/sanity/client';
 import Image from 'next/image';
+import Hero from "@/components/pages/Hero.jsx"
 import { useState, useEffect } from 'react';
+import Features from '@/components/pages/Features';
+import Qualities from '@/components/pages/Qualities';
+import BestSellerDishes from '@/components/pages/BestDishes';
 
 // Define async function to fetch content from Sanity
 async function getContent() {
@@ -34,9 +38,12 @@ export default function Home() {
 console.log(content);
   
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <h1>Hello</h1>
-      <Button title='hello' color='accent' />
+    <main className="min-h-screen border-2 border-green-500">
+      <Hero/>
+      <Features/>
+      <Qualities/>
+      <BestSellerDishes/>
+      {/* <Button title='hello' color='accent' /> */}
       {/* Render fetched content */}
       <div className="grid grid-cols-3 gap-4">
         {content.map((dish) => (
