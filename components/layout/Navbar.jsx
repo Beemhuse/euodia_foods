@@ -33,7 +33,7 @@ const router = useRouter()
           <Link href="/menu">
             <span className="hover:text-green-800">Our Menu</span>
           </Link>
-          <Link href="/contact">
+          <Link href="/contact-us">
             <span className="hover:text-green-800">Contact us</span>
           </Link>
           <div className="flex items-center space-x-4">
@@ -71,7 +71,7 @@ const router = useRouter()
           <Link href="/menu">
             <span className="hover:text-green-800">Our Menu</span>
           </Link>
-          <Link href="/contact">
+          <Link href="/contact-us">
             <span className="hover:text-green-800">Contact us</span>
           </Link>
           <Button title='Login' color='accent' isBorder onClick={() =>router.push("/auth/   login")} />

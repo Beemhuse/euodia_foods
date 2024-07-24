@@ -6,37 +6,37 @@ const bestSellerDishes = [
     title: "Spaghetti Carbonara",
     price: "N10,000",
     description: "A classic Italian pasta dish made with eggs, cheese, pancetta, and pepper.",
-    image: "/meal.png" // Replace with the actual path to the dish image
+    image: "/meal.png" 
   },
   {
     title: "Margherita Pizza",
     price: "N8,000",
     description: "A simple yet delicious pizza topped with tomatoes, mozzarella, and fresh basil.",
-    image: "/meal.png" // Replace with the actual path to the dish image
+    image: "/meal.png" 
   },
   {
     title: "Caesar Salad",
     price: "N7,500",
     description: "A fresh salad with romaine lettuce, croutons, and Caesar dressing.",
-    image: "/meal.png" // Replace with the actual path to the dish image
+    image: "/image 32.png"
   },
   {
     title: "Grilled Salmon",
     price: "N6,000",
     description: "Perfectly grilled salmon served with a side of vegetables.",
-    image: "/meal.png" // Replace with the actual path to the dish image
+    image: "/meal.png" 
   },
   {
     title: "Beef Tacos",
     price: "N5,000",
     description: "Soft tacos filled with seasoned beef, lettuce, cheese, and salsa.",
-    image: "/meal.png" // Replace with the actual path to the dish image
+    image: "/meal.png" 
   },
   {
     title: "Chocolate Cake",
     price: "N10,000",
     description: "Rich and moist chocolate cake topped with creamy chocolate frosting.",
-    image: "/meal.png" // Replace with the actual path to the dish image
+    image: "/image 32.png" 
   }
 ];
 

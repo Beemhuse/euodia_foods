@@ -3,7 +3,7 @@ import banner from "@/public/Frame 77.png"
 
 const Banner = () => {
     return (
-        <div className=" py-10 px-6 bg-white">
+        <div className=" py-10 px-4 bg-white">
            <Image src={banner} />
         </div>
     );
