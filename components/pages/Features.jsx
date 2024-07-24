@@ -4,35 +4,34 @@ const features = [
     {
         title: "Quality Food",
         description: "Contrary to popular belief, Lorem Ipsum is not simply random text",
-        icon: "/icons/quality-food.png" 
+        icon: "/01.png" 
     },
     {
         title: "Speed Delivery",
         description: "Contrary to popular belief, Lorem Ipsum is not simply random text",
-        icon: "/icons/speed-delivery.png"
+        icon: "/02.png"
     },
     {
         title: "Affordable Pricing",
         description: "Contrary to popular belief, Lorem Ipsum is not simply random text",
-        icon: "/icons/affordable-pricing.png" 
+        icon: "/image 25.png" 
     },
     {
         title: "Quality Packaging",
         description: "Contrary to popular belief, Lorem Ipsum is not simply random text",
-        icon: "/icons/quality-packaging.png"
+        icon: "/5.png"
     }
 ];
 
 const Features = () => {
     return (
-        <div className="py-8 border-2 border-blue-500">
+        <div className="py-8 bg-white">
             <div className="container mx-auto px-4">
                 <div className="grid gap-8 lg:grid-cols-4 md:grid-cols-2 sm:grid-cols-1">
                     {features.map((feature, index) => (
                         <div key={index} className="bg-white p-6 rounded-lg shadow-lg text-center">
-                            <div className="mb-4">
-                              <h2>icons ooo</h2>
-                                {/* <Image src={feature.icon} alt={feature.title} width={64} height={64} /> */}
+                            <div className="mb-9 flex items-center border border-pink-500">
+                                <Image src={feature.icon} alt={feature.title} width={64} height={64} className='border border-green-300 rounded shadow-lg' />
                             </div>
                             <h3 className="text-base font-bold mb-2">{feature.title}</h3>
                             <p className="text-gray-600">{feature.description}</p>

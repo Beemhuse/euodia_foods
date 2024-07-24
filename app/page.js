@@ -8,6 +8,8 @@ import { useState, useEffect } from 'react';
 import Features from '@/components/pages/Features';
 import Qualities from '@/components/pages/Qualities';
 import BestSellerDishes from '@/components/pages/BestDishes';
+import Banner from '@/components/pages/Banner';
+
 
 // Define async function to fetch content from Sanity
 async function getContent() {
@@ -39,10 +41,11 @@ console.log(content);
   
   return (
     <main className="min-h-screen border-2 border-green-500">
-      <Hero/>
-      <Features/>
-      <Qualities/>
-      <BestSellerDishes/>
+      <Hero />
+      <Features />
+      <Qualities />
+      <BestSellerDishes />
+      <Banner />
       {/* <Button title='hello' color='accent' /> */}
       {/* Render fetched content */}
       <div className="grid grid-cols-3 gap-4">
