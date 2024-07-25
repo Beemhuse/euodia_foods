@@ -5,7 +5,7 @@ import profilePic from "@/public/Frame 18.png"
 
 const Hero = () => {
     return (
-        <div className="flex items-center justify-between py-10 px-6 border border-red-400">
+        <div className="flex items-center justify-between py-10 px-6 ">
             <div className="max-w-md">
                 <h1 className="text-4xl font-bold mb-4">
                     Come For The <span className="bg-orange-400 text-white px-5 py-1 rounded-full">Food</span>

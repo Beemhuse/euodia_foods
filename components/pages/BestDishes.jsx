@@ -49,12 +49,12 @@ const BestSellerDishes = () => {
         <div className="grid gap-8 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1">
           {bestSellerDishes.map((dish, index) => (
             <div key={index} className="bg-white p-6 rounded-lg shadow-lg">
-              <div className="h-48 mb-4">
+              <div className="relative h-48 mb-4">
                 <Image 
                   src={dish.image} 
                   alt={dish.title} 
-                  layout="fill" 
-                  objectFit="cover" 
+                  fill
+                  style={{ objectFit: 'cover' }}
                   className="rounded-t-lg" 
                 />
               </div>

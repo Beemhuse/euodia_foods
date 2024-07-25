@@ -40,7 +40,7 @@ export default function Home() {
 console.log(content);
   
   return (
-    <main className="min-h-screen border-2 border-green-500">
+    <main className="min-h-screen ">
       <Hero />
       <Features />
       <Qualities />

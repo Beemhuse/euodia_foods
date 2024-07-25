@@ -37,8 +37,7 @@ export default function Login() {
     try {
       setLoading(true);
       const response = await axios.post('/api/login', { email, password });
-      if(response){
-
+      if (response) {
         console.log(response)
         setCookie("euodia_token", response?.data?.token)
       }
@@ -55,48 +54,32 @@ export default function Login() {
   };
 
   return (
-    <div className="max-w-lg mx-auto mt-10">
+    <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="bg-white p-8 shadow-md flex flex-col gap-2 rounded-lg"
+        className="bg-white p-15 shadow-md p-10 flex flex-col gap-4 rounded-lg"
       >
         <h2 className="text-3xl text-center text-accent font-bold">Log in to Euodia</h2>
-        <p className="text-center">Quick & Simple way to start making your orders</p>
-        
-        {/* {error && <p className="text-red-500 text-center">{error}</p>} */}
-        {/* {success && <p className="text-green-500 text-center">{success}</p>} */}
-        
-        <InputComponent
-          // label="Email"
-          placeholder="johndoe@gmail.com"
+        <p className="text-center text-gray-700">Quick & Simple way to start making your orders</p>
 
+        {error && <p className="text-red-500 text-center">{error}</p>}
+        {success && <p className="text-green-500 text-center">{success}</p>}
+
+        <InputComponent
+          label="Email"
+          placeholder="johndoe@gmail.com"
           name="email"
           register={register}
           error={errors.email?.message}
         />
         <InputComponent
           label="Password"
-          // name="password"
+          placeholder="Password"
           name="password"
           register={register}
           error={errors.password?.message}
           type="password"
         />
-        {/* <div className="mb-4 flex items-center justify-between w-full">
-          <label className="inline-flex items-center">
-            <input
-              type="checkbox"
-              name="rememberMe"
-              className="form-checkbox"
-            />
-            <span className="ml-2">Remember me</span>
-          </label>
-          <p className="text-center">
-            <a href="/auth/reset-password" className="text-green-500">
-              forgot password?
-            </a>
-          </p>
-        </div> */}
         <Button
           type="submit"
           title="Log in"
@@ -105,7 +88,7 @@ export default function Login() {
         />
         <p className="text-center mt-2">
           don&apos;t have an account?{" "}
-          <a href="/auth/signup" className="text-green-500">
+          <a href="/auth/register" className="text-green-500">
             Sign up
           </a>
         </p>
