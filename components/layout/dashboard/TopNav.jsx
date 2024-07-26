@@ -13,7 +13,7 @@ export default function TopNav({ ...props }) {
       setMenuOpen(!menuOpen);
     };
   return (
-    <div className="p-4 border w-full border flex justify-between items-center px-8 border-gray-300" {...props}>
+    <div className="p-4  w-full border flex justify-between items-center px-8 border-gray-300" {...props}>
       <Image
         src={"/genova.svg"}
         alt="Boles Admin"

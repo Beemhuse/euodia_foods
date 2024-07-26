@@ -20,11 +20,33 @@ console.log(email)
     return null;
   }
 };
+export const getAdminByEmail = async (email) => {
+  const query = '*[_type == "admin" && email == $email][0]';
+  const params = { email };
+console.log(email)
+  try {
+    const user = await client.fetch(query, params);
+    return user;
+  } catch (error) {
+    console.error('Error fetching user by email:', error);
+    return null;
+  }
+};
 
 
 export const createUser = async (user) => {
   try {
     const sanityResponse = await client.create({ _type: 'customer', ...user });
+    console.log('User saved to Sanity:', sanityResponse);
+    return sanityResponse;
+  } catch (sanityError) {
+    console.error('Error saving user to Sanity:', sanityError);
+    return { error: 'Internal Server Error', message: sanityError.message };
+  }
+};
+export const createAdmin = async (user) => {
+  try {
+    const sanityResponse = await client.create({ _type: 'admin', ...user });
     console.log('User saved to Sanity:', sanityResponse);
     return sanityResponse;
   } catch (sanityError) {
