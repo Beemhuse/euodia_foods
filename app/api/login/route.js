@@ -33,7 +33,7 @@ export async function POST(req) {
       });
     }
 
-    const secretKey = generateRandomSecret();
+    // const secretKey = generateRandomSecret();
 
     // Generate JWT token
     const token = jwt.sign({ userId: user._id }, secretKey, { expiresIn: '7d' });

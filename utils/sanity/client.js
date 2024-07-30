@@ -37,10 +37,8 @@ console.log(email)
 export const createUser = async (user) => {
   try {
     const sanityResponse = await client.create({ _type: 'customer', ...user });
-    console.log('User saved to Sanity:', sanityResponse);
     return sanityResponse;
   } catch (sanityError) {
-    console.error('Error saving user to Sanity:', sanityError);
     return { error: 'Internal Server Error', message: sanityError.message };
   }
 };

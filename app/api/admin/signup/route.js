@@ -7,9 +7,8 @@ import crypto from 'crypto';
 import { createAdmin, getAdminByEmail,   } from '@/utils/sanity/client';
 
 // Function to generate a random secret key
-const generateRandomSecret = () => {
-  return crypto.randomBytes(32).toString('hex');
-};
+const secretKey = process.env.JWT_SECRET_KEY;
+
 
 export  async function POST(req) {
  
@@ -36,7 +35,6 @@ export  async function POST(req) {
       };
       const newUser = await createAdmin(user);
     
-      const secretKey = generateRandomSecret();
       const expiresIn = 7 * 24 * 60 * 60; // 7 days in seconds
     
       // Generate JWT token
