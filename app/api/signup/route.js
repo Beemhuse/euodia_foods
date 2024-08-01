@@ -41,7 +41,6 @@ export  async function POST(req) {
     
       // Generate JWT token
       const token = jwt.sign({ userId: newUser._id  }, secretKey, { expiresIn: expiresIn });
-    console.log(res)
     return new Response(JSON.stringify({ message: 'User signed up successfully!', user: newUser, token }), {
         status: 200,
         headers: { 'Content-Type': 'application/json' }
