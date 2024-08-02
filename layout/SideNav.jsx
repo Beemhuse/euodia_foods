@@ -82,7 +82,7 @@ export default function SideNav({ ...props }) {
                 className={`relative cursor-pointer w-full text-base dark:text-white py-3 flex items-center gap-x-4 text-black transition-all duration-200 ${
                   isActive
                     ? "text-black bg-green-500 p-2 dark:text-white"
-                    : "hover:text-white hover:scale-95"
+                    : "hover:text-green-500 hover:scale-95"
                 }`}
               >
                 {item.icon}
