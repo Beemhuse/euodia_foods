@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 
 // Ensure the secret key is consistent and stored securely
 const secretKey = process.env.JWT_SECRET_KEY;
-console.log(secretKey)
+
 export async function POST(req) {
   try {
     const body = await req.json();

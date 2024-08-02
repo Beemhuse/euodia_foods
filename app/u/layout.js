@@ -1,5 +1,7 @@
 import { Inter } from 'next/font/google';
-import './globals.css';
+import '../globals.css';
+import Navbar from '@/components/layout/Navbar';
+import Footer from '@/components/layout/Footer';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -61,9 +63,13 @@ export function generateViewport() {
 }
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className="">
-    <body>
+    <html lang="en" className="h-full">
+    <body className="bg-[#FF9E0C]/5 flex flex-col min-h-screen h-full">
+      <Navbar />
+      <div  className="flex-grow">
         {children}
+      </div>
+      <Footer />
     </body>
   </html>
   );

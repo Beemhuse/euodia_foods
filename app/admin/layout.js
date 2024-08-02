@@ -1,8 +1,6 @@
 import { Inter } from 'next/font/google';
-import './globals.css';
-import Navbar from '@/components/layout/Navbar';
-import Footer from '@/components/layout/Footer';
-
+import SideNav from '@/layout/SideNav';
+import "../globals.css"
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata = {
@@ -63,13 +61,19 @@ export function generateViewport() {
 }
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className="h-full">
-    <body className="bg-[#FF9E0C]/5 flex flex-col min-h-screen h-full">
-      <Navbar />
-      <div  className="flex-grow">
-        {children}
+    <html lang="en">
+    <body className=" flex flex-col min-h-screen  h-full">
+     
+       <div className="flex  flex-col h-screen w-full mx-auto">
+        <div className="flex flex-grow">
+          <SideNav className="flex-shrink-0 w-64  dark:bg-[#0D0D0D] text-white" />
+          <div className="flex p-4  bg-[rgba(255, 255, 255, 1)] dark:bg-[#212121] flex-col flex-grow">
+            <div className="flex-grow w-auto h-full overflow-x-auto mt-4">
+              {children}
+            </div>
+          </div>
+        </div>
       </div>
-      <Footer />
     </body>
   </html>
   );
