@@ -3,7 +3,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
 // Ensure the secret key is consistent and stored securely
-const secretKey = process.env.JWT_SECRET_KEY;
+const secretKey = process.env.NEXT_PRIVATE_JWT_SECRET_KEY;
 
 export async function POST(req) {
   try {
@@ -32,7 +32,7 @@ export async function POST(req) {
 
     // Generate JWT token
     const token = jwt.sign({ userId: user._id, role: 'admin' }, secretKey, { expiresIn: '7d' });
-
+// console.log(token)
     return new Response(JSON.stringify({ message: 'Admin signed in successfully!', user, token }), {
       status: 200,
       headers: { 'Content-Type': 'application/json' }

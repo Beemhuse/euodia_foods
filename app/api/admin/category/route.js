@@ -1,6 +1,6 @@
 // pages/api/categories.js
-import client from "../../lib/sanity";
-import { isAdmin } from "../../lib/auth";
+import {client} from "@/utils/sanity/client";
+import { isAdmin } from "@/utils/lib/auth";
 
 export async function POST(req) {
   const { title, description } = await req.json();

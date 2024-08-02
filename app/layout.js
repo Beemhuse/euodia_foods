@@ -1,6 +1,6 @@
 import { Inter } from 'next/font/google';
 import './globals.css';
-
+import init from "@/config/config"
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata = {
@@ -59,6 +59,8 @@ export function generateViewport() {
     themeColor: '#ffffff',
   };
 }
+
+init()
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className="">

@@ -15,7 +15,6 @@ export async function POST(req) {
 
     // Retrieve user from Sanity (implement this function)
     const user = await getUserIdByEmail(email);
-
     if (!user) {
       return new Response(JSON.stringify({ error: 'Invalid credentials' }), {
         status: 401,
@@ -25,7 +24,6 @@ export async function POST(req) {
 
     // Check if the password is correct
     const passwordMatch = await bcrypt.compare(password, user.password);
-
     if (!passwordMatch) {
       return new Response(JSON.stringify({ error: 'Invalid credentials' }), {
         status: 401,
@@ -33,11 +31,10 @@ export async function POST(req) {
       });
     }
 
-    // const secretKey = generateRandomSecret();
+    const secretKey = generateRandomSecret();
 
     // Generate JWT token
     const token = jwt.sign({ userId: user._id }, secretKey, { expiresIn: '7d' });
-
     return new Response(JSON.stringify({ message: 'User signed in successfully!', user, token }), {
       status: 200,
       headers: { 'Content-Type': 'application/json' }

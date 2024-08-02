@@ -36,16 +36,16 @@ export default function Login() {
     const { email, password } = data;
     try {
       setLoading(true);
-      const response = await axios.post('/api/login', { email, password });
+      const response = await axios.post('/api/admin/login', { email, password });
       if (response) {
         console.log(response)
-        setCookie("euodia_token", response?.data?.token)
+        setCookie("admineu_token", response?.data?.token)
       }
 
       setLoading(false);
       setSuccess('Login successful');
-      router.push('/');
-      window.location.reload()
+      router.push('/admin');
+      // window.location.reload()
     } catch (error) {
       const errMsg = handleGenericError(error);
       setError(errMsg);
@@ -59,7 +59,7 @@ export default function Login() {
         onSubmit={handleSubmit(onSubmit)}
         className="bg-white p-15 shadow-md p-10 flex flex-col gap-4 rounded-lg"
       >
-        <h2 className="text-3xl text-center text-accent font-bold">Log in to Euodia</h2>
+        <h2 className="text-3xl text-center text-accent font-bold">Admin Log in to Euodia</h2>
         <p className="text-center text-gray-700">Quick & Simple way to start making your orders</p>
 
         {error && <p className="text-red-500 text-center">{error}</p>}
