@@ -1,5 +1,6 @@
 import { Inter } from 'next/font/google';
 import SideNav from '@/layout/SideNav';
+import TopNav from '@/layout/TopNav';
 import "../globals.css"
 const inter = Inter({ subsets: ['latin'] });
 
@@ -65,10 +66,11 @@ export default function RootLayout({ children }) {
     <body className=" flex flex-col min-h-screen  h-full">
      
        <div className="flex  flex-col h-screen w-full mx-auto">
+            <TopNav />
         <div className="flex flex-grow">
           <SideNav className="flex-shrink-0 w-64  dark:bg-[#0D0D0D] text-white" />
-          <div className="flex p-4  bg-[rgba(255, 255, 255, 1)] dark:bg-[#212121] flex-col flex-grow">
-            <div className="flex-grow w-auto h-full overflow-x-auto mt-4">
+          <div className="flex p-4   dark:bg-[#212121] flex-col flex-grow">
+            <div className="flex-grow bg-gray-100 p-6 w-auto h-full overflow-x-auto mt-4">
               {children}
             </div>
           </div>
