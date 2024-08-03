@@ -1,5 +1,5 @@
 import { Inter } from 'next/font/google';
-import './globals.css';
+import '../../app/globals.css';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 
@@ -61,13 +61,15 @@ export function generateViewport() {
     themeColor: '#ffffff',
   };
 }
-export default function RootLayout({ children }) {
+export default function HomeLayout({ children }) {
   return (
     <html lang="en" className="h-full">
-    <body className=" h-full">
-      <div  className="flex-grow">
+    <body className="bg-[#FF9E0C]/5 flex flex-col min-h-screen h-full">
+      <Navbar />
+      <main  className="flex-grow">
         {children}
-      </div>
+      </main>
+      <Footer />
     </body>
   </html>
   );

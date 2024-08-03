@@ -1,7 +1,10 @@
+import HomeLayout from '@/components/layout/HomeLayout';
 import React from 'react';
 
 const ContactUs = () => {
   return (
+    <HomeLayout>
+
     <div className="bg-gray-50 min-h-screen py-12">
       <div className="container mx-auto px-4">
         <div className="flex flex-wrap -mx-4">
@@ -62,6 +65,7 @@ const ContactUs = () => {
         </div>
       </div>
     </div>
+    </HomeLayout>
   );
 };
 

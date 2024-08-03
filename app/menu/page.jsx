@@ -1,9 +1,12 @@
+import HomeLayout from '@/components/layout/HomeLayout'
 import Banner from '@/components/menu-components/Banner'
 import Dishes from '@/components/menu-components/Dishes'
 import React from 'react'
 
 export default function page() {
   return (
+    <HomeLayout>
+
     <div className='bg-white min-h-screen border-2 border-green-500'>
       <Banner />
       <div className='text-center bg-orange-50 py-3 my-4'>
@@ -11,5 +14,6 @@ export default function page() {
       </div>
       <Dishes />
     </div>
+    </HomeLayout>
   )
 }

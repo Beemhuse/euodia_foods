@@ -9,6 +9,7 @@ import Features from '@/components/pages/Features';
 import Qualities from '@/components/pages/Qualities';
 import BestSellerDishes from '@/components/pages/BestDishes';
 import Banner from '@/components/pages/Banner';
+import HomeLayout from '@/components/layout/HomeLayout';
 
 
 // Define async function to fetch content from Sanity
@@ -40,7 +41,9 @@ export default function Home() {
 console.log(content);
   
   return (
-    <main className="min-h-screen ">
+    <HomeLayout>
+
+    <section className="min-h-screen ">
       <Hero />
       <Features />
       <Qualities />
@@ -70,6 +73,7 @@ console.log(content);
           </div>
         ))}
       </div>
-    </main>
+    </section>
+    </HomeLayout>
   );
 }
