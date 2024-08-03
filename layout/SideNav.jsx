@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation"; // Import the useRouter hook
+import { usePathname, useRouter } from "next/navigation"; // Import the useRouter hook
 import { FiLayout } from "react-icons/fi";
 import { RiExchangeLine } from "react-icons/ri";
 import { HiUsers } from "react-icons/hi";
@@ -12,7 +12,7 @@ const sideData = [
   {
     icon: <FiLayout />,
     title: "Dashboard",
-    link: "/admin/",
+    link: "/admin",
   },
   {
     icon: <HiUsers />,
@@ -28,8 +28,8 @@ const sideData = [
 
 export default function SideNav({ ...props }) {
   const router = useRouter(); // Use the useRouter hook
-  const pathname = router.pathname; // Get the current pathname
-
+  const pathname = usePathname(); // Get the current pathname
+console.log(pathname)
   const [isExpanded, setIsExpanded] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
@@ -65,23 +65,17 @@ export default function SideNav({ ...props }) {
         isExpanded ? "w-64" : "w-20"
       }`}
     >
-      {/* <div className="flex items-center gap-2">
-        <Image src="/logo.svg" width={50} height={50} alt="logo" />
-        {isExpanded && (
-          <Typography variant="h1" size="md" className="text-primary">
-            Euodia Wholefoods
-          </Typography>
-        )}
-      </div> */}
-      <nav className="flex-grow flex flex-col mt-10 gap-y-8">
+    
+      <nav className="flex-grow flex flex-col mt-[5rem] gap-y-8">
         {sideData.map((item, idx) => {
           const isActive = pathname === item.link;
+          // console.log(isActive)
           return (
             <Link key={idx} href={item.link}>
               <div
-                className={`relative mt-10 cursor-pointer w-full text-base dark:text-white py-3 flex items-center gap-x-4 text-black transition-all duration-200 ${
+                className={`relative mt-10 cursor-pointer w-full text-base dark:text-white p-2 space-x-2 py-3 flex items-center gap-x-4 text-black transition-all duration-200 ${
                   isActive
-                    ? "text-black bg-green-500 p-2 dark:text-white"
+                    ? "text-white bg-green-500 p-2 dark:text-white"
                     : "hover:text-green-500 hover:scale-95"
                 }`}
               >

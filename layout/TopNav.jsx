@@ -42,7 +42,7 @@ export default function TopNav({ ...props }) {
           </Typography>
       </div>
       <aside className="hidden md:flex items-center gap-10 relative">
-
+<NotificationIcon />
         <div className=" block space-y-2">
             <Typography variant ="h3" className="flex items-center gap-2">
               Admin
