@@ -79,22 +79,22 @@ export default function Dashboard() {
   return (
     <div className="">
       <div className="grid grid-cols-3 gap-x-8">
-        <div className="rounded-xl shadow-md bg-[rgba(255, 255, 255, 1)] p-5 py-10 ">
+        <div className="rounded-xl shadow-md bg-[#fff] p-5 py-10 ">
           <h2 className="font-[700] text-sm">Total Orders</h2>
           <p>#344,000</p>
         </div>
-        <div className="rounded-xl shadow-md bg-[rgba(255, 255, 255, 1)] p-5 py-10 ">
+        <div className="rounded-xl shadow-md bg-[#fff] p-5 py-10 ">
           <h2 className="font-[700] text-sm">Total Orders</h2>
           <p>#344,000</p>
         </div>
-        <div className="rounded-xl shadow-md bg-[rgba(255, 255, 255, 1)] p-5 py-10">
+        <div className="rounded-xl shadow-md bg-[#fff] p-5 py-10">
           <h2 className="font-[700] text-sm">Total Orders</h2>
           <p>#344,000</p>
         </div>
       </div>
 
       {/* Best sellers dish */}
-      <div className=" p-4 shadow-lg">
+      <div className=" p-4 bg-[#fff] mt-8 shadow-lg">
         <div className=" py-2 flex flex-col w-full items-start gap-y-8 p-4">
           <h2 className=" font-[700] text-lg border-0 border-b-2 py-4 w-full">Best Sellers Dishes</h2>
           <div className="w-full space-y-8">
@@ -124,7 +124,7 @@ export default function Dashboard() {
         </div>
       </div>
 
-      <div className="p-4 shadow-lg my-6">
+      <div className="p-4 shadow-lg bg-[#fff] my-8">
         <h2 className=" font-[700] text-lg border-0 border-b-2 py-4 w-full">Recent Orders</h2>
         <Table  columns={customer_column ?? []}
         data={[]}
