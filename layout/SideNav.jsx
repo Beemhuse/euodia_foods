@@ -7,20 +7,22 @@ import { HiUsers } from "react-icons/hi";
 import Link from "next/link";
 import Typography from "@/components/reusables/typography/Typography";
 // import Image from "next/image";
+import { MdDashboard, MdOutlineShoppingBag } from "react-icons/md";
+import { BsFileEarmarkTextFill } from "react-icons/bs";
 
 const sideData = [
   {
-    icon: <FiLayout />,
+    icon: <MdDashboard />,
     title: "Dashboard",
     link: "/admin",
   },
   {
-    icon: <HiUsers />,
+    icon: <BsFileEarmarkTextFill />,
     title: "Order list",
     link: "/admin/orders",
   },
   {
-    icon: <RiExchangeLine />,
+    icon: <MdOutlineShoppingBag />,
     title: "All Products",
     link: "/admin/products",
   },
@@ -61,8 +63,8 @@ console.log(pathname)
   return (
     <menu
       {...props}
-      className={`flex flex-col h-full dark:bg-black dark:text-white p-6 flex-none  transition-all duration-300 ${
-        isExpanded ? "w-64" : "w-20"
+      className={`flex flex-col h-full dark:bg-black dark:text-white p-4 mt-8 flex-none  transition-all duration-300 ${
+        isExpanded ? "w-80" : "w-20"
       }`}
     >
     
@@ -73,9 +75,9 @@ console.log(pathname)
           return (
             <Link key={idx} href={item.link}>
               <div
-                className={`relative mt-10 cursor-pointer w-full text-base dark:text-white p-2 space-x-2 py-3 flex items-center gap-x-4 text-black transition-all duration-200 ${
+                className={`relative mt-10 cursor-pointer w-full text-sm dark:text-white space-x-2 py-3 flex items-center gap-x-4 text-black transition-all duration-200 ${
                   isActive
-                    ? "text-white bg-green-500 p-2 dark:text-white"
+                    ? "text-white bg-green-500 rounded-xl p-2 dark:text-white"
                     : "hover:text-green-500 hover:scale-95"
                 }`}
               >

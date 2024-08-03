@@ -55,9 +55,12 @@ console.log(content);
         {content.map((dish) => (
           <div key={dish._id} className="p-4 border border-gray-200 rounded-lg">
             <h2>{dish.title}</h2>
-            <p>Category: {dish.category.name}</p>
+            <p>Category: {dish.category.title}</p>
             <ul>
-              {dish.ingredients.map((ingredient) => (
+              {/* {
+                dish &&
+              } */}
+              {dish?.ingredients && dish?.ingredients?.map((ingredient) => (
                 <li key={ingredient._id}>{ingredient.name}</li>
               ))}
             </ul>

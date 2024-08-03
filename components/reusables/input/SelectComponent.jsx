@@ -7,13 +7,13 @@ const SelectComponent = ({ label, options, error, register, name }) => {
     <div className="grid">
       <p className="font-medium text-sm">{label}</p>
       <select
-        className={`w-full py-1 px-3 outline-none bg-inherit rounded-md border border-accent text-base ${
+        className={`w-full py-1 px-3 outline-none bg-inherit rounded-md border border-accent text-sm ${
           error ? 'border-red-600' : ''
         }`}
         {...register(name)}
       >
         <option value="">Select {label}</option>
-        {options.map((option, idx) => (
+        {options?.map((option, idx) => (
           <option key={idx} value={option.value}>
             {option.label}
           </option>

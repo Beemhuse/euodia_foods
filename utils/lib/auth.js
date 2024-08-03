@@ -1,13 +1,11 @@
 import { verifyToken } from './jwt';
 
 export function isAdmin(headers) {
-  console.log("isAdmin ==>?>>>", headers)
+  const authHeader = headers.get('authorization');
+  if (!authHeader) return false;
   
-  // const authHeader = headers['authorization'];
-  // if (!authHeader) return false;
-  
-  const token = headers.split(' ')[1];
-  console.log("isAdmin ==>?>>>", token)
+  const token = authHeader.split(' ')[1];
+  console.log("isAdmin ==>?>>>", token);
   if (!token) return false;
 
   try {

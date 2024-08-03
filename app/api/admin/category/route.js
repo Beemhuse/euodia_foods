@@ -5,7 +5,7 @@ import { isAdmin } from "@/utils/lib/auth";
 export async function POST(req) {
   const { title, description } = await req.json();
 
-  if (!isAdmin(req)) {
+  if (!isAdmin(req.headers)) {
     return new Response(JSON.stringify({ error: "Forbidden" }), {
       status: 403,
       headers: { "Content-Type": "application/json" },

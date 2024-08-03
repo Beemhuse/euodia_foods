@@ -6,6 +6,8 @@ import InputComponent from "@/components/reusables/input/InputComponent";
 import SelectComponent from "@/components/reusables/input/SelectComponent";
 import Button from "@/components/reusables/buttons/Button";
 import { getCookie } from "@/utils/getCookie";
+import { uploadImageToSanity } from "@/utils/sanity/uploadImageToSanity";
+// import { uploadImageToSanity } from "@/utils/sanity/uploadImageToSanity"; // Import the utility function
 
 const mealSchema = yup.object().shape({
   title: yup.string().required("Title is required"),
@@ -20,16 +22,16 @@ const statusOptions = [
   { value: "unavailable", label: "Unavailable" },
 ];
 
-const categoryOptions = [
-  { value: "cat1", label: "Category 1" },
-  { value: "cat2", label: "Category 2" },
-];
 
-const CreateMealModal = ({ isOpen, onClose }) => {
+const CreateMealModal = ({ isOpen, onClose, categories }) => {
   const { register, handleSubmit, reset, formState: { errors } } = useForm({
     resolver: yupResolver(mealSchema),
   });
-
+  const categoryOptions = categories?.map((category) => ({
+    value: category?._id, // Use the category ID as the value
+    label: category?.title, // Use the category title as the label
+  }));
+  
   const adminToken = getCookie("admineu_token");
   const [selectedImage, setSelectedImage] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -43,22 +45,26 @@ const CreateMealModal = ({ isOpen, onClose }) => {
     try {
       setLoading(true);
 
-      const formData = new FormData();
-      formData.append("title", data.title);
-      formData.append("description", data.description);
-      formData.append("price", data.price);
-      formData.append("category", data.category);
-      formData.append("status", data.status);
+      let imageAssetId = "";
       if (selectedImage) {
-        formData.append("image", selectedImage);
+        imageAssetId = await uploadImageToSanity(selectedImage);
       }
 
       const response = await fetch('/api/admin/create-meal', {
         method: 'POST',
         headers: {
+          'Content-Type': 'application/json',
           'Authorization': `Bearer ${adminToken}`, // Include your token here
         },
-        body: formData,
+        body: JSON.stringify({
+          ...data,
+          image: {
+            _type: 'image',
+            asset: {
+              _type: 'reference',
+              _ref: imageAssetId, // Use the image asset ID
+            },
+          },        }),
       });
 
       if (response.ok) {
@@ -131,7 +137,7 @@ const CreateMealModal = ({ isOpen, onClose }) => {
                 type="file"
                 accept="image/*"
                 onChange={handleImageChange}
-                className="w-full py-1 px-3 outline-none bg-inherit rounded-md border border-accent text-base"
+                className="w-full py-1 px-3 outline-none bg-inherit rounded-md border border-accent text-sm"
               />
               {selectedImage && (
                 <img

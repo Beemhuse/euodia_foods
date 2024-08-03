@@ -17,7 +17,7 @@ const ProductCard = ({ product }) => {
       <div className="mt-4 space-y-4">
         <h2 className="text-lg font-semibold">{product.title}</h2>
         <p className="text-gray-600">{product.category}</p>
-        <p className="text-lg font-bold ">₦{product.price}</p>
+        <p className="text-md font-bold ">₦{product.price}</p>
       </div>
       <button className="text-[#374151] p-4 rounded-md bg-[#E5E7EB] hover:text-gray-600">
          <BsThreeDots />

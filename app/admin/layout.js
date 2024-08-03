@@ -62,8 +62,8 @@ export function generateViewport() {
 }
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-    <body className=" flex flex-col min-h-screen  h-full">
+   
+    <main className=" flex flex-col min-h-screen  h-full">
      
        <div className="flex  flex-col h-screen w-full mx-auto">
             <TopNav />
@@ -76,7 +76,6 @@ export default function RootLayout({ children }) {
           </div>
         </div>
       </div>
-    </body>
-  </html>
+    </main>
   );
 }
