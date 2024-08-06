@@ -38,7 +38,7 @@ export const initializePaystack = async (email, amount) => {
       {
         email,
         amount: amount * 100,
-        reference: `GC-${transactionRef}`,
+        reference: `Euodia-${transactionRef}`,
         // callback_url: callbackUrl,
 
       },
