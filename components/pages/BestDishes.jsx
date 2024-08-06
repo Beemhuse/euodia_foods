@@ -1,5 +1,6 @@
+// components/BestSellerDishes.js
 import Image from 'next/image';
-import Button from '../reusables/buttons/Button';
+import { motion } from 'framer-motion';
 
 const bestSellerDishes = [
   {
@@ -41,11 +42,23 @@ const bestSellerDishes = [
 ];
 
 const BestSellerDishes = () => {
+  const containerVariants = {
+    hidden: { opacity: 0, x: -100 },
+    visible: { opacity: 1, x: 0, transition: { duration: 1 } }
+  };
+
   return (
-    <div className="py-12 bg-white">
+    <motion.div
+      className="py-12 bg-white"
+      initial="hidden"
+      animate="visible"
+      variants={containerVariants}
+    >
       <div className="container mx-auto px-4">
         <h2 className="text-3xl font-bold text-center mb-5">Best Seller Dishes</h2>
-        <p className='text-center text-gray-700 mb-8'>Our fresh garden salad is a light and refreshing option. It features a mix of <br />crisp lettuce, juicy tomatoe all tossed in your choice of dressing.</p>
+        <p className='text-center text-gray-700 mb-8'>
+          Our fresh garden salad is a light and refreshing option. It features a mix of <br />crisp lettuce, juicy tomatoe all tossed in your choice of dressing.
+        </p>
         <div className="grid gap-8 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1">
           {bestSellerDishes.map((dish, index) => (
             <div key={index} className="bg-white p-6 rounded-lg shadow-lg">
@@ -64,14 +77,16 @@ const BestSellerDishes = () => {
               </div>
               <div className="flex justify-between items-center">
                 <p className="text-gray-600 me-8">{dish.description}</p>
-                <button className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 ml-4">Buy Now</button>
+                <button className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 ml-4 transition-colors duration-300">
+                  Buy Now
+                </button>
                 {/* <Button size='small' title='Buy Now' color='accent'/> */}
               </div>
             </div>
           ))}
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

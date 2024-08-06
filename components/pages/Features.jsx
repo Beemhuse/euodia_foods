@@ -1,4 +1,6 @@
+// components/Features.js
 import Image from 'next/image';
+import { motion } from 'framer-motion';
 
 const features = [
     {
@@ -24,22 +26,43 @@ const features = [
 ];
 
 const Features = () => {
+    const containerVariants = {
+        hidden: { opacity: 0, y: 50 },
+        visible: { opacity: 1, y: 0, transition: { staggerChildren: 0.2 } }
+    };
+
+    const itemVariants = {
+        hidden: { opacity: 0, y: 20 },
+        visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
+    };
+
     return (
-        <div className="py-8 bg-white">
-            <div className="container mx-auto px-4">
+        <motion.div
+            className="py-8 bg-white"
+            initial="hidden"
+            animate="visible"
+            variants={containerVariants}
+        >
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="grid gap-8 lg:grid-cols-4 md:grid-cols-2 sm:grid-cols-1">
                     {features.map((feature, index) => (
-                        <div key={index} className="bg-white p-6 rounded-lg shadow-lg text-center">
-                            <div className="mb-6 flex items-center justify-center h-16 w-16 mx-auto">
+                        <motion.div 
+                            key={index} 
+                            className="bg-white p-6 rounded-lg shadow-lg text-center flex flex-col items-center"
+                            variants={itemVariants}
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                        >
+                            <div className="mb-4 flex items-center justify-center h-16 w-16">
                                 <Image src={feature.icon} alt={feature.title} width={64} height={64} />
                             </div>
-                            <h3 className="text-base font-bold mb-2">{feature.title}</h3>
-                            <p className="text-gray-600">{feature.description}</p>
-                        </div>
+                            <h3 className="text-lg font-bold mb-2">{feature.title}</h3>
+                            <p className="text-gray-600 text-sm md:text-sm">{feature.description}</p>
+                        </motion.div>
                     ))}
                 </div>
             </div>
-        </div>
+        </motion.div>
     );
 };
 
