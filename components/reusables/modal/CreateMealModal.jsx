@@ -7,7 +7,6 @@ import SelectComponent from "@/components/reusables/input/SelectComponent";
 import Button from "@/components/reusables/buttons/Button";
 import { getCookie } from "@/utils/getCookie";
 import { uploadImageToSanity } from "@/utils/sanity/uploadImageToSanity";
-// import { uploadImageToSanity } from "@/utils/sanity/uploadImageToSanity"; // Import the utility function
 
 const mealSchema = yup.object().shape({
   title: yup.string().required("Title is required"),
