@@ -1,65 +1,8 @@
-"use client"
-import { useState } from 'react';
+"use client";
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
+import axios from 'axios';
 import Button from '../reusables/buttons/Button';
-
-// Dish data
-const dish = [
-  {
-    title: "Spaghetti Carbonara",
-    price: "N10,000",
-    description: "A classic Italian pasta dish made with eggs, cheese, pancetta, and pepper.",
-    image: "/meal.png"
-  },
-  {
-    title: "Margherita Pizza",
-    price: "N8,000",
-    description: "A simple yet delicious pizza topped with tomatoes, mozzarella, and fresh basil.",
-    image: "/meal.png"
-  },
-  {
-    title: "Chocolate Cake",
-    price: "N10,000",
-    description: "Rich and moist chocolate cake topped with creamy chocolate frosting.",
-    image: "/image 32.png"
-  },
-  {
-    title: "Caesar Salad",
-    price: "N7,500",
-    description: "A fresh salad with romaine lettuce, croutons, and Caesar dressing.",
-    image: "/image 32.png"
-  },
-  {
-    title: "Grilled Salmon",
-    price: "N6,000",
-    description: "Perfectly grilled salmon served with a side of vegetables.",
-    image: "/meal.png"
-  },
-  {
-    title: "Beef Tacos",
-    price: "N5,000",
-    description: "Soft tacos filled with seasoned beef, lettuce, cheese, and salsa.",
-    image: "/meal.png"
-  },
-  {
-    title: "Chocolate Cake",
-    price: "N10,000",
-    description: "Rich and moist chocolate cake topped with creamy chocolate frosting.",
-    image: "/image 32.png"
-  },
-  {
-    title: "Grilled Salmon",
-    price: "N6,000",
-    description: "Perfectly grilled salmon served with a side of vegetables.",
-    image: "/meal.png"
-  },
-  {
-    title: "Chocolate Cake",
-    price: "N10,000",
-    description: "Rich and moist chocolate cake topped with creamy chocolate frosting.",
-    image: "/image 32.png"
-  }
-];
 
 // Modal Component
 const DishModal = ({ dish, onClose, onAddToCart }) => {
@@ -97,8 +40,24 @@ const DishModal = ({ dish, onClose, onAddToCart }) => {
 
 // Main Dishes Component
 const Dishes = () => {
+  const [dishes, setDishes] = useState([]);
   const [selectedDish, setSelectedDish] = useState(null);
   const [cart, setCart] = useState([]);
+
+  useEffect(() => {
+    // Fetch dishes data from API
+    const fetchDishes = async () => {
+      try {
+        const response = await axios.get('/api/dishes'); // Replace with your API endpoint
+        console.log('Fetched dishes:', response.data); // Log the fetched data
+        setDishes(response.data);
+      } catch (error) {
+        console.error('Error fetching dishes:', error);
+      }
+    };
+
+    fetchDishes();
+  }, []);
 
   const handleDishClick = (dish) => {
     setSelectedDish(dish);
@@ -116,8 +75,9 @@ const Dishes = () => {
   return (
     <div className="py-12 bg-white">
       <div className="container mx-auto px-4">
+        <h2 className="text-2xl font-bold mb-4">Total Products: {dishes.length}</h2> {/* Display the total number of products */}
         <div className="grid gap-8 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1">
-          {dish.map((dish, index) => (
+          {dishes.map((dish, index) => (
             <div key={index} className="bg-white p-6 rounded-lg shadow-lg" onClick={() => handleDishClick(dish)}>
               <div className="relative h-48 mb-4 border-3 border-green-600">
                 <Image
@@ -144,18 +104,6 @@ const Dishes = () => {
           onClose={handleCloseModal}
           onAddToCart={handleAddToCart}
         />
-      )}
-      {cart.length > 0 && (
-        <div className="fixed bottom-0 right-0 m-4 bg-white p-4 rounded-lg shadow-lg">
-          <h3 className="text-xl font-bold mb-2">Cart</h3>
-          <ul>
-            {cart.map((item, index) => (
-              <li key={index} className="mb-2">
-                {item.title} - {item.price}
-              </li>
-            ))}
-          </ul>
-        </div>
       )}
     </div>
   );
