@@ -38,9 +38,11 @@ const router = useRouter()
           </Link>
           <div className="flex items-center space-x-4">
             {/* <Button /> */}
+            <Link href="/cart">
             <button className="hover:text-green-800">
               <FiShoppingCart className="h-5 w-5" />
             </button>
+            </Link>
             {
               euodia_token ? 
             <button className="hover:text-green-800">
