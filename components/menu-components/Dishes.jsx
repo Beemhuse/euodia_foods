@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import axios from 'axios';
 import Button from '../reusables/buttons/Button';
+import { client } from '@/utils/sanity/client';
 
 // Modal Component
 const DishModal = ({ dish, onClose, onAddToCart }) => {
@@ -38,26 +39,35 @@ const DishModal = ({ dish, onClose, onAddToCart }) => {
   );
 };
 
+async function getContent() {
+  const CONTENT_QUERY = `*[_type == "dish"] {
+    ...,
+    category->,
+    ingredients[]->,
+    image {
+      ...,
+      asset->
+    }
+  }`;
+
+  const content = await client.fetch(CONTENT_QUERY);
+  return content;
+}
+
 // Main Dishes Component
 const Dishes = () => {
   const [dishes, setDishes] = useState([]);
   const [selectedDish, setSelectedDish] = useState(null);
   const [cart, setCart] = useState([]);
 
-  useEffect(() => {
-    // Fetch dishes data from API
-    const fetchDishes = async () => {
-      try {
-        const response = await axios.get('/api/dishes'); // Replace with your API endpoint
-        console.log('Fetched dishes:', response.data); // Log the fetched data
-        setDishes(response.data);
-      } catch (error) {
-        console.error('Error fetching dishes:', error);
-      }
-    };
 
-    fetchDishes();
+  // Fetch content when component mounts
+  useEffect(() => {
+    getContent().then((data) => {
+      setDishes(data);
+    });
   }, []);
+ 
 
   const handleDishClick = (dish) => {
     setSelectedDish(dish);
