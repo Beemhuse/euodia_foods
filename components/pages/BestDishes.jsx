@@ -59,7 +59,7 @@ const BestSellerDishes = () => {
         <p className='text-center text-gray-700 mb-8'>
           Our fresh garden salad is a light and refreshing option. It features a mix of <br />crisp lettuce, juicy tomatoe all tossed in your choice of dressing.
         </p>
-        <div className="grid gap-8 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1">
+        <div className="grid gap-8 lg:grid-cols-3 sm:grid-cols-2">
           {bestSellerDishes.map((dish, index) => (
             <div key={index} className="bg-white p-6 rounded-lg shadow-lg">
               <div className="relative h-48 mb-4">
