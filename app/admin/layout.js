@@ -2,6 +2,7 @@ import { Inter } from 'next/font/google';
 import SideNav from '@/layout/SideNav';
 import TopNav from '@/layout/TopNav';
 import "../globals.css"
+import AuthLayout from './AuthLayout';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata = {
@@ -61,8 +62,11 @@ export function generateViewport() {
   };
 }
 export default function RootLayout({ children }) {
+  
+ 
   return (
-   
+   <AuthLayout>
+
     <main className=" flex flex-col min-h-screen  h-full">
      
        <div className="flex  flex-col h-screen w-full mx-auto">
@@ -77,5 +81,6 @@ export default function RootLayout({ children }) {
         </div>
       </div>
     </main>
+   </AuthLayout>
   );
 }
