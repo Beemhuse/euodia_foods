@@ -14,8 +14,7 @@ const products = [
     title: "Village Rice",
     category: "Rice",
     price: 5000,
-    summary:
-      "Our delicious Village Rice is here to take you out on a tasty ride.",
+    summary: "Our delicious Village Rice is here to take you out on a tasty ride.",
     sales: 5,
   },
   {
@@ -23,8 +22,7 @@ const products = [
     title: "Fried Rice",
     category: "Rice",
     price: 4500,
-    summary:
-      "Our delicious Fried Rice is here to take you out on a tasty ride.",
+    summary: "Our delicious Fried Rice is here to take you out on a tasty ride.",
     sales: 10,
   },
   {
@@ -32,8 +30,7 @@ const products = [
     title: "Jollof Rice",
     category: "Rice",
     price: 4000,
-    summary:
-      "Our delicious Jollof Rice is here to take you out on a tasty ride.",
+    summary: "Our delicious Jollof Rice is here to take you out on a tasty ride.",
     sales: 8,
   },
   {
@@ -41,8 +38,7 @@ const products = [
     title: "Egusi Soup",
     category: "Soup",
     price: 5500,
-    summary:
-      "Our delicious Egusi Soup is here to take you out on a tasty ride.",
+    summary: "Our delicious Egusi Soup is here to take you out on a tasty ride.",
     sales: 12,
   },
   {
@@ -50,8 +46,7 @@ const products = [
     title: "Ogbono Soup",
     category: "Soup",
     price: 5000,
-    summary:
-      "Our delicious Ogbono Soup is here to take you out on a tasty ride.",
+    summary: "Our delicious Ogbono Soup is here to take you out on a tasty ride.",
     sales: 7,
   },
   {
@@ -59,8 +54,7 @@ const products = [
     title: "Pepper Soup",
     category: "Soup",
     price: 6000,
-    summary:
-      "Our delicious Pepper Soup is here to take you out on a tasty ride.",
+    summary: "Our delicious Pepper Soup is here to take you out on a tasty ride.",
     sales: 9,
   },
 ];
@@ -75,38 +69,35 @@ const fetchCategories = async () => {
   }
 };
 
-export default function page() {
+export default function Page() {
   const [isMealModalOpen, setIsMealModalOpen] = useState(false);
   const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
-  const [categories, setCategory] = useState(null);
-  useEffect( ()=>{
-async function getCategory(){
+  const [categories, setCategories] = useState(null);
 
-  const categories = await fetchCategories();
-  setCategory(categories)
-}
-getCategory()
-  }, [])
-
-console.log(categories);
+  useEffect(() => {
+    async function getCategories() {
+      const categories = await fetchCategories();
+      setCategories(categories);
+    }
+    getCategories();
+  }, []);
 
   return (
     <section className="p-4">
-      <div className="flex w-full justify-between items-center">
-        <div className="">
+      <div className="flex flex-col md:flex-row w-full justify-between items-center mb-6">
+        <div className="mb-4 md:mb-0">
           <Typography variant="h2" size="lg">
             All Products
           </Typography>
-
-          <nav class="flex" aria-label="Breadcrumb">
-            <ol class="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
-              <li class="inline-flex items-center">
+          <nav className="flex" aria-label="Breadcrumb">
+            <ol className="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
+              <li className="inline-flex items-center">
                 <a
                   href="#"
-                  class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white"
+                  className="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white"
                 >
                   <svg
-                    class="w-3 h-3 me-2.5"
+                    className="w-3 h-3 me-2.5"
                     aria-hidden="true"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="currentColor"
@@ -117,11 +108,10 @@ console.log(categories);
                   Products
                 </a>
               </li>
-            
               <li aria-current="page">
-                <div class="flex items-center">
+                <div className="flex items-center">
                   <svg
-                    class="rtl:rotate-180 w-3 h-3 text-gray-400 mx-1"
+                    className="rtl:rotate-180 w-3 h-3 text-gray-400 mx-1"
                     aria-hidden="true"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -129,13 +119,13 @@ console.log(categories);
                   >
                     <path
                       stroke="currentColor"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
                       d="m1 9 4-4-4-4"
                     />
                   </svg>
-                  <span class="ms-1 text-sm font-medium text-gray-500 md:ms-2 dark:text-gray-400">
+                  <span className="ms-1 text-sm font-medium text-gray-500 md:ms-2 dark:text-gray-400">
                     Flowbite
                   </span>
                 </div>
@@ -143,17 +133,21 @@ console.log(categories);
             </ol>
           </nav>
         </div>
-        <Button
-          onClick={() => setIsMealModalOpen(true)}
-          title="Add new Product"
-          icon={<Image src={"/prod.svg"} height={20} width={20} alt="" />}
-        />
+        <div className="flex gap-2">
+          <Button
+            onClick={() => setIsMealModalOpen(true)}
+            title="Add new Product"
+            icon={<Image src={"/prod.svg"} height={20} width={20} alt="" />}
+          />
+          <Button
+            onClick={() => setIsCategoryModalOpen(true)}
+            title="Add Category"
+            icon={<Image src={"/category.svg"} height={20} width={20} alt="" />}
+          />
+        </div>
       </div>
-
-      <button onClick={() => setIsCategoryModalOpen(true)} className="btn-primary">
-        Add Category
-      </button>
-      <div className="flex my-8 flex-wrap gap-4 items-start justify-start ">
+      
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         {products.map((product, index) => (
           <ProductCard key={index} product={product} />
         ))}
