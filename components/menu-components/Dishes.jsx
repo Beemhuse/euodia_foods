@@ -87,7 +87,7 @@ const Dishes = () => {
       <div className="container mx-auto px-4">
         <h2 className="text-2xl font-bold mb-4">Total Products: {dishes.length}</h2> {/* Display the total number of products */}
         <div className="grid gap-8 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1">
-          {dishes.map((dish, index) => (
+          {dishes?.map((dish, index) => (
             <div key={index} className="bg-white p-6 rounded-lg shadow-lg" onClick={() => handleDishClick(dish)}>
               <div className="relative h-48 mb-4 border-3 border-green-600">
                 <Image
