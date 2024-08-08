@@ -80,9 +80,9 @@ const Cart = () => {
         </div>
         <div className="mt-6 flex flex-col md:flex-row justify-between items-start md:items-center">
           <Link href="/menu">
-          <button className="border border-gray-300 px-4 py-2 rounded-md mb-4 md:mb-0">
-            Return To Shop
-          </button>
+            <button className="border border-gray-300 px-4 py-2 rounded-md mb-4 md:mb-0">
+              Return To Shop
+            </button>
           </Link>
           <div className="border border-gray-300 p-4 rounded-md w-full md:w-1/3">
             <h2 className="text-lg font-bold mb-4">Cart Total</h2>
@@ -98,9 +98,11 @@ const Cart = () => {
               <span>Total:</span>
               <span>₦{calculateSubtotal().toLocaleString()}</span>
             </div>
-            <button className="bg-green-500 text-white px-4 py-2 rounded-md w-full">
-              Process to checkout
-            </button>
+            <Link href="/checkout">
+              <button className="bg-green-500 text-white px-4 py-2 rounded-md w-full">
+                Process to checkout
+              </button>
+            </Link>
           </div>
         </div>
       </div>

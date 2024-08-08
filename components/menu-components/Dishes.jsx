@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
-import axios from 'axios';
+// import axios from 'axios';
 import Button from '../reusables/buttons/Button';
 import { client } from '@/utils/sanity/client';
 
