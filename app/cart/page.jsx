@@ -1,6 +1,7 @@
 "use client"
 import React, { useState } from 'react';
 import HomeLayout from '@/components/layout/HomeLayout';
+import Link from 'next/link';
 
 const Cart = () => {
   const initialCartItems = [
@@ -78,9 +79,11 @@ const Cart = () => {
           </table>
         </div>
         <div className="mt-6 flex flex-col md:flex-row justify-between items-start md:items-center">
+          <Link href="/menu">
           <button className="border border-gray-300 px-4 py-2 rounded-md mb-4 md:mb-0">
             Return To Shop
           </button>
+          </Link>
           <div className="border border-gray-300 p-4 rounded-md w-full md:w-1/3">
             <h2 className="text-lg font-bold mb-4">Cart Total</h2>
             <div className="flex justify-between mb-2">
