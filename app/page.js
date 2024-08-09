@@ -1,14 +1,10 @@
 'use client';
-import Navbar from '@/components/layout/Navbar';
-import Button from '@/components/reusables/buttons/Button';
 import { client } from '@/utils/sanity/client';
-import Image from 'next/image';
 import Hero from "@/components/pages/Hero.jsx"
 import { useState, useEffect } from 'react';
 import Features from '@/components/pages/Features';
 import Qualities from '@/components/pages/Qualities';
 import BestSellerDishes from '@/components/pages/BestDishes';
-import Banner from '@/components/pages/Banner';
 import HomeLayout from '@/components/layout/HomeLayout';
 
 
@@ -48,8 +44,6 @@ export default function Home() {
         <BestSellerDishes />
         <Features />
         <Qualities />
-        {/* <Banner /> */}
-
 
         {/* Render fetched content */}
         {/* <div className="grid grid-cols-3 gap-4">

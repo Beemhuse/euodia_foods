@@ -98,11 +98,11 @@ const Dishes = () => {
                 />
               </div>
               <div className="flex justify-between items-center mb-2">
-                <h3 className="text-xl font-bold">{dish.title}</h3>
+                <h3 className="text-xl font-semibold">{dish.title}</h3>
                 <p className="text-green-500 text-lg font-bold">{dish.price}</p>
               </div>
               <p className="text-gray-600 mb-2">{dish.description}</p>
-              <button className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Buy Now</button>
+              <button className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">View Details</button>
             </div>
           ))}
         </div>
