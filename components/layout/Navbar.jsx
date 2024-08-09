@@ -13,14 +13,14 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const totalQuantities = useSelector(state => state.cart.totalQuantities)
 
-const router = useRouter()
+  const router = useRouter()
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
   };
   const { getCookie } = useCookies();
   let euodia_token = getCookie("euodia_token");
 
-  useEffect(() => {}, [euodia_token]);
+  useEffect(() => { }, [euodia_token]);
 
   return (
     <nav className="bg-white shadow-md">
@@ -43,13 +43,13 @@ const router = useRouter()
           </Link>
           <div className="flex items-center space-x-4">
             <Link href="/cart">
-            <button className="hover:text-green-800 relative">
-              <FiShoppingCart className="text-xl" />
-              <p className='absolute -top-2 right-0 bg-red h-4 w-4 text-white flex items-center justify-center p-1 text-sm rounded-full' >
+              <button className="hover:text-green-800 relative">
+                <FiShoppingCart className="text-xl" />
+                <p className='absolute -top-2 right-0 bg-red h-4 w-4 text-white flex items-center justify-center p-1 text-sm rounded-full' >
 
-              {totalQuantities}
-              </p>
-            </button>
+                  {totalQuantities}
+                </p>
+              </button>
             </Link>
             {euodia_token ? (
               <button className="hover:text-green-800">
@@ -57,6 +57,7 @@ const router = useRouter()
               </button>
             ) : (
               <Button
+                color="green"
                 title="Login"
                 hoverAnimation={"bounce"}
                 isBorder

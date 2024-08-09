@@ -3,10 +3,10 @@
 import { useRef, useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 
-
-const Category = ({categories, onCategorySelect}) => {
+const Category = ({ categories, onCategorySelect }) => {
   const [activeIndex, setActiveIndex] = useState(0);
   const scrollRef = useRef(null);
+
   const scrollLeft = () => {
     scrollRef.current.scrollBy({ left: -200, behavior: 'smooth' });
   };
@@ -25,16 +25,17 @@ const Category = ({categories, onCategorySelect}) => {
     };
 
     scrollContainer.addEventListener('scroll', handleScroll);
-    
+
     return () => {
       scrollContainer.removeEventListener('scroll', handleScroll);
     };
-  }, []);
+  }, [categories.length]);
 
   const handleCategoryClick = (index, title) => {
     setActiveIndex(index % categories.length);
     onCategorySelect(title);
   };
+
   return (
     <div className="bg-green-500 py-4 px-6 relative flex items-center overflow-hidden">
       <button onClick={scrollLeft} className="absolute left-0 outline-none">
@@ -60,7 +61,8 @@ const Category = ({categories, onCategorySelect}) => {
         {categories?.categories?.map((category, index) => (
           <motion.div
             key={index}
-            className={`text-${activeIndex === (index % categories.length) ? 'white' : 'black'} font-bold px-4 cursor-pointer hover:underline`}
+            className={`${activeIndex === index % categories.length ? 'text-white' : 'text-black'
+              } font-semibold px-4 cursor-pointer hover:underline capitalize`}
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, delay: (index % categories.length) * 0.1 }}
@@ -68,6 +70,7 @@ const Category = ({categories, onCategorySelect}) => {
           >
             {category.title}
           </motion.div>
+
         ))}
       </div>
 
