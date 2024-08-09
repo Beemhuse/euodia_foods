@@ -8,56 +8,6 @@ import Typography from "@/components/reusables/typography/Typography";
 import CreateCategoryModal from "@/components/reusables/modal/CreateCategoryModal";
 import { client } from "@/utils/sanity/client";
 
-const products = [
-  {
-    image: "/meal.png",
-    title: "Village Rice",
-    category: "Rice",
-    price: 5000,
-    summary: "Our delicious Village Rice is here to take you out on a tasty ride.",
-    sales: 5,
-  },
-  {
-    image: "/meal.png",
-    title: "Fried Rice",
-    category: "Rice",
-    price: 4500,
-    summary: "Our delicious Fried Rice is here to take you out on a tasty ride.",
-    sales: 10,
-  },
-  {
-    image: "/meal.png",
-    title: "Jollof Rice",
-    category: "Rice",
-    price: 4000,
-    summary: "Our delicious Jollof Rice is here to take you out on a tasty ride.",
-    sales: 8,
-  },
-  {
-    image: "/Frame 18.png",
-    title: "Egusi Soup",
-    category: "Soup",
-    price: 5500,
-    summary: "Our delicious Egusi Soup is here to take you out on a tasty ride.",
-    sales: 12,
-  },
-  {
-    image: "/01.png",
-    title: "Ogbono Soup",
-    category: "Soup",
-    price: 5000,
-    summary: "Our delicious Ogbono Soup is here to take you out on a tasty ride.",
-    sales: 7,
-  },
-  {
-    image: "/image 25.png",
-    title: "Pepper Soup",
-    category: "Soup",
-    price: 6000,
-    summary: "Our delicious Pepper Soup is here to take you out on a tasty ride.",
-    sales: 9,
-  },
-];
 
 const fetchCategories = async () => {
   try {
@@ -89,6 +39,7 @@ export default function Page() {
   const [categories, setCategories] = useState(null);
   const [products, setProducts] = useState(null);
 
+  console.log("products ==> ",products)
   useEffect(() => {
     async function getCategories() {
       const categories = await fetchCategories();
@@ -97,11 +48,9 @@ export default function Page() {
     getCategories();
   }, []);
   useEffect(() => {
-    async function getProducts() {
-      const allProducts = await fetchProducts();
-      setProducts(allProducts);
-    }
-    getProducts();
+    fetchProducts().then((data) => {
+      setProducts(data);
+    });
   }, []);
 
   return (
@@ -170,9 +119,9 @@ export default function Page() {
       </div>
       
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-        {/* {products?.map((product, index) => (
+        {products?.map((product, index) => (
           <ProductCard key={index} product={product} />
-        ))} */}
+        ))}
       </div>
 
       <CreateMealModal
@@ -183,7 +132,6 @@ export default function Page() {
       />
       <CreateCategoryModal
         isOpen={isCategoryModalOpen}
-        categories={categories}
         onClose={() => setIsCategoryModalOpen(false)}
       />
     </section>

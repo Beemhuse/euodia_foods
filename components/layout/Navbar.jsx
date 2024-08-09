@@ -7,8 +7,12 @@ import Button from '../reusables/buttons/Button';
 import { useRouter } from 'next/navigation';
 import useCookies from '@/hooks/useCookies';
 
+import { useSelector } from 'react-redux';
+
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const totalQuantities = useSelector(state => state.cart.totalQuantities)
+
 const router = useRouter()
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
@@ -39,8 +43,12 @@ const router = useRouter()
           <div className="flex items-center space-x-4">
             {/* <Button /> */}
             <Link href="/cart">
-            <button className="hover:text-green-800">
-              <FiShoppingCart className="h-5 w-5" />
+            <button className="hover:text-green-800 relative">
+              <FiShoppingCart className="text-xl" />
+              <p className='absolute -top-2 right-0 bg-red h-4 w-4 text-white flex items-center justify-center p-1 text-sm rounded-full' >
+
+              {totalQuantities}
+              </p>
             </button>
             </Link>
             {

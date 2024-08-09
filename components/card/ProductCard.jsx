@@ -8,15 +8,15 @@ const ProductCard = ({ product }) => {
     <div className="bg-[#F9FAFB] shadow-md rounded-lg p-4 w-full max-w-sm">
       <div className="flex items-center justify-between">
         <Image
-          src={product.image}
+          src={product.image.asset.url}
           alt={product.title}
           width={50}
           height={50}
           className="rounded-lg"
         />
       <div className="mt-4 space-y-4">
-        <h2 className="text-lg font-semibold">{product.title}</h2>
-        <p className="text-gray-600">{product.category}</p>
+        <h2 className="text-md font-semibold">{product.title}</h2>
+        <p className="text-gray-600">{product.category.title}</p>
         <p className="text-md font-bold ">₦{product.price}</p>
       </div>
       <button className="text-[#374151] p-4 rounded-md bg-[#E5E7EB] hover:text-gray-600">

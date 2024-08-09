@@ -3,20 +3,10 @@
 import { useRef, useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 
-const categories = [
-  'FEATURED',
-  'BREAKFAST COMBOS',
-  'MADE FROM SCRATCH™ BISCUITS & MORE',
-  'BREAKFAST BURRITOS & WRAPS',
-  'PLATTERS',
-  '2 FOR $5',
-  'CHARBROILED BURGER COMBO',
-];
 
-const Category = () => {
+const Category = ({categories, onCategorySelect}) => {
   const [activeIndex, setActiveIndex] = useState(0);
   const scrollRef = useRef(null);
-
   const scrollLeft = () => {
     scrollRef.current.scrollBy({ left: -200, behavior: 'smooth' });
   };
@@ -41,6 +31,10 @@ const Category = () => {
     };
   }, []);
 
+  const handleCategoryClick = (index, title) => {
+    setActiveIndex(index % categories.length);
+    onCategorySelect(title);
+  };
   return (
     <div className="bg-green-500 py-4 px-6 relative flex items-center overflow-hidden">
       <button onClick={scrollLeft} className="absolute left-0 outline-none">
@@ -63,16 +57,16 @@ const Category = () => {
         className="flex space-x-6 overflow-x-auto scroll-smooth whitespace-nowrap no-scrollbar"
         style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }} // Firefox and IE
       >
-        {[...categories, ...categories, ...categories].map((category, index) => (
+        {categories?.categories?.map((category, index) => (
           <motion.div
             key={index}
             className={`text-${activeIndex === (index % categories.length) ? 'white' : 'black'} font-bold px-4 cursor-pointer hover:underline`}
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, delay: (index % categories.length) * 0.1 }}
-            onClick={() => setActiveIndex(index % categories.length)}
+            onClick={() => handleCategoryClick(index, category.title)}
           >
-            {category}
+            {category.title}
           </motion.div>
         ))}
       </div>

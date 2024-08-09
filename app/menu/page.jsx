@@ -1,9 +1,31 @@
+"use client"
 import HomeLayout from '@/components/layout/HomeLayout'
 import Dishes from '@/components/menu-components/Dishes'
 import Category from '@/components/reusables/category/page'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
+const fetchCategories = async () => {
+  try {
+    const query = `*[_type == "category"]`;
+    return await client.fetch(query);
+  } catch (error) {
+    console.error('Error fetching categories:', error);
+    return [];
+  }
+};
 export default function page() {
+  const [categories, setCategories] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+
+  useEffect(() => {
+    async function getCategories() {
+      const categories = await fetch("api/admin/category");
+      const result = await categories.json()
+      setCategories(result);
+    }
+    getCategories();
+  }, []);
+
   return (
     <HomeLayout>
 
@@ -12,9 +34,9 @@ export default function page() {
           Menu
         </h1>
         <div className='container mx-auto'>
-          <Category />
+          <Category onCategorySelect={setSelectedCategory} categories={categories} />
         </div>
-        <Dishes />
+        <Dishes selectedCategory={selectedCategory} />
       </div>
     </HomeLayout>
   )
