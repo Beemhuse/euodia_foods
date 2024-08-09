@@ -2,26 +2,22 @@
 import React, { useState } from 'react';
 import HomeLayout from '@/components/layout/HomeLayout';
 import Link from 'next/link';
+import { useDispatch, useSelector } from 'react-redux';
+import Image from 'next/image';
+import { decrementQuantity, incrementQuantity, updateCartItemQuantity } from '@/store/reducers/cartReducer';
 
 const Cart = () => {
-  const initialCartItems = [
-    { id: 1, name: 'Jollof Rice', price: 20000, quantity: 1 },
-    { id: 2, name: 'Fruit Salad', price: 10000, quantity: 1 },
-    { id: 3, name: 'Village Rice', price: 5000, quantity: 1 },
-  ];
+const dispatch = useDispatch()
+  const {cartItems } = useSelector(state => state.cart)
 
-  const [cartItems, setCartItems] = useState(initialCartItems);
 
   const handleQuantityChange = (id, delta) => {
-    setCartItems((prevItems) =>
-      prevItems.map((item) =>
-        item.id === id
-          ? { ...item, quantity: Math.max(1, item.quantity + delta) }
-          : item
-      )
-    );
+    if (delta > 0) {
+      dispatch(incrementQuantity({ id }));
+    } else if (delta < 0) {
+      dispatch(decrementQuantity({ id }));
+    }
   };
-
   const calculateSubtotal = () => {
     return cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
   };
@@ -43,9 +39,11 @@ const Cart = () => {
               {cartItems.map((item) => (
                 <tr key={item.id} className="border-t">
                   <td className="px-4 py-2 flex items-center">
-                    <img
-                      src={`/images/${item.name.toLowerCase().replace(/ /g, '-')}.jpg`}
+                    <Image
+                      src={item.image.asset.url}
                       alt={item.name}
+                      width={50}
+                      height={50}
                       className="w-10 h-10 mr-2 object-cover"
                     />
                     {item.name}
@@ -55,7 +53,7 @@ const Cart = () => {
                     <div className="flex items-center justify-center">
                       <button
                         className="px-2 py-1 border rounded-l"
-                        onClick={() => handleQuantityChange(item.id, -1)}
+                        onClick={() => dispatch(decrementQuantity({ id: item?._id })) }
                       >
                         -
                       </button>
@@ -64,8 +62,7 @@ const Cart = () => {
                       </span>
                       <button
                         className="px-2 py-1 border rounded-r"
-                        onClick={() => handleQuantityChange(item.id, 1)}
-                      >
+                        onClick={() => dispatch(incrementQuantity({ id: item?._id })) }                      >
                         +
                       </button>
                     </div>
@@ -100,7 +97,7 @@ const Cart = () => {
             </div>
             <Link href="/checkout">
               <button className="bg-green-500 text-white px-4 py-2 rounded-md w-full">
-                Process to checkout
+                Proceed to checkout
               </button>
             </Link>
           </div>
