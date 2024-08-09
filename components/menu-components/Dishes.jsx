@@ -1,20 +1,23 @@
 "use client";
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
-// import axios from 'axios';
-import Button from '../reusables/buttons/Button';
 import { client } from '@/utils/sanity/client';
+import { addCartItem } from '@/store/reducers/cartReducer';
+import { useDispatch } from 'react-redux';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 // Modal Component
 const DishModal = ({ dish, onClose, onAddToCart }) => {
+ 
   return (
     <div className="fixed inset-0 z-50 overflow-auto bg-black bg-opacity-70 flex justify-center items-center p-4 sm:p-6 md:p-8">
       <div className="bg-white rounded-lg w-full max-w-4xl h-auto p-4 sm:p-6 md:p-8 relative flex flex-col md:flex-row">
         <button className="absolute top-4 right-4 text-3xl font-bold text-gray-600" onClick={onClose}>&times;</button>
         <div className="w-full md:w-1/2 mb-4 md:mb-0 md:pr-4">
           <Image
-            src={dish.image}
-            alt={dish.title}
+                  src={dish.image.asset.url}
+                  alt={dish.title}
             layout="responsive"
             width={500}
             height={500}
@@ -29,7 +32,7 @@ const DishModal = ({ dish, onClose, onAddToCart }) => {
           </div>
           <button
             className="bg-green-500 text-white px-6 py-3 rounded hover:bg-green-600"
-            onClick={() => onAddToCart(dish)}
+            onClick={()=>onAddToCart(dish)}
           >
             Add to Cart
           </button>
@@ -40,34 +43,85 @@ const DishModal = ({ dish, onClose, onAddToCart }) => {
 };
 
 async function getContent() {
-  const CONTENT_QUERY = `*[_type == "dish"] {
-    ...,
-    category->,
-    ingredients[]->,
+  const query = `*[_type == "dish" && !(_id in path("drafts.*"))] | order(sortOrder asc) {
+    _id,
+    title,
+    slug,
+    description,
+    price,
+    category->{
+      title
+    },
+    status,
+    sortOrder,
     image {
-      ...,
-      asset->
+      asset->{
+        url
+      }
     }
   }`;
 
-  const content = await client.fetch(CONTENT_QUERY);
+  const content = await client.fetch(query);
   return content;
 }
 
 // Main Dishes Component
-const Dishes = () => {
+const Dishes = ({selectedCategory}) => {
   const [dishes, setDishes] = useState([]);
   const [selectedDish, setSelectedDish] = useState(null);
-  const [cart, setCart] = useState([]);
+  const [defaultCategory, setDefaultCategory] = useState(null);
+  const dispatch = useDispatch();
+  const handleAddToCart = (dish) => {
+    console.log("add item to cart ==>", dish._id)
+    console.log("add item to cart ==>", dish)
+    try {
+      dispatch(addCartItem({dish}));
+      toast.success("Item added to cart", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    } catch (err) {
+      toast.error(err.message || "Failed to add item to cart", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    }
+  };
 
-
-  // Fetch content when component mounts
   useEffect(() => {
-    getContent().then((data) => {
-      setDishes(data);
-    });
+    const fetchDishes = async () => {
+      try {
+//         const data = await fetch("/api/dishes");
+// const result = await data.json()
+// console.log("filter dishes ==> ",result);
+const fetchedDishes = await getContent();
+setDishes(fetchedDishes);
+        // setDishes(result.data);
+      } catch (error) {
+        toast.error("Failed to load dishes", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }
+    };
+
+    fetchDishes();
   }, []);
- 
 
   const handleDishClick = (dish) => {
     setSelectedDish(dish);
@@ -77,20 +131,24 @@ const Dishes = () => {
     setSelectedDish(null);
   };
 
-  const handleAddToCart = (dish) => {
-    setCart([...cart, dish]);
-    handleCloseModal();
-  };
 
+
+  // Filter dishes based on the selected category or default category
+  const filteredDishes = dishes?.filter((dish) => 
+    dish?.category?.title === selectedCategory
+  );
+    // dish?.category?.title === (selectedCategory || defaultCategory)
+    console.log("filter dishes ==> ",dishes);
+  
   return (
     <div className="py-12 bg-white">
       <div className="container mx-auto px-4">
         <div className="grid gap-8 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1">
-          {dishes.map((dish, index) => (
-            <div key={index} className="bg-white p-6 rounded-lg shadow-lg" onClick={() => handleDishClick(dish)}>
+          {filteredDishes?.map((dish) => (
+            <div key={dish._id} className="bg-white p-6 rounded-lg shadow-lg" onClick={() => handleDishClick(dish)}>
               <div className="relative h-48 mb-4 border-3 border-green-600">
                 <Image
-                  src={dish.image}
+                  src={dish.image.asset.url}
                   alt={dish.title}
                   layout="fill"
                   objectFit="cover"
@@ -114,6 +172,7 @@ const Dishes = () => {
           onAddToCart={handleAddToCart}
         />
       )}
+      <ToastContainer />
     </div>
   );
 };

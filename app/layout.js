@@ -1,8 +1,8 @@
 import { Inter } from "next/font/google";
-import "./globals.css";
-import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer";
+import "./globals.css"
 import StoreProvider from "./StoreProvider";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -67,6 +67,7 @@ export default function RootLayout({ children }) {
     <html lang="en" className="h-full">
       <body className=" h-full">
         <div className="flex-grow">
+          <ToastContainer />
           <StoreProvider>{children}</StoreProvider>
         </div>
       </body>
