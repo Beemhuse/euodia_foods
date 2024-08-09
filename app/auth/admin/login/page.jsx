@@ -9,6 +9,7 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { handleGenericError } from "@/utils/errorHandler";
 import useCookies from "@/hooks/useCookies";
+import { toast } from "react-toastify";
 
 const schema = yup.object().shape({
   email: yup.string().email("Invalid email").required("Email is required"),
@@ -43,12 +44,30 @@ export default function Login() {
       }
 
       setLoading(false);
-      setSuccess('Login successful');
+      // setSuccess('Login successful');
+      toast.success("Welcome back Admin", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
       router.push('/admin');
       // window.location.reload()
     } catch (error) {
       const errMsg = handleGenericError(error);
-      setError(errMsg);
+      toast.error(errMsg, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+      // setError(errMsg);
       setLoading(false);
     }
   };
@@ -57,13 +76,11 @@ export default function Login() {
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="bg-white p-15 shadow-md p-10 flex flex-col gap-4 rounded-lg"
+        className="bg-white  p-15 shadow-md p-10 flex flex-col gap-4 rounded-lg"
       >
-        <h2 className="text-3xl text-center text-accent font-bold">Admin Log in to Euodia</h2>
-        <p className="text-center text-gray-700">Quick & Simple way to start making your orders</p>
+        <h2 className="text-3xl text-center text-accent font-bold"> Log in to Euodia</h2>
+        <p className="text-center text-gray-700">Welcome back Admin</p>
 
-        {error && <p className="text-red-500 text-center">{error}</p>}
-        {success && <p className="text-green-500 text-center">{success}</p>}
 
         <InputComponent
           label="Email"

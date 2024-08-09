@@ -68,11 +68,26 @@ const fetchCategories = async () => {
     return [];
   }
 };
+async function fetchProducts() {
+  const CONTENT_QUERY = `*[_type == "dish"] {
+    ...,
+    category->,
+    ingredients[]->,
+    image {
+      ...,
+      asset->
+    }
+  }`;
+
+  const content = await client.fetch(CONTENT_QUERY);
+  return content;
+}
 
 export default function Page() {
   const [isMealModalOpen, setIsMealModalOpen] = useState(false);
   const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
   const [categories, setCategories] = useState(null);
+  const [products, setProducts] = useState(null);
 
   useEffect(() => {
     async function getCategories() {
@@ -80,6 +95,13 @@ export default function Page() {
       setCategories(categories);
     }
     getCategories();
+  }, []);
+  useEffect(() => {
+    async function getProducts() {
+      const allProducts = await fetchProducts();
+      setProducts(allProducts);
+    }
+    getProducts();
   }, []);
 
   return (
@@ -126,7 +148,7 @@ export default function Page() {
                     />
                   </svg>
                   <span className="ms-1 text-sm font-medium text-gray-500 md:ms-2 dark:text-gray-400">
-                    Flowbite
+                    
                   </span>
                 </div>
               </li>
@@ -148,9 +170,9 @@ export default function Page() {
       </div>
       
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-        {products.map((product, index) => (
+        {/* {products?.map((product, index) => (
           <ProductCard key={index} product={product} />
-        ))}
+        ))} */}
       </div>
 
       <CreateMealModal
