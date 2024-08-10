@@ -30,7 +30,7 @@ const Cart = () => {
 
   return (
     <HomeLayout>
-      <div className="container mx-auto p-4">
+      <div className="container mx-auto py-16 border-t">
         {cartItems.length === 0 ? (
           <div className="text-center mt-8">
             <h2 className="text-xl font-semibold mb-6">Your cart is empty</h2>
