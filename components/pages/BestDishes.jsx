@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
+import useCurrencyFormatter from '@/hooks/useCurrencyFormatter'; 
 
 // Modal Component
 const DishModal = ({ dish, onClose, onAddToCart }) => {
@@ -42,40 +43,42 @@ const BestSellerDishes = () => {
   const [selectedDish, setSelectedDish] = useState(null);
   const [cart, setCart] = useState([]);
 
+  const formatCurrency = useCurrencyFormatter(); // Use the hook
+
   const bestSellerDishes = [
     {
       title: "Spaghetti Carbonara",
-      price: "N10,000",
+      price: 10000, // Use numerical values
       description: "A classic Italian pasta dish made with eggs, cheese, pancetta, and pepper.",
       image: "/meal.png"
     },
     {
       title: "Margherita Pizza",
-      price: "N8,000",
+      price: 8000, // Use numerical values
       description: "A simple yet delicious pizza topped with tomatoes, mozzarella, and fresh basil.",
       image: "/meal.png"
     },
     {
       title: "Caesar Salad",
-      price: "N7,500",
+      price: 7500, // Use numerical values
       description: "A fresh salad with romaine lettuce, croutons, and Caesar dressing.",
       image: "/image 32.png"
     },
     {
       title: "Grilled Salmon",
-      price: "N6,000",
+      price: 6000, // Use numerical values
       description: "Perfectly grilled salmon served with a side of vegetables.",
       image: "/meal.png"
     },
     {
       title: "Beef Tacos",
-      price: "N5,000",
+      price: 5000, // Use numerical values
       description: "Soft tacos filled with seasoned beef, lettuce, cheese, and salsa.",
       image: "/meal.png"
     },
     {
       title: "Chocolate Cake",
-      price: "N10,000",
+      price: 10000, // Use numerical values
       description: "Rich and moist chocolate cake topped with creamy chocolate frosting.",
       image: "/image 32.png"
     }
@@ -130,7 +133,7 @@ const BestSellerDishes = () => {
               </div>
               <div className="flex justify-between items-center mb-2">
                 <h3 className="text-xl font-bold">{dish.title}</h3>
-                <p className="text-green-500 text-lg font-bold">{dish.price}</p>
+                <p className="text-green-500 text-lg font-bold">{formatCurrency(dish.price)}</p> {/* Format price */}
               </div>
               <div className="flex justify-between items-center">
                 <p className="text-gray-600 ">{dish.description}</p>

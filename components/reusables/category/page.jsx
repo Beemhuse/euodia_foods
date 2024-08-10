@@ -27,7 +27,9 @@ const Category = ({ categories, onCategorySelect }) => {
     const handleScroll = () => {
       const containerWidth = scrollContainer.offsetWidth;
       const scrollLeft = scrollContainer.scrollLeft;
-      const newIndex = Math.round(scrollLeft / (containerWidth / categories.categories.length));
+      const newIndex = Math.round(
+        scrollLeft / (containerWidth / categories.categories.length)
+      );
       setActiveIndex(newIndex);
     };
 
@@ -60,7 +62,11 @@ const Category = ({ categories, onCategorySelect }) => {
           stroke="currentColor"
           strokeWidth="2"
         >
-          <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M15 19l-7-7 7-7"
+          />
         </motion.svg>
       </button>
 
@@ -72,11 +78,17 @@ const Category = ({ categories, onCategorySelect }) => {
         {categories?.categories?.map((category, index) => (
           <motion.div
             key={index}
-            className={`${activeIndex === index % categories.categories.length ? 'text-white' : 'text-black'
-              } font-semibold px-4 cursor-pointer hover:underline capitalize`}
+            className={`${
+              activeIndex === index % categories.categories.length
+                ? 'text-white'
+                : 'text-black'
+            } font-semibold px-4 cursor-pointer hover:underline capitalize`}
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3, delay: (index % categories.categories.length) * 0.1 }}
+            transition={{
+              duration: 0.3,
+              delay: (index % categories.categories.length) * 0.1,
+            }}
             onClick={() => handleCategoryClick(index, category.title)}
           >
             {category.title}
@@ -95,7 +107,11 @@ const Category = ({ categories, onCategorySelect }) => {
           stroke="currentColor"
           strokeWidth="2"
         >
-          <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M9 5l7 7-7 7"
+          />
         </motion.svg>
       </button>
     </div>
