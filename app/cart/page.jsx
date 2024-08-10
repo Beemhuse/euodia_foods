@@ -10,14 +10,9 @@ const Cart = () => {
 const dispatch = useDispatch()
   const {cartItems } = useSelector(state => state.cart)
 
+console.log(cartItems);
 
-  const handleQuantityChange = (id, delta) => {
-    if (delta > 0) {
-      dispatch(incrementQuantity({ id }));
-    } else if (delta < 0) {
-      dispatch(decrementQuantity({ id }));
-    }
-  };
+
   const calculateSubtotal = () => {
     return cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
   };
@@ -40,15 +35,15 @@ const dispatch = useDispatch()
                 <tr key={item.id} className="border-t">
                   <td className="px-4 py-2 flex items-center">
                     <Image
-                      src={item.image.asset.url}
+                      src={item?.image?.asset?.url}
                       alt={item.name}
-                      width={50}
-                      height={50}
+                      width={80}
+                      height={80}
                       className="w-10 h-10 mr-2 object-cover"
                     />
-                    {item.name}
+                    {item.title}
                   </td>
-                  <td className="px-4 py-2 text-right">₦{item.price.toLocaleString()}</td>
+                  <td className="px-4 py-2 text-right">₦{item?.price?.toLocaleString()}</td>
                   <td className="px-4 py-2 text-center">
                     <div className="flex items-center justify-center">
                       <button
