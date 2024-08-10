@@ -1,14 +1,15 @@
-"use client";
-import React from 'react';
+"use client"
+import React, { useState } from 'react';
 import HomeLayout from '@/components/layout/HomeLayout';
 import Link from 'next/link';
 import { useDispatch, useSelector } from 'react-redux';
 import Image from 'next/image';
-import { decrementQuantity, incrementQuantity, removeItem } from '@/store/reducers/cartReducer'; // Ensure `removeItem` is correctly imported
+import { decrementQuantity, incrementQuantity, updateCartItemQuantity } from '@/store/reducers/cartReducer';
 
 const Cart = () => {
-  const dispatch = useDispatch();
-  const { cartItems } = useSelector(state => state.cart);
+const dispatch = useDispatch()
+  const {cartItems } = useSelector(state => state.cart)
+
 
   const handleQuantityChange = (id, delta) => {
     if (delta > 0) {
@@ -17,11 +18,6 @@ const Cart = () => {
       dispatch(decrementQuantity({ id }));
     }
   };
-
-  const handleRemoveItem = (id) => {
-    dispatch(removeItem({ id }));
-  };
-
   const calculateSubtotal = () => {
     return cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
   };
@@ -37,7 +33,6 @@ const Cart = () => {
                 <th className="px-4 py-2 text-right">Price</th>
                 <th className="px-4 py-2 text-center">Quantity</th>
                 <th className="px-4 py-2 text-right">Subtotal</th>
-                <th className="px-4 py-2 text-center">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -51,15 +46,14 @@ const Cart = () => {
                       height={50}
                       className="w-10 h-10 mr-2 object-cover"
                     />
-                    {item.name || "Product Name"}
+                    {item.name}
                   </td>
                   <td className="px-4 py-2 text-right">₦{item.price.toLocaleString()}</td>
                   <td className="px-4 py-2 text-center">
                     <div className="flex items-center justify-center">
                       <button
                         className="px-2 py-1 border rounded-l"
-                        onClick={() => handleQuantityChange(item.id, -1)}
-                        disabled={item.quantity <= 1}
+                        onClick={() => dispatch(decrementQuantity({ id: item?._id })) }
                       >
                         -
                       </button>
@@ -68,22 +62,13 @@ const Cart = () => {
                       </span>
                       <button
                         className="px-2 py-1 border rounded-r"
-                        onClick={() => handleQuantityChange(item.id, 1)}
-                      >
+                        onClick={() => dispatch(incrementQuantity({ id: item?._id })) }                      >
                         +
                       </button>
                     </div>
                   </td>
                   <td className="px-4 py-2 text-right">
                     ₦{(item.price * item.quantity).toLocaleString()}
-                  </td>
-                  <td className="px-4 py-2 text-center">
-                    <button
-                      className="text-red-500 hover:text-red-700"
-                      onClick={() => handleRemoveItem(item.id)}
-                    >
-                      Remove
-                    </button>
                   </td>
                 </tr>
               ))}

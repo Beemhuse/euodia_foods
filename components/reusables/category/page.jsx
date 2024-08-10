@@ -8,32 +8,43 @@ const Category = ({ categories, onCategorySelect }) => {
   const scrollRef = useRef(null);
 
   const scrollLeft = () => {
-    scrollRef.current.scrollBy({ left: -200, behavior: 'smooth' });
+    if (scrollRef.current) {
+      scrollRef.current.scrollBy({ left: -200, behavior: 'smooth' });
+    }
   };
 
   const scrollRight = () => {
-    scrollRef.current.scrollBy({ left: 200, behavior: 'smooth' });
+    if (scrollRef.current) {
+      scrollRef.current.scrollBy({ left: 200, behavior: 'smooth' });
+    }
   };
 
   useEffect(() => {
     const scrollContainer = scrollRef.current;
+
+    if (!scrollContainer || !categories?.categories?.length) return;
+
     const handleScroll = () => {
       const containerWidth = scrollContainer.offsetWidth;
       const scrollLeft = scrollContainer.scrollLeft;
-      const newIndex = Math.round(scrollLeft / (containerWidth / categories.length));
+      const newIndex = Math.round(scrollLeft / (containerWidth / categories.categories.length));
       setActiveIndex(newIndex);
     };
 
     scrollContainer.addEventListener('scroll', handleScroll);
 
     return () => {
-      scrollContainer.removeEventListener('scroll', handleScroll);
+      if (scrollContainer) {
+        scrollContainer.removeEventListener('scroll', handleScroll);
+      }
     };
-  }, [categories.length]);
+  }, [categories?.categories?.length]);
 
   const handleCategoryClick = (index, title) => {
-    setActiveIndex(index % categories.length);
-    onCategorySelect(title);
+    if (categories?.categories?.length) {
+      setActiveIndex(index % categories.categories.length);
+      onCategorySelect(title);
+    }
   };
 
   return (
@@ -61,16 +72,15 @@ const Category = ({ categories, onCategorySelect }) => {
         {categories?.categories?.map((category, index) => (
           <motion.div
             key={index}
-            className={`${activeIndex === index % categories.length ? 'text-white' : 'text-black'
+            className={`${activeIndex === index % categories.categories.length ? 'text-white' : 'text-black'
               } font-semibold px-4 cursor-pointer hover:underline capitalize`}
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3, delay: (index % categories.length) * 0.1 }}
+            transition={{ duration: 0.3, delay: (index % categories.categories.length) * 0.1 }}
             onClick={() => handleCategoryClick(index, category.title)}
           >
             {category.title}
           </motion.div>
-
         ))}
       </div>
 
