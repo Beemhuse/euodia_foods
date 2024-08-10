@@ -1,4 +1,5 @@
 import { createClient } from '@sanity/client';
+import { ensureUserExists } from '../lib/checkUser';
 
 export const client = createClient({
   projectId: '8bms2xqg',
@@ -54,33 +55,51 @@ export const createAdmin = async (user) => {
 };
 
 
-export const createOrder = async (
+export const createOrder = async ({
   cartItems,
   amount,
   email,
+  name,
+  streetAddress,
+  apartment,
+  townCity,
+  phone,
   deliveryAddress,
   transactionRef,
   note,
-  phone
+  user // User object is passed here
+}
 ) => {
   const cartItemsWithKeys = cartItems.map((item, index) => ({
     ...item,
     _key: `orderedItem_${index}`,
-  }))
+  }));
+
+  // Extract userId from the user object
+  const userId = user?._ref;
 
   try {
-    // Your logic to create an order document in Sanity
+    // Ensure the user exists or create a new one if necessary
+    const ensuredUser = await ensureUserExists(userId);
+
+    // Create the order document in Sanity
     const order = await client.create({
       _type: 'order',
       cartItems: cartItemsWithKeys,
       amount,
-      email,
-      deliveryAddress,
       transactionDate: new Date(), // Use current date for transactionDate
+      email,
+      name,
+      streetAddress,
+      apartment,
+      townCity,
+      phone,
+      deliveryAddress,
       transactionRef,
       note,
-      phone
+      user: { _type: 'reference', _ref: ensuredUser._id }, // Use the ensured user ID
     });
+
     await client.patch(order._id).set({ orderId: order._id }).commit();
 
     console.log('Order saved to Sanity:', order);

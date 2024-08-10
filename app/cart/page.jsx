@@ -37,8 +37,8 @@ console.log(cartItems);
                     <Image
                       src={item?.image?.asset?.url}
                       alt={item.name}
-                      width={80}
-                      height={80}
+                      width={100}
+                      height={100}
                       className="w-10 h-10 mr-2 object-cover"
                     />
                     {item.title}
