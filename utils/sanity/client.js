@@ -21,18 +21,16 @@ console.log(email)
     return null;
   }
 };
-export const getAdminByEmail = async (email) => {
-  const query = '*[_type == "admin" && email == $email][0]';
-  const params = { email };
-console.log(email)
-  try {
-    const user = await client.fetch(query, params);
-    return user;
-  } catch (error) {
-    console.error('Error fetching user by email:', error);
-    return null;
-  }
-};
+export async function getAdminByEmail(email) {
+  const query = `*[_type == "admin" && email == $email][0]{
+    _id,
+    name,
+    email,
+    password,
+    role
+  }`;
+  return client.fetch(query, { email });
+}
 
 
 export const createUser = async (user) => {
@@ -56,9 +54,10 @@ export const createAdmin = async (user) => {
 
 
 export const createOrder = async ({
-  cartItems,
-  amount,
+  products,
+  total,
   email,
+  serviceFee,
   name,
   streetAddress,
   apartment,
@@ -66,27 +65,26 @@ export const createOrder = async ({
   phone,
   deliveryAddress,
   transactionRef,
-  note,
-  user // User object is passed here
-}
-) => {
-  const cartItemsWithKeys = cartItems.map((item, index) => ({
-    ...item,
-    _key: `orderedItem_${index}`,
-  }));
-
-  // Extract userId from the user object
-  const userId = user?._ref;
-
+  notes,
+  user
+}) => {
   try {
     // Ensure the user exists or create a new one if necessary
-    const ensuredUser = await ensureUserExists(userId);
+    const ensuredUser = await ensureUserExists(user?._ref);
+
+    // Map products to an array of references with unique keys
+    const cartItemsWithKeys = products.map((item, index) => ({
+      _key: `orderedItem_${index}`, // Unique key for each item
+      _type: 'reference',
+      _ref: item._id, // Reference to the dish document in Sanity
+    }));
 
     // Create the order document in Sanity
     const order = await client.create({
       _type: 'order',
-      cartItems: cartItemsWithKeys,
-      amount,
+      products: cartItemsWithKeys, // Use the mapped products array
+      total,
+      serviceFee,
       transactionDate: new Date(), // Use current date for transactionDate
       email,
       name,
@@ -96,10 +94,11 @@ export const createOrder = async ({
       phone,
       deliveryAddress,
       transactionRef,
-      note,
+      notes,
       user: { _type: 'reference', _ref: ensuredUser._id }, // Use the ensured user ID
     });
 
+    // Update the order with its own ID as orderId (optional)
     await client.patch(order._id).set({ orderId: order._id }).commit();
 
     console.log('Order saved to Sanity:', order);
@@ -110,16 +109,16 @@ export const createOrder = async ({
   }
 };
 
+
 export const createTransaction = async (
   order,
   amount,
-  email,
-  deliveryAddress,
   transactionRef,
   id,
   status = 'pending', // Default value is 'pending'
 ) => {
   
+  console.log("transaction ==>>>", order)
   try {
     // Your logic to create a transaction document in Sanity
     const transaction = await client.create({
@@ -129,8 +128,6 @@ export const createTransaction = async (
         _ref: order._id, // Assuming order._id is the Sanity document ID of the order
       },
       amount,
-      email,
-      deliveryAddress,
       transactionRef,
       id,
       transactionDate: new Date(), // Use current date for transactionDate

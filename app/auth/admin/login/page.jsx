@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import { handleGenericError } from "@/utils/errorHandler";
 import useCookies from "@/hooks/useCookies";
 import { toast } from "react-toastify";
+import Link from "next/link";
 
 const schema = yup.object().shape({
   email: yup.string().email("Invalid email").required("Email is required"),
@@ -78,7 +79,7 @@ export default function Login() {
         onSubmit={handleSubmit(onSubmit)}
         className="bg-white  p-15 shadow-md p-10 flex flex-col gap-4 rounded-lg"
       >
-        <h2 className="text-3xl text-center text-accent font-bold"> Log in to Euodia</h2>
+        <h2 className="text-3xl text-center text-accent font-bold"> Log in to Your dashboard</h2>
         <p className="text-center text-gray-700">Welcome back Admin</p>
 
 
@@ -105,9 +106,9 @@ export default function Login() {
         />
         <p className="text-center mt-2">
           don&apos;t have an account?{" "}
-          <a href="/auth/register" className="text-green-500">
+          <Link href="/auth/admin/register" className="text-green-500">
             Sign up
-          </a>
+          </Link>
         </p>
       </form>
     </div>

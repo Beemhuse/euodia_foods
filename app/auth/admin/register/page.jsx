@@ -9,6 +9,8 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { handleGenericError } from "@/utils/errorHandler";
 import useCookies from "@/hooks/useCookies";
+import { toast } from "react-toastify";
+import Link from "next/link";
 
 const schema = yup.object().shape({
   name: yup.string().required("Name is required"),
@@ -39,12 +41,12 @@ export default function Signup() {
       setLoading(true);
       const response = await axios.post('/api/admin/signup', { name, email, password });
       setLoading(false);
-      setSuccess("Signup successful");
-      setCookie("euodia_admin_token", response?.data?.token);
-      router.push("/admin");
-      window.location.reload();
+      setCookie("admineu_token", response?.data?.token);
+      toast.success("Admin signup successfully")
+      router.push("/auth/admin/login");
     } catch (error) {
       const errMsg = handleGenericError(error);
+      toast.error(errMsg)
       setError(errMsg);
       setLoading(false);
     }
@@ -56,7 +58,7 @@ export default function Signup() {
         onSubmit={handleSubmit(onSubmit)}
         className="bg-white p-10  shadow-md flex flex-col gap-4 rounded-lg max-w-md mx-auto"
       >
-        <h2 className="text-3xl text-center text-accent font-bold">Sign up to Euodia</h2>
+        <h2 className="text-3xl text-center text-accent font-bold">Sign up to your Admin dashboard</h2>
         <p className="text-center text-gray-700 mb-4">Quick & Simple way to start making your orders</p>
 
         {error && <p className="text-red-500 text-center">{error}</p>}
@@ -105,9 +107,9 @@ export default function Signup() {
         </button>
         <p className="text-center mt-4">
           Already have an account?{" "}
-          <a href="/auth/login" className="text-green-500">
+          <Link href="/auth/admin/login" className="text-green-500">
             Log in
-          </a>
+          </Link>
         </p>
       </form>
     </div>

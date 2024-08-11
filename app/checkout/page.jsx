@@ -3,55 +3,103 @@
 import HomeLayout from "@/components/layout/HomeLayout";
 import { clearCart } from "@/store/reducers/cartReducer";
 // import useLoggedInStatus from "@/hooks/useLoggedinStatus";
+import { client } from '@/utils/sanity/client';
+import useCurrencyFormatter from '@/hooks/useCurrencyFormatter';
+
 import { handleGenericError } from "@/utils/errorHandler";
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 
 const Checkout = () => {
   const { cartItems } = useSelector((state) => state.cart);
-  //   const isLoggedIn = useLoggedInStatus();
+  const formatCurrency = useCurrencyFormatter();
+  const [serviceFees, setServiceFees] = useState([]);
+  const [selectedServiceFee, setSelectedServiceFee] = useState(0);
+
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors },
   } = useForm();
+
+   // Watch the selected location
+   const selectedLocation = watch("serviceFee");
+
+   useEffect(() => {
+     // Update the service fee based on the selected location
+     if (selectedLocation) {
+       const selectedFee = serviceFees.find(
+         (fee) => fee.location === selectedLocation
+       );
+       setSelectedServiceFee(selectedFee ? selectedFee.fee : 0);
+      }
+      else{
+       setSelectedServiceFee(0);
+
+     }
+   }, [selectedLocation, serviceFees]);
+ 
+
+  useEffect(() => {
+    async function fetchServiceFees() {
+      const query = `*[_type == "serviceFee"]`;
+      const fetchedServiceFees = await client.fetch(query);
+      setServiceFees(fetchedServiceFees);
+    }
+
+    fetchServiceFees();
+  }, []);
+
+// console.log(serviceFees)
 
   const calculateSubtotal = () => {
     return cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
   };
+
   const subtotal = calculateSubtotal();
   const vat = subtotal * 0.07;
   const calculateTotal = () => {
     const subtotal = calculateSubtotal();
-    const serviceFee = 650; // Example service fee
-    const vat = subtotal * 0.07; // Example VAT rate (7%)
-    return subtotal + serviceFee + vat;
+       const serviceFee = selectedServiceFee ?? 0; // Default to 650 if no location is selected
+    const vat = Number(subtotal) * 0.07; // Example VAT rate (7%)
+    return Number(subtotal) + Number(serviceFee) + Number(vat);
+
   };
   const handleCheckout = async (data) => {
+       // Combine the form data with the selected service fee object
+       
+       const orderData = {
+        ...data,
+        serviceFee: {
+          _type: "reference",
+          _ref: data.serviceFee,
+        },
+        cartItems,
+      };
+    // console.log(data.serviceFee)
+
     try {
       if (data.firstName !== "") {
         setLoading(true);
 
         await axios
-          .post("/api/order", { cartItems, ...data, amount: calculateTotal() })
-
+          .post("/api/order", { cartItems, ...data, amount: Math.round(calculateTotal()) })
           .then((res) => {
             setLoading(false);
-            dispatch(clearCart());
-            // handleShowCart()
-            console.log(res);
+            // dispatch(clearCart());
 
-            const paymentLink =
-              res?.data?.paymentResponse?.data?.authorization_url;
-            console.log(paymentLink);
-            if (paymentLink) {
-              window.location.href = paymentLink;
-            }
+            // const paymentLink =
+            //   res?.data?.paymentResponse?.data?.authorization_url;
+            // console.log(paymentLink);
+            // if (paymentLink) {
+            //   window.location.href = paymentLink;
+            // }
           });
       } else {
         toast.error("Please add an address to proceed with checkout");
@@ -64,11 +112,11 @@ const Checkout = () => {
         duration: 3000,
       });
       setLoading(false);
-      //   handleShowCart()
 
       console.error("Error handling checkout:", error);
     }
   };
+
   return (
     <HomeLayout>
       <div className="min-h-screen bg-gray-100 p-6 flex items-center justify-center">
@@ -213,7 +261,31 @@ const Checkout = () => {
                       placeholder="Enter your delivery address "
                     />
                   </div>
-      
+                  <div className="mb-4">
+                    <label
+                      className="block text-sm font-medium text-gray-700"
+                      htmlFor="location"
+                    >
+                      Service areas
+                    </label>
+                    <select
+                      id="serviceFee"
+                      {...register("serviceFee", {
+                        required: "Service Area is required",
+                      })}
+                      className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                    >
+                      <option value="">Select your closest service area</option>
+                      {serviceFees.map((fee) => (
+                        <option key={fee._id} value={fee._id}>
+                          {fee.location}
+                        </option>
+                      ))}
+                    </select>
+                    {errors.location && (
+                      <p className="text-red-600">{errors.serviceFee.message}</p>
+                    )}
+                  </div>
 
                   <div className="mb-4">
                     <label
@@ -237,6 +309,8 @@ const Checkout = () => {
                   </button>
                 </form>
               </div>
+
+              {/* Order details */}
               <div>
                 <h2 className="text-2xl font-bold mb-6">Your Order</h2>
                 <div className="border p-4 rounded-lg">
@@ -247,7 +321,7 @@ const Checkout = () => {
                           {item.title} x {item.quantity}
                         </span>
                         <span>
-                          ₦{(item.price * item.quantity).toLocaleString()}
+                        ₦{ (item.price * item.quantity).toLocaleString()}
                         </span>
                       </div>
                     ))}
@@ -260,12 +334,12 @@ const Checkout = () => {
                     </div>
                     <div className="flex justify-between">
                       <span>Service Fee:</span>
-                      <span>₦650.00 </span>
+                      <span>₦{selectedServiceFee}</span>
                     </div>
                     <div className="flex justify-between">
                       <span>VAT:</span>
                       <span>
-                        ₦{(calculateSubtotal() * 0.07).toLocaleString()}
+                      {formatCurrency(vat.toFixed(2))}
                       </span>
                     </div>
                     <div className="flex justify-between font-bold">
