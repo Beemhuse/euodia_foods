@@ -19,17 +19,25 @@ const fetchCategories = async () => {
   }
 };
 async function fetchProducts() {
-  const CONTENT_QUERY = `*[_type == "dish"] {
-    ...,
-    category->,
-    ingredients[]->,
+  const query = `*[_type == "dish" && !(_id in path("drafts.*"))] | order(sortOrder asc) {
+    _id,
+    title,
+    slug,
+    description,
+    price,
+    category->{
+      title
+    },
+    status,
+    sortOrder,
     image {
-      ...,
-      asset->
+      asset->{
+        url
+      }
     }
   }`;
 
-  const content = await client.fetch(CONTENT_QUERY);
+  const content = await client.fetch(query);
   return content;
 }
 

@@ -6,27 +6,31 @@ import { useDispatch, useSelector } from 'react-redux';
 import Image from 'next/image';
 import { decrementQuantity, incrementQuantity, removeCartItem } from '@/store/reducers/cartReducer';
 import useCurrencyFormatter from '@/hooks/useCurrencyFormatter';
+import { toast } from 'react-toastify';
 
 const Cart = () => {
-  const dispatch = useDispatch();
-  const { cartItems } = useSelector(state => state.cart);
-  const formatCurrency = useCurrencyFormatter();
+const dispatch = useDispatch()
+  const {cartItems } = useSelector(state => state.cart)
+  const formatCurrency = useCurrencyFormatter()
+console.log(cartItems);
 
-  const handleQuantityChange = (id, delta) => {
-    if (delta > 0) {
-      dispatch(incrementQuantity({ id }));
-    } else if (delta < 0) {
-      dispatch(decrementQuantity({ id }));
-    }
-  };
-
-  const handleRemoveItem = (id) => {
-    dispatch(removeCartItem({ product: { _id: id } }));
-  };
 
   const calculateSubtotal = () => {
     return cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
   };
+const handleRemoveCartItem =(id)=>{
+  dispatch(removeCartItem({id}))
+  toast.success("Item removed successfully",{
+    position: "top-right",
+    autoClose: 5000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+  })
+}
+
 
   return (
     <HomeLayout>
@@ -64,7 +68,7 @@ const Cart = () => {
                           height={50}
                           className="w-10 h-10 mr-2 object-cover"
                         />
-                        {item.name}
+                        {item.title}
                       </td>
                       <td className="px-4 py-2 text-right">
                         {formatCurrency(item.price)}
@@ -73,8 +77,8 @@ const Cart = () => {
                         <div className="flex items-center justify-center">
                           <button
                             className="px-2 py-1 border rounded-l"
-                            onClick={() => handleQuantityChange(item._id, -1)}
-                          >
+                            onClick={() => dispatch(decrementQuantity({ id: item?._id })) }
+                            >
                             -
                           </button>
                           <span className="px-2 py-1 border-t border-b">
@@ -82,8 +86,8 @@ const Cart = () => {
                           </span>
                           <button
                             className="px-2 py-1 border rounded-r"
-                            onClick={() => handleQuantityChange(item._id, 1)}
-                          >
+                            onClick={() => dispatch(incrementQuantity({ id: item?._id })) }
+                            >
                             +
                           </button>
                         </div>
@@ -94,7 +98,7 @@ const Cart = () => {
                       <td className="px-4 py-2 text-center">
                         <button
                           className="bg-red-500 text-white px-4 py-2 rounded-md"
-                          onClick={() => handleRemoveItem(item._id)}
+                          onClick={() => handleRemoveCartItem(item._id)}
                         >
                           Remove
                         </button>

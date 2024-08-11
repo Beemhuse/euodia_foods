@@ -104,9 +104,8 @@ import { v4 as uuidv4 } from 'uuid';
 
 export async function POST(req) {
 
-  const { cartItems, amount, name, email, note, phone, streetAddress, apartment, townCity, deliveryAddress, id } = await req.json();
+  const { cartItems, amount, fullName, email,  phoneNumber, streetAddress,orderNotes, apartment, townCity, deliveryAddress, id } = await req.json();
   const anonymousUserId = id || uuidv4(); // Generate a new anonymous ID if not provided
-console.log(amount)
   try {
     const paymentResponse = await initializePaystack(email, amount);
     const transactionRef = paymentResponse?.data.reference;
@@ -114,18 +113,17 @@ console.log(amount)
       cartItems,
       amount,
       email,
-      name,
+      name: fullName,
       streetAddress,
       apartment,
       townCity,
-      phone,
+      phone: phoneNumber,
       deliveryAddress,
       transactionRef,
-      note,
+      note: orderNotes,
       user: { _type: "reference", _ref: anonymousUserId }, // Assign the user ID or anonymous ID
 
   });
-console.log(order)
     if (order?._id) {
       const transaction = await createTransaction(
         order,
@@ -136,7 +134,6 @@ console.log(order)
         id,
         'pending', // Set default status to 'pending' or adjust as needed
       );
-      console.log(transaction)
 
       return new Response(JSON.stringify({ success: true, order, transaction, paymentResponse }), { status: 200 });
     } else {

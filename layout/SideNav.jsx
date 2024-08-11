@@ -1,10 +1,9 @@
 "use client";
 import { useState, useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { MdDashboard, MdOutlineShoppingBag } from "react-icons/md";
+import { MdDashboard, MdOutlineLocationOn, MdOutlineShoppingBag } from "react-icons/md";
 import { BsFileEarmarkTextFill } from "react-icons/bs";
 import Link from "next/link";
-import Typography from "@/components/reusables/typography/Typography";
 
 const sideData = [
   {
@@ -21,6 +20,16 @@ const sideData = [
     icon: <MdOutlineShoppingBag />,
     title: "All Products",
     link: "/admin/products",
+  },
+  {
+    icon: <MdOutlineShoppingBag />,
+    title: "Category",
+    link: "/admin/category",
+  },
+  {
+    icon: <MdOutlineLocationOn />,
+    title: "Location",
+    link: "/admin/location",
   },
 ];
 

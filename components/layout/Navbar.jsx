@@ -45,12 +45,16 @@ const Navbar = () => {
           </Link>
           <div className="flex items-center space-x-4">
             <Link href="/cart">
-              <button className="hover:text-green-800 relative">
-                <FiShoppingCart className="text-xl" />
-                <p className='absolute -top-2 right-0 bg-red h-4 w-4 text-white flex items-center justify-center p-1 text-sm rounded-full'>
-                  {totalQuantities}
-                </p>
-              </button>
+            <button className="hover:text-green-800 relative">
+              <FiShoppingCart className="text-xl" />
+              {
+                totalQuantities === 0 ? null : 
+              <p className='absolute -top-2 right-0 bg-red h-4 w-4 text-white flex items-center justify-center p-1 text-sm rounded-full' >
+
+              { totalQuantities}
+              </p>
+              }
+            </button>
             </Link>
             {euodia_token ? (
               <button className="hover:text-green-800">
