@@ -12,7 +12,7 @@ const ProductCard = ({ product }) => {
           alt={product.title}
           width={50}
           height={50}
-          className="rounded-lg"
+          className="rounded-lg  object-contain"
         />
       <div className="mt-4 space-y-4">
         <h2 className="text-md font-semibold">{product.title}</h2>
