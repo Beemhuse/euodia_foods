@@ -7,29 +7,30 @@ import Image from 'next/image';
 import { decrementQuantity, incrementQuantity, removeCartItem } from '@/store/reducers/cartReducer';
 import useCurrencyFormatter from '@/hooks/useCurrencyFormatter';
 import { toast } from 'react-toastify';
+import { RiDeleteBinLine } from "react-icons/ri";
 
 const Cart = () => {
-const dispatch = useDispatch()
-  const {cartItems } = useSelector(state => state.cart)
+  const dispatch = useDispatch()
+  const { cartItems } = useSelector(state => state.cart)
   const formatCurrency = useCurrencyFormatter()
-console.log(cartItems);
+  console.log(cartItems);
 
 
   const calculateSubtotal = () => {
     return cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
   };
-const handleRemoveCartItem =(id)=>{
-  dispatch(removeCartItem({id}))
-  toast.success("Item removed successfully",{
-    position: "top-right",
-    autoClose: 5000,
-    hideProgressBar: false,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true,
-    progress: undefined,
-  })
-}
+  const handleRemoveCartItem = (id) => {
+    dispatch(removeCartItem({ id }))
+    toast.success("Item removed successfully", {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    })
+  }
 
 
   return (
@@ -77,8 +78,8 @@ const handleRemoveCartItem =(id)=>{
                         <div className="flex items-center justify-center">
                           <button
                             className="px-2 py-1 border rounded-l"
-                            onClick={() => dispatch(decrementQuantity({ id: item?._id })) }
-                            >
+                            onClick={() => dispatch(decrementQuantity({ id: item?._id }))}
+                          >
                             -
                           </button>
                           <span className="px-2 py-1 border-t border-b">
@@ -86,8 +87,8 @@ const handleRemoveCartItem =(id)=>{
                           </span>
                           <button
                             className="px-2 py-1 border rounded-r"
-                            onClick={() => dispatch(incrementQuantity({ id: item?._id })) }
-                            >
+                            onClick={() => dispatch(incrementQuantity({ id: item?._id }))}
+                          >
                             +
                           </button>
                         </div>
@@ -96,12 +97,12 @@ const handleRemoveCartItem =(id)=>{
                         {formatCurrency(item.price * item.quantity)}
                       </td>
                       <td className="px-4 py-2 text-center">
-                        <button
-                          className="bg-red-500 text-white px-4 py-2 rounded-md"
+                        <div
+                          className=" text-red-600 flex justify-center items-center py-2 rounded-md cursor-pointer"
                           onClick={() => handleRemoveCartItem(item._id)}
                         >
-                          Remove
-                        </button>
+                          <RiDeleteBinLine />
+                        </div>
                       </td>
                     </tr>
                   ))}
@@ -138,7 +139,7 @@ const handleRemoveCartItem =(id)=>{
           </>
         )}
       </div>
-    </HomeLayout>
+    </HomeLayout >
   );
 };
 
