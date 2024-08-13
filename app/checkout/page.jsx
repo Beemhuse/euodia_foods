@@ -71,40 +71,97 @@ const Checkout = () => {
     return Number(subtotal) + Number(serviceFee) + Number(vat);
 
   };
-  const handleCheckout = async (data) => {
-       // Combine the form data with the selected service fee object
+  // const handleCheckout = async (data) => {
+  //      // Combine the form data with the selected service fee object
        
-       const orderData = {
-        ...data,
-        serviceFee: {
-          _type: "reference",
-          _ref: data.serviceFee,
-        },
-        cartItems,
-      };
-    // console.log(data.serviceFee)
+  //      const orderData = {
+  //       ...data,
+  //       serviceFee: {
+  //         _type: "reference",
+  //         _ref: data.serviceFee,
+  //       },
+  //       cartItems,
+  //     };
+  //   // console.log(data.serviceFee)
 
+  //   try {
+  //     if (data.firstName !== "") {
+  //       setLoading(true);
+
+  //       await axios
+  //         .post("/api/order", { cartItems, ...data, amount: Math.round(calculateTotal()) })
+  //         .then((res) => {
+  //           setLoading(false);
+  //           // dispatch(clearCart());
+
+  //           // const paymentLink =
+  //           //   res?.data?.paymentResponse?.data?.authorization_url;
+  //           // console.log(paymentLink);
+  //           // if (paymentLink) {
+  //           //   window.location.href = paymentLink;
+  //           // }
+  //         });
+  //     } else {
+  //       toast.error("Please add an address to proceed with checkout");
+  //     }
+  //     // Call Paystack API to initiate payment
+  //   } catch (error) {
+  //     const errMsg = handleGenericError(error);
+  //     toast.error(errMsg, {
+  //       position: "top-right",
+  //       duration: 3000,
+  //     });
+  //     setLoading(false);
+
+  //     console.error("Error handling checkout:", error);
+  //   }
+  // };
+
+  const handleCheckout = async (data) => {
     try {
       if (data.firstName !== "") {
         setLoading(true);
-
+  
+        // Fetch user details based on email or another unique identifier
+        const userResponse = await axios.post("/api/user", {
+          email: data.email,
+          customerDetails: data, // Pass additional details if needed for user creation
+        });
+  
+        const userId = userResponse?.data?._id;
+  
+        if (!userId) {
+          throw new Error("User not found or could not be created");
+        }
+  
+        // Combine the form data with the selected service fee object and user ID
+        const orderData = {
+          ...data,
+          serviceFee: {
+            _type: "reference",
+            _ref: data.serviceFee,
+          },
+          cartItems,
+          userId, // Pass the user ID to the order data
+          amount: Math.round(calculateTotal()),
+        };
+  
         await axios
-          .post("/api/order", { cartItems, ...data, amount: Math.round(calculateTotal()) })
+          .post("/api/order", orderData)
           .then((res) => {
             setLoading(false);
             // dispatch(clearCart());
-
-            // const paymentLink =
-            //   res?.data?.paymentResponse?.data?.authorization_url;
-            // console.log(paymentLink);
-            // if (paymentLink) {
-            //   window.location.href = paymentLink;
-            // }
+  
+            const paymentLink =
+              res?.data?.paymentResponse?.data?.authorization_url;
+  
+            if (paymentLink) {
+              window.location.href = paymentLink;
+            }
           });
       } else {
         toast.error("Please add an address to proceed with checkout");
       }
-      // Call Paystack API to initiate payment
     } catch (error) {
       const errMsg = handleGenericError(error);
       toast.error(errMsg, {
@@ -112,7 +169,7 @@ const Checkout = () => {
         duration: 3000,
       });
       setLoading(false);
-
+  
       console.error("Error handling checkout:", error);
     }
   };

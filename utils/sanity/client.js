@@ -3,6 +3,7 @@ import { ensureUserExists } from '../lib/checkUser';
 
 export const client = createClient({
   projectId: '8bms2xqg',
+  // dataset: 'main',
   dataset: 'production',
   apiVersion: '2024-03-11',
   useCdn: true,
@@ -21,6 +22,21 @@ console.log(email)
     return null;
   }
 };
+
+export async function createAnonymousUser(email) {
+  try {
+    const anonymousUser = await client.create({
+      _type: 'user', // or 'customer', depending on your schema
+      email,
+      isAnonymous: true,
+      createdAt: new Date().toISOString(),
+    });
+
+    return anonymousUser;
+  } catch (error) {
+    throw new Error(`Error creating anonymous user: ${error.message}`);
+  }
+}
 export async function getAdminByEmail(email) {
   const query = `*[_type == "admin" && email == $email][0]{
     _id,
@@ -70,7 +86,7 @@ export const createOrder = async ({
 }) => {
   try {
     // Ensure the user exists or create a new one if necessary
-    const ensuredUser = await ensureUserExists(user?._ref);
+    // const ensuredUser = await ensureUserExists(user?._ref);
 
     // Map products to an array of references with unique keys
     const cartItemsWithKeys = products.map((item, index) => ({
