@@ -9,6 +9,9 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { handleGenericError } from "@/utils/errorHandler";
 import useCookies from "@/hooks/useCookies";
+import 'react-toastify/dist/ReactToastify.css';
+import { toast, ToastContainer } from "react-toastify";
+
 
 const schema = yup.object().shape({
   name: yup.string().required("Name is required"),
@@ -22,8 +25,8 @@ const schema = yup.object().shape({
 
 export default function Signup() {
   const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState("");
-  const [error, setError] = useState("");
+  // const [success, setSuccess] = useState("");
+  // const [error, setError] = useState("");
   const { setCookie } = useCookies();
   const router = useRouter();
 
@@ -39,13 +42,14 @@ export default function Signup() {
       setLoading(true);
       const response = await axios.post('/api/signup', { name, email, password });
       setLoading(false);
-      setSuccess("Signup successful");
+      toast.success("Signup successful");
       setCookie("euodia_token", response?.data?.token);
-      router.push("/");
-      window.location.reload();
+      router.push("/auth/login");
+      
     } catch (error) {
       const errMsg = handleGenericError(error);
-      setError(errMsg);
+      toast.error(errMsg);
+      // setError(errMsg);
       setLoading(false);
     }
   };
@@ -59,8 +63,7 @@ export default function Signup() {
         <h2 className="text-3xl text-center text-accent font-bold">Sign up to Euodia</h2>
         <p className="text-center text-gray-700 mb-4">Quick & Simple way to start making your orders</p>
 
-        {error && <p className="text-red-500 text-center">{error}</p>}
-        {success && <p className="text-green-500 text-center">{success}</p>}
+      
 
         <InputComponent
           label="Name"
@@ -110,6 +113,8 @@ export default function Signup() {
           </a>
         </p>
       </form>
+
+      <ToastContainer />
     </div>
   );
 }

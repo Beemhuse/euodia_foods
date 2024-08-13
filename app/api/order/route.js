@@ -38,7 +38,7 @@ console.log("curcurrentUserId);", currentUserId);
       apartment,
       townCity,
       phone: phoneNumber,
-      deliveryAddress,
+      // deliveryAddress,
       transactionRef,
       notes: orderNotes,
       customer: { _type: "reference", _ref: currentUserId }, // Use the current user ID (either signed-in or anonymous)

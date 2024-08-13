@@ -9,6 +9,8 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { handleGenericError } from "@/utils/errorHandler";
 import useCookies from "@/hooks/useCookies";
+import { toast, ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 const schema = yup.object().shape({
   email: yup.string().email("Invalid email").required("Email is required"),
@@ -45,7 +47,7 @@ export default function Login() {
       }
 
       setLoading(false);
-      setSuccess('Login successful');
+      toast.success('Login successful');
       router.push('/');
     } catch (error) {
       const errMsg = handleGenericError(error);
@@ -94,6 +96,8 @@ export default function Login() {
           </a>
         </p>
       </form>
+
+      <ToastContainer />
     </div>
   );
 }

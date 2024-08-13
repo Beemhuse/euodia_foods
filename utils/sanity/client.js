@@ -79,7 +79,7 @@ export const createOrder = async ({
   apartment,
   townCity,
   phone,
-  deliveryAddress,
+  // deliveryAddress,
   transactionRef,
   notes,
   customer
@@ -111,7 +111,7 @@ export const createOrder = async ({
       apartment,
       townCity,
       phone,
-      deliveryAddress,
+      // deliveryAddress,
       transactionRef,
       notes,
       customer: { _type: 'reference', _ref: String(userRef) }, // Use the ensured user ID

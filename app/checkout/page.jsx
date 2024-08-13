@@ -31,12 +31,13 @@ const Checkout = () => {
 
    // Watch the selected location
    const selectedLocation = watch("serviceFee");
+console.log(selectedServiceFee);
 
    useEffect(() => {
      // Update the service fee based on the selected location
      if (selectedLocation) {
        const selectedFee = serviceFees.find(
-         (fee) => fee.location === selectedLocation
+         (fee) => fee._id === selectedLocation
        );
        setSelectedServiceFee(selectedFee ? selectedFee.fee : 0);
       }
@@ -72,7 +73,6 @@ const Checkout = () => {
     return Number(subtotal) + Number(serviceFee) + Number(vat);
 
   };
-  // const handleCheckout = async (data) => {
   //      // Combine the form data with the selected service fee object
        
   //      const orderData = {
@@ -126,15 +126,8 @@ const Checkout = () => {
       if (data.firstName !== "") {
         setLoading(true);
   
-        // Fetch user details based on email or another unique identifier
-        // const userResponse = await axios.post("/api/user", {
-        //   email: data.email,
-        //   customerDetails: data, // Pass additional details if needed for user creation
-        // });
-  // if(userResponse)
-        // const userId =  id? id : userResponse?.data?._id
+
         const userId =  id
-  console.log(token)
         if (!userId) {
           throw new Error("User not found or could not be created");
         }
@@ -150,8 +143,7 @@ const Checkout = () => {
           userId, // Pass the user ID to the order data
           amount: Math.round(calculateTotal()),
         };
-      //  console.log(token);
-        // token
+   
         // Configure headers to include the token if available
         const config = token
           ? {
@@ -165,8 +157,11 @@ const Checkout = () => {
           .post("/api/order", orderData, config)
           .then((res) => {
             setLoading(false);
-            // dispatch(clearCart());
-  
+            dispatch(clearCart());
+            toast.success("order placed",{
+              position: "top-right",
+              duration: 3000,
+            })
             const paymentLink =
               res?.data?.paymentResponse?.data?.authorization_url;
   
@@ -320,7 +315,7 @@ const Checkout = () => {
                       <p className="text-red-600">{errors.email.message}</p>
                     )}
                   </div>
-                  <div className="my-4">
+                  {/* <div className="my-4">
                     <label className="block text-sm font-medium text-gray-700">
                       Shipping/Delivery
                     </label>
@@ -332,7 +327,7 @@ const Checkout = () => {
                       className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                       placeholder="Enter your delivery address "
                     />
-                  </div>
+                  </div> */}
                   <div className="mb-4">
                     <label
                       className="block text-sm font-medium text-gray-700"
