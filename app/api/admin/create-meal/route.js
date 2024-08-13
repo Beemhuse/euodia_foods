@@ -3,11 +3,7 @@ import { client } from '@/utils/sanity/client';
 import slugify from 'slugify';
 import { isAdmin } from '@/utils/lib/auth';
 
-export const config = {
-  api: {
-    bodyParser: true, // Enable default body parser to parse JSON
-  },
-};
+
 
 export async function POST(req) {
 

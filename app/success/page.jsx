@@ -1,8 +1,8 @@
 import React, {  useEffect, useState } from 'react';
 import Link from 'next/link';
 import { BsBagCheckFill } from 'react-icons/bs';
-import { runFireworks } from '../../lib/utils';
 import axios from 'axios';
+import { runFireworks } from '@/utils/lib/utils';
 
 
 const Success = () => {

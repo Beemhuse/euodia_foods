@@ -2,11 +2,12 @@ import { client } from "./client";
 import { v4 as uuidv4 } from 'uuid';
 
 export async function findOrCreateCustomerByEmail(email, customerDetails) {
+
   try {
     // Step 1: Check if the customer already exists by email
     const query = `*[_type == "customer" && email == $email][0]`;
     const existingCustomer = await client.fetch(query, { email });
-
+console.log("existing customer ==>", existingCustomer)
     // Step 2: If the customer exists, return the customer
     if (existingCustomer) {
       return existingCustomer;

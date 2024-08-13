@@ -12,6 +12,7 @@ import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
+import { getCookie } from "@/utils/getCookie";
 
 const Checkout = () => {
   const { cartItems } = useSelector((state) => state.cart);
@@ -116,6 +117,9 @@ const Checkout = () => {
   //     console.error("Error handling checkout:", error);
   //   }
   // };
+  const token = getCookie("euodia_token"); // Assuming the API returns a token if the user exists
+  const id = getCookie("euodia_user"); // Assuming the API returns a token if the user exists
+  // const id = getCookie("euodia_user"); // Assuming the API returns a token if the user exists
 
   const handleCheckout = async (data) => {
     try {
@@ -123,13 +127,14 @@ const Checkout = () => {
         setLoading(true);
   
         // Fetch user details based on email or another unique identifier
-        const userResponse = await axios.post("/api/user", {
-          email: data.email,
-          customerDetails: data, // Pass additional details if needed for user creation
-        });
-  
-        const userId = userResponse?.data?._id;
-  
+        // const userResponse = await axios.post("/api/user", {
+        //   email: data.email,
+        //   customerDetails: data, // Pass additional details if needed for user creation
+        // });
+  // if(userResponse)
+        // const userId =  id? id : userResponse?.data?._id
+        const userId =  id
+  console.log(token)
         if (!userId) {
           throw new Error("User not found or could not be created");
         }
@@ -145,9 +150,19 @@ const Checkout = () => {
           userId, // Pass the user ID to the order data
           amount: Math.round(calculateTotal()),
         };
+      //  console.log(token);
+        // token
+        // Configure headers to include the token if available
+        const config = token
+          ? {
+              headers: {
+                Authorization: `Bearer ${token}`, // Include the token in the Authorization header
+              },
+            }
+          : {};
   
         await axios
-          .post("/api/order", orderData)
+          .post("/api/order", orderData, config)
           .then((res) => {
             setLoading(false);
             // dispatch(clearCart());
@@ -173,7 +188,7 @@ const Checkout = () => {
       console.error("Error handling checkout:", error);
     }
   };
-
+  
   return (
     <HomeLayout>
       <div className="min-h-screen bg-gray-100 p-6 flex items-center justify-center">

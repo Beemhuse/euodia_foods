@@ -37,15 +37,16 @@ export default function Login() {
     try {
       setLoading(true);
       const response = await axios.post('/api/login', { email, password });
+      
       if (response) {
         console.log(response)
         setCookie("euodia_token", response?.data?.token)
+        setCookie("euodia_user", response?.data?.user._id)
       }
 
       setLoading(false);
       setSuccess('Login successful');
       router.push('/');
-      window.location.reload()
     } catch (error) {
       const errMsg = handleGenericError(error);
       setError(errMsg);

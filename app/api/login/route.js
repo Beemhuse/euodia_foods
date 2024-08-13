@@ -1,12 +1,12 @@
 import { getUserIdByEmail } from '@/utils/lib/getUserIdByEmail';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import crypto from 'crypto';
+// import crypto from 'crypto';
 
 // Function to generate a random secret key
-const generateRandomSecret = () => {
-  return crypto.randomBytes(32).toString('hex');
-};
+// const generateRandomSecret = () => {
+//   return crypto.randomBytes(32).toString('hex');
+// };
 
 export async function POST(req) {
   try {
@@ -31,10 +31,10 @@ export async function POST(req) {
       });
     }
 
-    const secretKey = generateRandomSecret();
+    // const secretKey = generateRandomSecret();
 
     // Generate JWT token
-    const token = jwt.sign({ userId: user._id }, secretKey, { expiresIn: '7d' });
+    const token = jwt.sign({ userId: user._id }, process.env.NEXT_PRIVATE_JWT_SECRET_KEY, { expiresIn: '7d' });
     return new Response(JSON.stringify({ message: 'User signed in successfully!', user, token }), {
       status: 200,
       headers: { 'Content-Type': 'application/json' }

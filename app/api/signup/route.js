@@ -3,13 +3,13 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { v4 as uuidv4 } from 'uuid';
 
-import crypto from 'crypto';
+// import crypto from 'crypto';
 import { createUser, getUserByEmail } from '@/utils/sanity/client';
 
 // Function to generate a random secret key
-const generateRandomSecret = () => {
-  return crypto.randomBytes(32).toString('hex');
-};
+// const generateRandomSecret = () => {
+//   return crypto.randomBytes(32).toString('hex');
+// };
 
 export  async function POST(req) {
  
@@ -36,11 +36,11 @@ export  async function POST(req) {
       };
       const newUser = await createUser(user);
     
-      const secretKey = generateRandomSecret();
+      // const secretKey = generateRandomSecret();
       const expiresIn = 7 * 24 * 60 * 60; // 7 days in seconds
     
       // Generate JWT token
-      const token = jwt.sign({ userId: newUser._id  }, secretKey, { expiresIn: expiresIn });
+      const token = jwt.sign({ userId: newUser._id  }, process.env.NEXT_PRIVATE_JWT_SECRET_KEY, { expiresIn: expiresIn });
     return new Response(JSON.stringify({ message: 'User signed up successfully!', user: newUser, token }), {
         status: 200,
         headers: { 'Content-Type': 'application/json' }

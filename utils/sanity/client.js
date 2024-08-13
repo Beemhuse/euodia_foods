@@ -82,25 +82,28 @@ export const createOrder = async ({
   deliveryAddress,
   transactionRef,
   notes,
-  user
+  customer
 }) => {
   try {
     // Ensure the user exists or create a new one if necessary
-    // const ensuredUser = await ensureUserExists(user?._ref);
+    const ensuredUserId = await ensureUserExists(customer?._ref);
 
     // Map products to an array of references with unique keys
     const cartItemsWithKeys = products.map((item, index) => ({
       _key: `orderedItem_${index}`, // Unique key for each item
       _type: 'reference',
-      _ref: item._id, // Reference to the dish document in Sanity
+      _ref: item._id, // Reference to the product document in Sanity
     }));
 
+    // Ensure that the serviceFee and user references are valid strings
+    const serviceFeeRef = typeof serviceFee === 'string' ? serviceFee : serviceFee._ref;
+    const userRef = typeof ensuredUserId === 'string' ? ensuredUserId : ensuredUserId._id;
     // Create the order document in Sanity
     const order = await client.create({
       _type: 'order',
       products: cartItemsWithKeys, // Use the mapped products array
       total,
-      serviceFee,
+      serviceFee: serviceFeeRef,
       transactionDate: new Date(), // Use current date for transactionDate
       email,
       name,
@@ -111,7 +114,7 @@ export const createOrder = async ({
       deliveryAddress,
       transactionRef,
       notes,
-      user: { _type: 'reference', _ref: ensuredUser._id }, // Use the ensured user ID
+      customer: { _type: 'reference', _ref: String(userRef) }, // Use the ensured user ID
     });
 
     // Update the order with its own ID as orderId (optional)

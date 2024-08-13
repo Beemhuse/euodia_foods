@@ -30,32 +30,33 @@ import { client } from "../sanity/client";
 // Function to create a new user document if neededimport { client } from "../sanity/client";
 
 // Function to ensure a user document exists, or return the existing one
-export async function ensureUserExists(customerId) {
-  console.log(customerId)
+export const ensureUserExists = async (customerId) => {
   try {
-    // Check if a user document with the given customer reference exists
-    const existingUser = await client.fetch(
-      `*[_type == "user" && customer._ref == $customerId][0]`,
+    // Check if a customer document with the given ID exists
+    const existingCustomer = await client.fetch(
+      `*[_type == "customer" && _id == $customerId][0]`,
       { customerId }
     );
 
-    if (existingUser) {
-      // Return the existing user document if found
-      return existingUser;
+    if (existingCustomer) {
+      // Return the existing customer document if found
+      console.log("Existing customer found:", existingCustomer);
+      return existingCustomer;
     }
 
-    // If no such user document exists, create a new one
-    const newUser = await client.createIfNotExists({
-      _id: customerId, // Use the customerId as the user ID or generate a new one if needed
-      _type: "user",
-      customer: { _type: 'reference', _ref: customerId },
-      // Add any default fields required for a user document
+    // If no such customer document exists, create a new one (anonymous customer)
+    const newCustomer = await client.createIfNotExists({
+      _id: customerId, // Use the customerId as the customer ID or generate a new one if needed
+      _type: "customer",
+      isAnonymous: true,
+      createdAt: new Date().toISOString(), // Add any default fields required for a customer document
     });
 
-    console.log('Created new user:', newUser);
-    return newUser;
+    console.log('Created new anonymous customer:', newCustomer);
+    return newCustomer;
   } catch (error) {
-    console.error('Error ensuring user exists:', error);
-    throw new Error('Failed to ensure user existence');
+    console.error('Error ensuring customer exists:', error);
+    throw new Error('Failed to ensure customer existence');
   }
-}
+};
+
