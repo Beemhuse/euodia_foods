@@ -22,11 +22,6 @@ const sideData = [
     link: "/admin/products",
   },
   {
-    icon: <MdOutlineShoppingBag />,
-    title: "Category",
-    link: "/admin/category",
-  },
-  {
     icon: <MdOutlineLocationOn />,
     title: "Location",
     link: "/admin/location",

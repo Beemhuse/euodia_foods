@@ -59,7 +59,7 @@ export default function Signup() {
         className="bg-white p-10  shadow-md flex flex-col gap-4 rounded-lg max-w-md mx-auto"
       >
         <h2 className="text-3xl text-center text-accent font-bold">Sign up to your Admin dashboard</h2>
-        <p className="text-center text-gray-700 mb-4">Quick & Simple way to start making your orders</p>
+        <p className="text-center text-gray-700 mb-4">Quick & Simple way to stay in charge</p>
 
         {error && <p className="text-red-500 text-center">{error}</p>}
         {success && <p className="text-green-500 text-center">{success}</p>}
