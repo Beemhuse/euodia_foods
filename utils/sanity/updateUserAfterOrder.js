@@ -66,6 +66,20 @@ console.log('User document updated successfully:', updatedUser);
 }
 
 
+export async function updateTransaction(customerId, transaction) {
+  try {
+    const response = await client
+      .patch(customerId) // ID of the customer to update
+      .append('transactions', [{ _type: 'reference', _ref: transaction._id, _key: uuidv4()  }]) // Add transaction reference to the array
+      .commit(); // Commit the changes
+    console.log('Customer transactions updated successfully:', response);
+  } catch (error) {
+    console.error('Error updating customer transactions:', error);
+    throw error;
+  }
+}
+
+
 // import { client } from "./client";
 // import { v4 as uuidv4 } from 'uuid';
 
