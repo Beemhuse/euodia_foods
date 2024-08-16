@@ -52,7 +52,7 @@ const OrdersPage = ({ transactions, onViewTransaction }) => {
   ];
   
   return (
-    <div className="px-[50px]">
+    <div className="xl:px-[50px] px-4">
       <Table
         columns={columns}
         data={transactions}

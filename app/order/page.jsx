@@ -106,7 +106,7 @@ export default function OrdersPage({ searchParams }) {
   return (
     <HomeLayout>
 
-    <div className="px-[50px]">
+    <div className="xl:px-[50px]">
       <h1 className="text-center font-bold text-2xl my-8">All Transactions</h1>
       {isLoading ? (
         <p>Loading...</p>
