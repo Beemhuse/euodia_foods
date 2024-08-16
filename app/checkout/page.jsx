@@ -29,24 +29,24 @@ const Checkout = () => {
     formState: { errors },
   } = useForm();
 
-   // Watch the selected location
-   const selectedLocation = watch("serviceFee");
-console.log(selectedServiceFee);
+  // Watch the selected location
+  const selectedLocation = watch("serviceFee");
+  console.log(selectedServiceFee);
 
-   useEffect(() => {
-     // Update the service fee based on the selected location
-     if (selectedLocation) {
-       const selectedFee = serviceFees.find(
-         (fee) => fee._id === selectedLocation
-       );
-       setSelectedServiceFee(selectedFee ? selectedFee.fee : 0);
-      }
-      else{
-       setSelectedServiceFee(0);
+  useEffect(() => {
+    // Update the service fee based on the selected location
+    if (selectedLocation) {
+      const selectedFee = serviceFees.find(
+        (fee) => fee._id === selectedLocation
+      );
+      setSelectedServiceFee(selectedFee ? selectedFee.fee : 0);
+    }
+    else {
+      setSelectedServiceFee(0);
 
-     }
-   }, [selectedLocation, serviceFees]);
- 
+    }
+  }, [selectedLocation, serviceFees]);
+
 
   useEffect(() => {
     async function fetchServiceFees() {
@@ -58,7 +58,7 @@ console.log(selectedServiceFee);
     fetchServiceFees();
   }, []);
 
-// console.log(serviceFees)
+  // console.log(serviceFees)
 
   const calculateSubtotal = () => {
     return cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
@@ -68,13 +68,13 @@ console.log(selectedServiceFee);
   const vat = subtotal * 0.07;
   const calculateTotal = () => {
     const subtotal = calculateSubtotal();
-       const serviceFee = selectedServiceFee ?? 0; // Default to 650 if no location is selected
-    const vat = Number(subtotal) * 0.07; // Example VAT rate (7%)
+    const serviceFee = selectedServiceFee ?? 0; // Default to 650 if no location is selected
+    const vat = Number(subtotal) * 0.075; // Example VAT rate (7%)
     return Number(subtotal) + Number(serviceFee) + Number(vat);
 
   };
   //      // Combine the form data with the selected service fee object
-       
+
   //      const orderData = {
   //       ...data,
   //       serviceFee: {
@@ -125,13 +125,13 @@ console.log(selectedServiceFee);
     try {
       if (data.firstName !== "") {
         setLoading(true);
-  
 
-        const userId =  id
+
+        const userId = id
         if (!userId) {
           throw new Error("User not found or could not be created");
         }
-  
+
         // Combine the form data with the selected service fee object and user ID
         const orderData = {
           ...data,
@@ -143,28 +143,28 @@ console.log(selectedServiceFee);
           userId, // Pass the user ID to the order data
           amount: Math.round(calculateTotal()),
         };
-   
+
         // Configure headers to include the token if available
         const config = token
           ? {
-              headers: {
-                Authorization: `Bearer ${token}`, // Include the token in the Authorization header
-              },
-            }
+            headers: {
+              Authorization: `Bearer ${token}`, // Include the token in the Authorization header
+            },
+          }
           : {};
-  
+
         await axios
           .post("/api/order", orderData, config)
           .then((res) => {
             setLoading(false);
             dispatch(clearCart());
-            toast.success("order placed",{
+            toast.success("order placed", {
               position: "top-right",
               duration: 3000,
             })
             const paymentLink =
               res?.data?.paymentResponse?.data?.authorization_url;
-  
+
             if (paymentLink) {
               window.location.href = paymentLink;
             }
@@ -179,11 +179,11 @@ console.log(selectedServiceFee);
         duration: 3000,
       });
       setLoading(false);
-  
+
       console.error("Error handling checkout:", error);
     }
   };
-  
+
   return (
     <HomeLayout>
       <div className="min-h-screen bg-gray-100 p-6 flex items-center justify-center">
@@ -191,7 +191,7 @@ console.log(selectedServiceFee);
           <div className="bg-white rounded-lg shadow-lg p-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <h2 className="text-2xl font-bold mb-6">Billing Details</h2>
+                <h2 className="text-2xl font-bold mb-6">Delivery Details</h2>
                 <form
                   onSubmit={handleSubmit(handleCheckout)}
                   className="space-y-4"
@@ -260,18 +260,20 @@ console.log(selectedServiceFee);
                     >
                       Town/City
                     </label>
-                    <input
-                      type="text"
+                    <select
                       id="townCity"
                       {...register("townCity", {
                         required: "Town/City is required",
                       })}
                       className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                    />
+                    >
+                      <option value="Lagos">Lagos</option>
+                    </select>
                     {errors.townCity && (
                       <p className="text-red-600">{errors.townCity.message}</p>
                     )}
                   </div>
+
 
                   <div className="mb-4">
                     <label
@@ -295,7 +297,7 @@ console.log(selectedServiceFee);
                     )}
                   </div>
 
-               
+
                   <div className="mb-4">
                     <label
                       className="block text-sm font-medium text-gray-700"
@@ -333,7 +335,7 @@ console.log(selectedServiceFee);
                       className="block text-sm font-medium text-gray-700"
                       htmlFor="location"
                     >
-                      Service areas
+                      Delivery Area
                     </label>
                     <select
                       id="serviceFee"
@@ -342,7 +344,7 @@ console.log(selectedServiceFee);
                       })}
                       className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                     >
-                      <option value="">Select your closest service area</option>
+                      <option value="">Select your closest Delivery area</option>
                       {serviceFees.map((fee) => (
                         <option key={fee._id} value={fee._id}>
                           {fee.location}
@@ -388,7 +390,7 @@ console.log(selectedServiceFee);
                           {item.title} x {item.quantity}
                         </span>
                         <span>
-                        ₦{ (item.price * item.quantity).toLocaleString()}
+                          ₦{(item.price * item.quantity).toLocaleString()}
                         </span>
                       </div>
                     ))}
@@ -406,7 +408,7 @@ console.log(selectedServiceFee);
                     <div className="flex justify-between">
                       <span>VAT:</span>
                       <span>
-                      {formatCurrency(vat.toFixed(2))}
+                        {formatCurrency(vat.toFixed(2))}
                       </span>
                     </div>
                     <div className="flex justify-between font-bold">
@@ -416,30 +418,25 @@ console.log(selectedServiceFee);
                   </div>
                   <hr />
 
-                  {/* <div className="my-4">
+                  <div className="my-4">
                     <label className="block text-sm font-medium text-gray-700">
                       Payment Method
                     </label>
-                    <div className="flex items-center mb-4">
-                      <input
-                        type="radio"
-                        name="paymentMethod"
-                        className="mr-2"
-                      />
+                    <div className="flex items-center justify-between mb-4">
+                      <div>
+                        <input
+                          type="radio"
+                          name="paymentMethod"
+                          className="mr-2"
+                        />
+                        <span>Card</span>
+                      </div>
                       <img
                         src="/paystack.png"
                         alt="Paystack"
-                        className="h-6 mr-2"
+                        className=" "
                       />
-                      <span>Card</span>
-                    </div>
-                    <div className="flex items-center mb-4">
-                      <input
-                        type="radio"
-                        name="paymentMethod"
-                        className="mr-2"
-                      />
-                      <span>Pay with bank transfer</span>
+
                     </div>
                     <div className="flex items-center mb-4">
                       <input
@@ -449,7 +446,7 @@ console.log(selectedServiceFee);
                       />
                       <span>Cash on delivery</span>
                     </div>
-                  </div> */}
+                  </div>
                 </div>
               </div>
             </div>
