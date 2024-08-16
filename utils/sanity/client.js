@@ -1,5 +1,6 @@
 import { createClient } from '@sanity/client';
 import { ensureUserExists } from '../lib/checkUser';
+import { v4 as uuidv4 } from 'uuid'; // Import the UUID library for generating unique IDs
 
 export const client = createClient({
   projectId: '8bms2xqg',
@@ -13,7 +14,7 @@ export const client = createClient({
 export const getUserByEmail = async (email) => {
   const query = '*[_type == "customer" && email == $email][0]';
   const params = { email };
-console.log(email)
+// console.log(email)
   try {
     const user = await client.fetch(query, params);
     return user;
@@ -60,7 +61,7 @@ export const createUser = async (user) => {
 export const createAdmin = async (user) => {
   try {
     const sanityResponse = await client.create({ _type: 'admin', ...user });
-    console.log('User saved to Sanity:', sanityResponse);
+    // console.log('User saved to Sanity:', sanityResponse);
     return sanityResponse;
   } catch (sanityError) {
     console.error('Error saving user to Sanity:', sanityError);
@@ -120,7 +121,7 @@ export const createOrder = async ({
     // Update the order with its own ID as orderId (optional)
     await client.patch(order._id).set({ orderId: order._id }).commit();
 
-    console.log('Order saved to Sanity:', order);
+    // console.log('Order saved to Sanity:', order);
     return order;
   } catch (sanityError) {
     console.error('Error saving order to Sanity:', sanityError);
@@ -129,28 +130,33 @@ export const createOrder = async ({
 };
 
 
-export const createTransaction = async (
+export const createTransaction = async ({
   order,
   amount,
   transactionRef,
-  id,
+  userId,
   status = 'pending', // Default value is 'pending'
-) => {
+  method
+}) => {
   
   console.log("transaction ==>>>", order)
   try {
     // Your logic to create a transaction document in Sanity
+    // Generate a shorter custom ID for the transaction
+    const shortUuid = uuidv4().split('-')[0]; // Take only the first segment of the UUID
+    const customTransactionId = `txn-${shortUuid}`;
+
+
     const transaction = await client.create({
       _type: 'transaction',
-      order: {
-        _type: 'reference',
-        _ref: order._id, // Assuming order._id is the Sanity document ID of the order
-      },
+      id: customTransactionId,
+      order,
       amount,
       transactionRef,
-      id,
+      userId,
       transactionDate: new Date(), // Use current date for transactionDate
       status,
+      method
     });
 
     console.log('Transaction saved to Sanity:', transaction);

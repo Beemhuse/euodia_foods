@@ -11,17 +11,16 @@ export async function POST(req) {
   try {
     // Check if the user is signed in
     let session = await getSession(req);
-    console.log("session ==>", session)
+    // console.log("session ==>", session)
    currentUserId = userId;
 
     if (!session || !session.user) {
       // User is not signed in, create an anonymous user
       const anonymousUser = await createAnonymousUser(email);
 
-      console.log("anonnymous ==>;", anonymousUser);
+      // console.log("anonnymous ==>;", anonymousUser);
       currentUserId = anonymousUser._id; // Use the anonymous user's ID
     }
-console.log("curcurrentUserId);", currentUserId);
 
     // Proceed with the order processing
     const paymentResponse = await initializePaystack(email, amount);
@@ -43,17 +42,19 @@ console.log("curcurrentUserId);", currentUserId);
       notes: orderNotes,
       customer: { _type: "reference", _ref: currentUserId }, // Use the current user ID (either signed-in or anonymous)
     });
-console.log("order ==> ", currentUserId)
+// console.log("order ==> ", currentUserId)
     // startFunc;
 
     if (order?._id) {
-      const transaction = await createTransaction(
-        order,
+      const transaction = await createTransaction({
+        order: { _type: "reference", _ref: order._id },
         amount,
         transactionRef,
-        currentUserId,
-        'pending', // Set default status to 'pending' or adjust as needed
-      );
+        userId: { _type: "reference", _ref: currentUserId }, // Reference to the user
+        status: 'pending', // Set default status to 'pending' or adjust as needed
+        method: 'paystack', // Assuming you're using Paystack, adjust if necessary
+        transactionDate: new Date().toISOString(), // Add the current date and time
+      });
 console.log("transaction ==>>", transaction)
       // Update the user's order history, order count, and total spent
       await updateUserAfterOrder(currentUserId, amount, order, true);
