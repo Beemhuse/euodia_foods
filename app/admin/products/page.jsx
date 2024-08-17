@@ -19,7 +19,7 @@ const fetchCategories = async () => {
   }
 };
 async function fetchProducts() {
-  const query = `*[_type == "dish" && !(_id in path("drafts.*"))] | order(sortOrder asc) {
+  const query = `*[_type == "dish" && status == true && !(_id in path("drafts.*"))] | order(sortOrder asc) {
     _id,
     title,
     slug,
@@ -60,6 +60,20 @@ export default function Page() {
       setProducts(data);
     });
   }, []);
+
+  const handleEditProduct = async (updatedProduct) => {
+    setProducts((prevProducts) =>
+      prevProducts.map((product) =>
+        product._id === updatedProduct._id ? updatedProduct : product
+      )
+    );
+  };
+
+  const handleDeleteProduct = async (productId) => {
+    setProducts((prevProducts) =>
+      prevProducts.filter((product) => product._id !== productId)
+    );
+  };
 
   return (
     <section className="p-4">
@@ -127,9 +141,14 @@ export default function Page() {
       </div>
       
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-        {products?.map((product, index) => (
-          <ProductCard key={index} product={product} />
-        ))}
+      {products?.map((product) => (
+        <ProductCard
+          key={product._id}
+          product={product}
+          onEdit={handleEditProduct}
+          onDelete={handleDeleteProduct}
+        />
+      ))}
       </div>
 
       <CreateMealModal

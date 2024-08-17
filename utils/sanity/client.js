@@ -114,6 +114,8 @@ export const createOrder = async ({
       transactionRef,
       notes,
       customer, 
+      status: 'pending', // Set the initial status to "Pending"
+
     });
 
     // Update the order with its own ID as orderId (optional)
