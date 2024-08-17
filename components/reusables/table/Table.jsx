@@ -20,9 +20,9 @@ const Table = ({ columns, data, onRowClick, isLoading }) => {
       onClick={() => onRowClick && onRowClick(rowData)}
       key={`row-${i}`}
       className={`text-left text-sm font-Poppins  cursor-pointer ${
-        rowData.status.toLowerCase() === "successful" || rowData.status.toLowerCase() === "active"
+        rowData?.status?.toLowerCase() === "successful" || rowData?.status?.toLowerCase() === "active"
           ? "hover:bg-green/30 "
-          : rowData.status.toLowerCase() === "failed" || rowData.status.toLowerCase() === "inactive"
+          : rowData?.status?.toLowerCase() === "failed" || rowData?.status?.toLowerCase() === "inactive"
           ? "hover:bg-red/30 "
           : "hover:bg-[#F7CB73]/20 "
       }`}

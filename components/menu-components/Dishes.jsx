@@ -122,6 +122,9 @@ const Dishes = ({ selectedCategory }) => {
     fetchDishes();
   }, []);
 
+console.log("dishes ===>>>",dishes);
+
+
   const handleDishClick = (dish) => {
     setSelectedDish(dish);
   };

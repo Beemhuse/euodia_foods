@@ -80,7 +80,6 @@ export const createOrder = async ({
   apartment,
   townCity,
   phone,
-  // deliveryAddress,
   transactionRef,
   notes,
   customer
@@ -112,10 +111,11 @@ export const createOrder = async ({
       apartment,
       townCity,
       phone,
-      // deliveryAddress,
       transactionRef,
       notes,
-      customer: { _type: 'reference', _ref: String(userRef) }, // Use the ensured user ID
+      customer, 
+      status: 'pending', // Set the initial status to "Pending"
+
     });
 
     // Update the order with its own ID as orderId (optional)

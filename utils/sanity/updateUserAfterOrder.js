@@ -1,26 +1,3 @@
-
-// import { client } from "./client";
-// import { v4 as uuidv4 } from 'uuid';
-
-// export async function updateUserAfterOrder(userId, amount, order, isSuccess = true) {
-//   try {
-//     // Step 1: Update the user document
-//     await client
-//       .patch(userId)
-//       .setIfMissing({ orders: [], orderCount: 0, totalSpent: 0 }) // Ensure fields are present
-//       .append('orders', [{ _type: 'reference', _ref: order._id, _key: uuidv4() }]) // Add a unique _key for each order reference
-//       .inc({ orderCount: 1 }) // Increment order count by 1
-//       .inc({ totalSpent: isSuccess ? amount : 0 }) // Increment total spent if the order was successful
-//       .commit();
-
-//     console.log('User document updated successfully');
-//   } catch (error) {
-//     console.error('Error updating user:', error);
-//     throw new Error('Failed to update user after order');
-//   }
-// }
-
-
 import { client } from "./client";
 import { v4 as uuidv4 } from 'uuid';
 
@@ -44,12 +21,6 @@ export async function updateUserAfterOrder(userId, amount, order, isSuccess = tr
     totalSpent: isSuccess ? amount : 0, // Increment total spent by the amount if successful
   })
   .commit();
-
-console.log('User document updated successfully:', updatedUser);
-
-
-console.log('User document updated successfully:', updatedUser);
-
 
       console.log('User document updated successfully:', updatedUser);
       return updatedUser;
