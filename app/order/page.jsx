@@ -134,7 +134,7 @@ export default function OrdersPage({ searchParams }) {
         </>
       )}
 
-{selectedOrder && (
+        {selectedOrder && (
             <OrderDetailsModal
               order={selectedOrder}
               onClose={() => setSelectedOrder(null)} // Close the modal

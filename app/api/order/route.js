@@ -37,13 +37,10 @@ export async function POST(req) {
       apartment,
       townCity,
       phone: phoneNumber,
-      // deliveryAddress,
       transactionRef,
       notes: orderNotes,
-      customer: { _type: "reference", _ref: currentUserId }, // Use the current user ID (either signed-in or anonymous)
+      customer: { _type: "reference", _ref: currentUserId }, 
     });
-// console.log("order ==> ", currentUserId)
-    // startFunc;
 
     if (order?._id) {
       const transaction = await createTransaction({
@@ -55,7 +52,7 @@ export async function POST(req) {
         method: 'paystack', // Assuming you're using Paystack, adjust if necessary
         transactionDate: new Date().toISOString(), // Add the current date and time
       });
-console.log("transaction ==>>", transaction)
+// console.log("transaction ==>>", transaction)
       // Update the user's order history, order count, and total spent
       await updateUserAfterOrder(currentUserId, amount, order, true);
 
