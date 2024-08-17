@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { FiMenu, FiX, FiShoppingCart, FiUser } from "react-icons/fi";
+import { FiMenu, FiX, FiShoppingCart, FiUser, FiLogOut, FiList } from "react-icons/fi";
 import Button from "../reusables/buttons/Button";
 import { useRouter, usePathname } from "next/navigation";
 import useCookies from "@/hooks/useCookies";
@@ -10,6 +10,7 @@ import { useSelector } from 'react-redux';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const totalQuantities = useSelector(state => state.cart.totalQuantities);
 
   const router = useRouter();
@@ -17,10 +18,18 @@ const Navbar = () => {
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
   };
-  const { getCookie } = useCookies();
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
+  const { getCookie, removeCookie } = useCookies();
   let euodia_token = getCookie("euodia_token");
 
   useEffect(() => { }, [euodia_token]);
+
+  const handleLogout = () => {
+    removeCookie("euodia_token");
+    router.push("/auth/login");
+  };
 
   return (
     <nav className="bg-white shadow-md">
@@ -45,21 +54,33 @@ const Navbar = () => {
           </Link>
           <div className="flex items-center space-x-4">
             <Link href="/cart">
-            <button className="hover:text-green-800 relative">
-              <FiShoppingCart className="text-xl" />
-              {
-                totalQuantities === 0 ? null : 
-              <p className='absolute -top-2 right-0 bg-red h-4 w-4 text-white flex items-center justify-center p-1 text-sm rounded-full' >
-
-              { totalQuantities}
-              </p>
-              }
-            </button>
+              <button className="hover:text-green-800 relative">
+                <FiShoppingCart className="text-xl" />
+                {totalQuantities !== 0 && (
+                  <p className='absolute -top-2 right-0 bg-red h-4 w-4 text-white flex items-center justify-center p-1 text-sm rounded-full'>
+                    {totalQuantities}
+                  </p>
+                )}
+              </button>
             </Link>
             {euodia_token ? (
-              <button className="hover:text-green-800">
-                <FiUser className="h-5 w-5" />
-              </button>
+              <div className="relative">
+                <button onClick={toggleDropdown} className="hover:text-green-800">
+                  <FiUser className="h-5 w-5" />
+                </button>
+                {isDropdownOpen && (
+                  <div className="absolute right-0 mt-2 w-48 bg-white shadow-md rounded-md py-2 z-10">
+                    <Link href="/orders" className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100">
+                      <FiList className="mr-2" />
+                      My Orders
+                    </Link>
+                    <button onClick={handleLogout} className="flex items-center w-full px-4 py-2 text-gray-700 hover:bg-gray-100">
+                      <FiLogOut className="mr-2" />
+                      Logout
+                    </button>
+                  </div>
+                )}
+              </div>
             ) : (
               <Button
                 color="green"
@@ -94,13 +115,30 @@ const Navbar = () => {
           </Link>
           <div className="flex flex-col items-center space-y-4 w-full">
             {euodia_token ? (
-              <button
-                onClick={toggleSidebar}
-                className="flex items-center justify-center text-green-600 border border-green-600 rounded-lg px-4 py-2 w-full hover:bg-green-600 hover:text-white"
-              >
-                <FiUser className="mr-2 h-5 w-5" />
-                Account
-              </button>
+              <div className="relative w-full">
+                <button
+                  onClick={() => {
+                    toggleDropdown();
+                    toggleSidebar();
+                  }}
+                  className="flex items-center justify-center text-green-600 border border-green-600 rounded-lg px-4 py-2 w-full hover:bg-green-600 hover:text-white"
+                >
+                  <FiUser className="mr-2 h-5 w-5" />
+                  Account
+                </button>
+                {isDropdownOpen && (
+                  <div className="absolute right-0 mt-2 w-full bg-white shadow-md rounded-md py-2 z-10">
+                    <Link href="/orders" className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100" onClick={toggleSidebar}>
+                      <FiList className="mr-2" />
+                      My Orders
+                    </Link>
+                    <button onClick={handleLogout} className="flex items-center w-full px-4 py-2 text-gray-700 hover:bg-gray-100">
+                      <FiLogOut className="mr-2" />
+                      Logout
+                    </button>
+                  </div>
+                )}
+              </div>
             ) : (
               <Button
                 title="Login"

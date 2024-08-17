@@ -438,14 +438,14 @@ const Checkout = () => {
                       />
 
                     </div>
-                    <div className="flex items-center mb-4">
+                    {/* <div className="flex items-center mb-4">
                       <input
                         type="radio"
                         name="paymentMethod"
                         className="mr-2"
                       />
                       <span>Cash on delivery</span>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
               </div>
