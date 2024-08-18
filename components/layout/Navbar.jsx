@@ -69,7 +69,7 @@ const Navbar = () => {
                   <FiUser className="h-5 w-5" />
                 </button>
                 {isDropdownOpen && (
-                  <div className="absolute right-0 mt-2 w-48 bg-white shadow-md rounded-md py-2 z-10">
+                  <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-300 shadow-lg rounded-md py-2 z-10">
                     <Link href="/orders" className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100">
                       <FiList className="mr-2" />
                       My Orders
@@ -127,7 +127,7 @@ const Navbar = () => {
                   Account
                 </button>
                 {isDropdownOpen && (
-                  <div className="absolute right-0 mt-2 w-full bg-white shadow-md rounded-md py-2 z-10">
+                  <div className="absolute right-0 mt-2 w-full bg-white border opacity-100 border-gray-300 shadow-lg rounded-md py-2 z-10">
                     <Link href="/orders" className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100" onClick={toggleSidebar}>
                       <FiList className="mr-2" />
                       My Orders
