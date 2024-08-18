@@ -9,7 +9,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { getCookie } from "@/utils/getCookie";
 
 
-export default function ServiceFeeForm({ serviceFee, onClose, onSuccess }) {
+export default function ServiceFeeForm({ serviceFee, onClose,mutate, onSuccess }) {
   const {
     register,
     handleSubmit,
@@ -44,6 +44,8 @@ export default function ServiceFeeForm({ serviceFee, onClose, onSuccess }) {
           draggable: true,
           progress: undefined,
         });
+      mutate()
+
       } else {
         // Create a new service fee
         response = await axios.post("/api/admin/servicefee", data, config);
@@ -57,6 +59,7 @@ export default function ServiceFeeForm({ serviceFee, onClose, onSuccess }) {
           progress: undefined,
         });
       }
+      mutate()
   
       setLoading(false);
       reset();
@@ -131,7 +134,7 @@ export default function ServiceFeeForm({ serviceFee, onClose, onSuccess }) {
           </button>
           <button
             type="submit"
-            className="w-full md:w-auto bg-indigo-600 text-white py-2 px-4 rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            className="w-full md:w-auto bg-green-600 text-white py-2 px-4 rounded-md shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             disabled={loading}
           >
             {loading ? "Submitting..." : "Submit"}

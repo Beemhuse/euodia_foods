@@ -26,7 +26,6 @@ export default function OrdersPage({ searchParams }) {
     // Get the user ID from the cookie
     const userCookie = getCookie("euodia_user");
     if (userCookie) {
-      console.log(userCookie)
       const user = userCookie;
       setUserId(user);
     }
@@ -67,7 +66,6 @@ export default function OrdersPage({ searchParams }) {
   }, [userId, currentPage]);
 
   const handleViewTransaction = async (orderId) => {
-    console.log(orderId)
     try {
       // Fetch more details of the selected order
       const orderDetails = await client.fetch(`
@@ -102,7 +100,6 @@ export default function OrdersPage({ searchParams }) {
     }
   };
 
-  console.log(transactions)
   return (
     <HomeLayout>
 

@@ -89,7 +89,6 @@ export default function BestSellers() {
       alert('Failed to add dish to Best Selling Dishes.');
     }
   };
-  console.log("best sellers ==>>> ", bestSellers);
 
   return (
     <div className="bg-white p-6 shadow-lg rounded-lg max-h-[500px] overflow-y-auto">
@@ -97,6 +96,11 @@ export default function BestSellers() {
         Best Sellers Dishes
       </h2>
       <div className=" flex items-center justify-center flex-wrap gap-6">
+        {
+          bestSellers.length === 0 && <div>
+No available content
+          </div>
+        }
         {bestSellers.slice(0,4).map((meal) => (
           <div
             key={meal.id}

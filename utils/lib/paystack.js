@@ -31,7 +31,6 @@ export const initializePaystack = async (email, amount) => {
     const transactionRef = generateTransactionRef(7);
 
     // Log for potential debugging
-    console.log("Email:", email, "Amount in Kobo:", amountInKobo);
 
     const response = await axios.post(
       "https://api.paystack.co/transaction/initialize",

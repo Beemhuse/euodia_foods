@@ -157,7 +157,7 @@ export default function Page() {
   return (
     <section className="p-4 my-6 flex">
       <div className="shadow-lg p-2 flex-grow">
-        <h2 className="font-bold text-lg border-b-2 py-4 px-2 mb-3">Recent Orders</h2>
+        <h2 className="font-bold text-lg border-b-2 py-4 px-2 mb-3">All Orders</h2>
         <Table columns={customerColumn} data={mappedOrders} isGray={false} />
         <div className="my-10">
           <Pagination

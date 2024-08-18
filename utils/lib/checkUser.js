@@ -40,7 +40,7 @@ export const ensureUserExists = async (customerId) => {
 
     if (existingCustomer) {
       // Return the existing customer document if found
-      console.log("Existing customer found:", existingCustomer);
+      // console.log("Existing customer found:", existingCustomer);
       return existingCustomer;
     }
 
@@ -52,7 +52,7 @@ export const ensureUserExists = async (customerId) => {
       createdAt: new Date().toISOString(), // Add any default fields required for a customer document
     });
 
-    console.log('Created new anonymous customer:', newCustomer);
+    // console.log('Created new anonymous customer:', newCustomer);
     return newCustomer;
   } catch (error) {
     console.error('Error ensuring customer exists:', error);

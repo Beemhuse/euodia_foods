@@ -40,7 +40,6 @@ export default function Login() {
       setLoading(true);
       const response = await axios.post('/api/admin/login', { email, password });
       if (response) {
-        console.log(response)
         setCookie("admineu_token", response?.data?.token)
       }
 

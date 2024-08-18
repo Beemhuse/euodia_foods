@@ -5,6 +5,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import InputComponent from "@/components/reusables/input/InputComponent";
 import Button from "@/components/reusables/buttons/Button";
 import { getCookie } from "@/utils/getCookie";
+import { toast } from "react-toastify";
 
 const categorySchema = yup.object().shape({
   title: yup.string().required("Title is required"),
@@ -15,7 +16,6 @@ const CreateCategoryModal = ({ isOpen, onClose, categories }) => {
   const { register, handleSubmit, reset, formState: { errors } } = useForm({
     resolver: yupResolver(categorySchema),
   });
-console.log(categories);
   const adminToken = getCookie("admineu_token");
   const [loading, setLoading] = useState(false);
 
@@ -34,7 +34,7 @@ console.log(categories);
 
       if (response.ok) {
         const result = await response.json();
-        console.log("Category created successfully:", result);
+        toast.success("Category created successfully")
         reset(); // Reset the form after successful submission
         onClose(); // Close the modal
       } else {

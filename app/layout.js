@@ -68,7 +68,12 @@ export default function RootLayout({ children }) {
       <body className=" h-full">
         <div className="flex-grow">
           <ToastContainer />
-          <StoreProvider>{children}</StoreProvider>
+
+          <StoreProvider>
+            {children}
+          {/* <SWRProvider>
+          </SWRProvider> */}
+            </StoreProvider>
         </div>
       </body>
     </html>

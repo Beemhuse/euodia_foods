@@ -25,7 +25,6 @@ export async function GET(req) {
 
     // Fetch dishes from Sanity
     const dishes = await client.fetch(query);
-console.log(dishes)
     return new NextResponse(JSON.stringify({ data: dishes }), {
       status: 200,
       headers: { 'Content-Type': 'application/json' },

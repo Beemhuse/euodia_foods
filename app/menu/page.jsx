@@ -6,7 +6,12 @@ import React, { useEffect, useState } from 'react'
 
 const fetchCategories = async () => {
   try {
-    const query = `*[_type == "category"]`;
+    const query = ` *[_type == "category" && active == true]{
+    _id,
+    title,
+    description,
+    slug,
+  }`;
     return await client.fetch(query);
   } catch (error) {
     console.error('Error fetching categories:', error);
