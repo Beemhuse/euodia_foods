@@ -24,22 +24,38 @@ export const getUserByEmail = async (email) => {
   }
 };
 
-export async function createAnonymousUser(email, fullName) {
+import { client } from "@/utils/sanity/client";
+
+export const createAnonymousUser = async (email, fullName) => {
   try {
-    const anonymousUser = await client.create({
-      _type: 'customer', // or 'customer', depending on your schema
+    // Check if the email already exists
+    const existingUser = await client.fetch(
+      `*[_type == "customer" && email == $email][0]`,
+      { email }
+    );
+
+    if (existingUser) {
+      return existingUser; // Return the existing user if found
+    }
+
+    // If no existing user is found, create a new anonymous user
+    const newUser = await client.create({
+      _type: "customer",
       email,
-      id: uuidv4(), // Generating a unique UUID
       name: fullName,
       isAnonymous: true,
+      orderCount: 0,
+      totalSpent: 0,
       createdAt: new Date().toISOString(),
     });
 
-    return anonymousUser;
+    return newUser;
   } catch (error) {
-    throw new Error(`Error creating anonymous user: ${error.message}`);
+    console.error("Error creating anonymous user:", error);
+    throw new Error("Could not create anonymous user");
   }
-}
+};
+
 export async function getAdminByEmail(email) {
   const query = `*[_type == "admin" && email == $email][0]{
     _id,
