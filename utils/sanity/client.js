@@ -4,8 +4,8 @@ import { v4 as uuidv4 } from 'uuid'; // Import the UUID library for generating u
 
 export const client = createClient({
   projectId: '8bms2xqg',
-  // dataset: 'main',
-  dataset: 'production',
+  dataset: 'main',
+  // dataset: 'production',
   apiVersion: '2024-03-11',
   useCdn: true,
   token: process.env.NEXT_PUBLIC_SANITY_TOKEN
@@ -24,11 +24,13 @@ export const getUserByEmail = async (email) => {
   }
 };
 
-export async function createAnonymousUser(email) {
+export async function createAnonymousUser(email, fullName) {
   try {
     const anonymousUser = await client.create({
-      _type: 'user', // or 'customer', depending on your schema
+      _type: 'customer', // or 'customer', depending on your schema
       email,
+      id: uuidv4(), // Generating a unique UUID
+      name: fullName,
       isAnonymous: true,
       createdAt: new Date().toISOString(),
     });

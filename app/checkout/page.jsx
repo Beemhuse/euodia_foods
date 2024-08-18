@@ -31,7 +31,6 @@ const Checkout = () => {
 
   // Watch the selected location
   const selectedLocation = watch("serviceFee");
-  console.log(selectedServiceFee);
 
   useEffect(() => {
     // Update the service fee based on the selected location
@@ -58,7 +57,6 @@ const Checkout = () => {
     fetchServiceFees();
   }, []);
 
-  // console.log(serviceFees)
 
   const calculateSubtotal = () => {
     return cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
@@ -73,50 +71,6 @@ const Checkout = () => {
     return Number(subtotal) + Number(serviceFee) + Number(vat);
 
   };
-  //      // Combine the form data with the selected service fee object
-
-  //      const orderData = {
-  //       ...data,
-  //       serviceFee: {
-  //         _type: "reference",
-  //         _ref: data.serviceFee,
-  //       },
-  //       cartItems,
-  //     };
-  //   // console.log(data.serviceFee)
-
-  //   try {
-  //     if (data.firstName !== "") {
-  //       setLoading(true);
-
-  //       await axios
-  //         .post("/api/order", { cartItems, ...data, amount: Math.round(calculateTotal()) })
-  //         .then((res) => {
-  //           setLoading(false);
-  //           // dispatch(clearCart());
-
-  //           // const paymentLink =
-  //           //   res?.data?.paymentResponse?.data?.authorization_url;
-  //           // console.log(paymentLink);
-  //           // if (paymentLink) {
-  //           //   window.location.href = paymentLink;
-  //           // }
-  //         });
-  //     } else {
-  //       toast.error("Please add an address to proceed with checkout");
-  //     }
-  //     // Call Paystack API to initiate payment
-  //   } catch (error) {
-  //     const errMsg = handleGenericError(error);
-  //     toast.error(errMsg, {
-  //       position: "top-right",
-  //       duration: 3000,
-  //     });
-  //     setLoading(false);
-
-  //     console.error("Error handling checkout:", error);
-  //   }
-  // };
   const token = getCookie("euodia_token"); // Assuming the API returns a token if the user exists
   const id = getCookie("euodia_user"); // Assuming the API returns a token if the user exists
   // const id = getCookie("euodia_user"); // Assuming the API returns a token if the user exists
@@ -128,9 +82,9 @@ const Checkout = () => {
 
 
         const userId = id
-        if (!userId) {
-          throw new Error("User not found or could not be created");
-        }
+        // if (!userId) {
+        //   throw new Error("User not found or could not be created");
+        // }
 
         // Combine the form data with the selected service fee object and user ID
         const orderData = {

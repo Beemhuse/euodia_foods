@@ -16,7 +16,7 @@ export async function POST(req) {
 
     if (!session || !session.user) {
       // User is not signed in, create an anonymous user
-      const anonymousUser = await createAnonymousUser(email);
+      const anonymousUser = await createAnonymousUser(email, fullName);
 
       // console.log("anonnymous ==>;", anonymousUser);
       currentUserId = anonymousUser._id; // Use the anonymous user's ID
