@@ -33,7 +33,12 @@ export async function POST(req) {
 
 export async function GET() {
   try {
-    const categories = await client.fetch(`*[_type == "category"]`);
+    const categories = await client.fetch(`*[_type == "category" && active == true]{
+    _id,
+    title,
+    description,
+    slug,
+  }`);
 
     return new Response(JSON.stringify({ categories }), {
         status: 200,

@@ -1,8 +1,12 @@
 "use client";
 import { useState, useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { MdDashboard, MdOutlineLocationOn, MdOutlineShoppingBag } from "react-icons/md";
+import { MdDashboard, MdOutlineLocationOn, MdOutlineShoppingBag, MdPeople } from "react-icons/md";
 import { BsFileEarmarkTextFill } from "react-icons/bs";
+import { GrTransaction } from "react-icons/gr";
+import { TbLogout } from "react-icons/tb";
+import { FaRegCaretSquareLeft, FaRegCaretSquareRight } from "react-icons/fa";
+
 import Link from "next/link";
 
 const sideData = [
@@ -10,6 +14,11 @@ const sideData = [
     icon: <MdDashboard />,
     title: "Dashboard",
     link: "/admin",
+  },
+  {
+    icon: <MdPeople />,
+    title: "Customers",
+    link: "/admin/customers",
   },
   {
     icon: <BsFileEarmarkTextFill />,
@@ -25,6 +34,11 @@ const sideData = [
     icon: <MdOutlineLocationOn />,
     title: "Location",
     link: "/admin/location",
+  },
+  {
+    icon: <GrTransaction />,
+    title: "Transactions",
+    link: "/admin/transactions",
   },
 ];
 
@@ -62,17 +76,17 @@ export default function SideNav({ ...props }) {
   return (
     <menu
       {...props}
-      className={`flex flex-col h-full dark:bg-black dark:text-white p-2 mt-6 flex-none transition-all duration-300 ${
-        isExpanded ? "w-80" : "w-20"
+      className={`flex flex-col h-full   dark:bg-black dark:text-white p-2 mt-6 flex-none transition-all duration-300 ${
+        isExpanded ? "w-80 relative" : "w-20 relative"
       }`}
     >
-      <nav className="flex-grow flex flex-col mt-[5rem] gap-y-8">
+      <nav className="flex-grow flex flex-col relative mt-[5rem] gap-y-8">
         {sideData.map((item, idx) => {
           const isActive = pathname === item.link;
           return (
             <Link key={idx} href={item.link}>
               <div
-                className={`relative mt-10 cursor-pointer w-full text-sm dark:text-white space-x-1 py-4 flex items-center gap-x-4 transition-all duration-200 ${
+                className={`relative mt-5 border-b-2 cursor-pointer w-full text-md dark:text-white space-x-1 py-2 flex items-center gap-x-4 transition-all duration-200 ${
                   isActive
                     ? "text-white bg-green-500 rounded-xl p-2 dark:text-white"
                     : "hover:text-green-500 hover:scale-95"
@@ -84,9 +98,15 @@ export default function SideNav({ ...props }) {
             </Link>
           );
         })}
+      <span onClick={toggleSidebar} className=" text-xl    ">
+        {isExpanded ? <FaRegCaretSquareRight /> : <FaRegCaretSquareLeft />}
+      </span>
+
       </nav>
-      <button onClick={toggleSidebar} className="mt-auto bg-green-500 p-2 rounded">
-        {isExpanded ? "Collapse" : "Expand"}
+
+
+      <button onClick={toggleSidebar} className="my-4 bg-green-500 p-2 rounded">
+        {isExpanded ? <div className="flex items-center text-white gap-4"><TbLogout /> <span>Logout</span> </div>  : <TbLogout />}
       </button>
     </menu>
   );

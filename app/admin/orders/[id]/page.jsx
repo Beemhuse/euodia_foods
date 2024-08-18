@@ -294,7 +294,10 @@ console.log("transaction result ====>>>>", transactionResult);
         </div>
         </div>
        
-        <div className="flex items-center justify-end space-x-4">
+        <div className="flex items-end justify-center flex-col gap-4 w-full">
+          <h2>Update the order status</h2>
+<div className=" flex items-center gap-4">
+
           <select
             className="p-2 border rounded-lg"
             value={selectedStatus}
@@ -306,28 +309,14 @@ console.log("transaction result ====>>>>", transactionResult);
               </option>
             ))}
           </select>
-          <button className="bg-gray-200 p-2 rounded">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M4 6h16M4 10h16M4 14h16M4 18h16"
-              />
-            </svg>
-          </button>
+        
           <button
             className="bg-green-500 text-white px-4 py-2 rounded"
             onClick={handleSaveStatus}
           >
             {loading ? "loading" : "Save"}
           </button>
+</div>
         </div>
       </div>
     </div>

@@ -68,13 +68,13 @@ export default function AdminPage() {
         <nav className="flex">
           <button
             onClick={() => setActiveTab('categories')}
-            className={`px-4 py-2 mr-4 border-b-2 ${activeTab === 'categories' ? 'border-blue-600 text-blue-600' : 'border-transparent text-gray-600 hover:text-gray-800'}`}
+            className={`px-4 py-2 mr-4 border-b-2 ${activeTab === 'categories' ? 'border-green-600 text-black-600' : 'border-transparent text-gray-600 hover:text-gray-800'}`}
           >
             Categories
           </button>
           <button
             onClick={() => setActiveTab('serviceFees')}
-            className={`px-4 py-2 border-b-2 ${activeTab === 'serviceFees' ? 'border-blue-600 text-blue-600' : 'border-transparent text-gray-600 hover:text-gray-800'}`}
+            className={`px-4 py-2 border-b-2 ${activeTab === 'serviceFees' ? 'border-green-600 text-black-600' : 'border-transparent text-gray-600 hover:text-gray-800'}`}
           >
             Service Fees
           </button>
