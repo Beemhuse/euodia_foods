@@ -1,9 +1,12 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { useParams, useSearchParams } from "next/navigation";
+import { useParams } from "next/navigation";
 import OrderDetailsCard from "@/components/card/OrderDetailsCard";
 import Typography from "@/components/reusables/typography/Typography";
 import { client } from "@/utils/sanity/client";
+import useCurrencyFormatter from "@/hooks/useCurrencyFormatter";
+import { AiOutlineCheckCircle, AiOutlineWarning } from "react-icons/ai";
+import { MdCancel, MdLocalShipping } from "react-icons/md";
 
 // Status options list
 const statusOptions = [
@@ -13,14 +16,15 @@ const statusOptions = [
   { title: "Delivered", value: "delivered" },
   { title: "Cancelled", value: "cancelled" },
 ];
-export default function page() {
-  const [order, setOrder] = useState(null);
-  const { id } = useParams();
-  const [transaction, setTransaction] = useState(null);
 
+export default function Page() {
+  const [order, setOrder] = useState(null);
+  const [transaction, setTransaction] = useState(null);
   const [selectedStatus, setSelectedStatus] = useState("");
   const [loading, setLoading] = useState(false);
-const transactionRef = order && order?.transactionRef;
+  const { id } = useParams();
+  const formatCurrency = useCurrencyFormatter();
+
   useEffect(() => {
     const fetchOrderDetails = async () => {
       if (!id) return;
@@ -36,8 +40,8 @@ const transactionRef = order && order?.transactionRef;
           _id,
           name,
           email,
-        totalSpent,
-        orderCount,
+          totalSpent,
+          orderCount,
           orders[]->{
             _id,
             orderId,
@@ -51,21 +55,15 @@ const transactionRef = order && order?.transactionRef;
             date
           }
         },
-          phone,
-          streetAddress,
-          apartment,
-          townCity,
+        phone,
+        streetAddress,
+        apartment,
+        townCity,
         products[]->{
           _id,
           title,
           price
         },
-        name,
-        streetAddress,
-        apartment,
-        townCity,
-        phone,
-        email,
         serviceFee->{
           _id,
           fee
@@ -75,26 +73,24 @@ const transactionRef = order && order?.transactionRef;
 
       const result = await client.fetch(query, { id });
       setOrder(result);
-      setSelectedStatus(result.status); // Set initial status
-      // Fetch the transaction details separately
+      setSelectedStatus(result.status);
+
       const transactionQuery = `*[_type == "transaction" && transactionRef == $transactionRef][0]{
-  _id,
-  transactionRef,
-  amount,
-  transactionDate,
-  method,
-}`;
+        _id,
+        transactionRef,
+        amount,
+        transactionDate,
+        method,
+      }`;
 
-      const transactionResult = await client.fetch(transactionQuery, {transactionRef});
-
+      const transactionResult = await client.fetch(transactionQuery, {
+        transactionRef: result.transactionRef,
+      });
       setTransaction(transactionResult);
     };
-    fetchOrderDetails();
-  }, [id, order?.status]);
 
-  const handleProfileClick = () => {
-    // Handle the profile button click
-  };
+    fetchOrderDetails();
+  }, [id]);
 
   const handleStatusChange = (event) => {
     setSelectedStatus(event.target.value);
@@ -106,216 +102,174 @@ const transactionRef = order && order?.transactionRef;
     try {
       await client.patch(order._id).set({ status: selectedStatus }).commit();
       setLoading(false);
-
       alert("Order status updated successfully!");
     } catch (error) {
       setLoading(false);
-
       console.error("Failed to update order status:", error);
       alert("Failed to update order status.");
     }
   };
+
   if (!order) {
     return <div>Loading...</div>;
   }
 
+  const statusColor = {
+    pending: "bg-yellow-500",
+    processing: "bg-blue-500",
+    shipped: "bg-purple-500",
+    delivered: "bg-green-500",
+    cancelled: "bg-red-500",
+  };
+
+  const statusIcon = {
+    pending: <AiOutlineWarning className="mr-2" />,
+    processing: <MdLocalShipping className="mr-2" />,
+    shipped: <MdLocalShipping className="mr-2" />,
+    delivered: <AiOutlineCheckCircle className="mr-2" />,
+    cancelled: <MdCancel className="mr-2" />,
+  };
+
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
-      <div className="">
-        <Typography variant="h2" size="lg">
-          Order List
-        </Typography>
+      <Typography variant="h2" size="lg" className="mb-4">
+        Order Details
+      </Typography>
+      <nav className="flex mb-4" aria-label="Breadcrumb">
+        <ol className="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
+          <li className="inline-flex items-center">
+            <a
+              href="#"
+              className="text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white"
+            >
+              Home
+            </a>
+          </li>
+          <li>
+            <span className="text-sm font-medium text-gray-500 md:mx-2 dark:text-gray-400">
+              Orders
+            </span>
+          </li>
+          <li>
+            <span className="text-sm font-medium text-gray-500 md:mx-2 dark:text-gray-400">
+              Order Details
+            </span>
+          </li>
+        </ol>
+      </nav>
 
-        <nav className="flex" aria-label="Breadcrumb">
-          <ol className="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
-            <li className="inline-flex items-center">
-              <a
-                href="#"
-                className="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white"
-              >
-                <svg
-                  className="w-3 h-3 me-2.5"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
-                  <path d="m19.707 9.293-2-2-7-7a1 1 0 0 0-1.414 0l-7 7-2 2a1 1 0 0 0 1.414 1.414L2 10.414V18a2 2 0 0 0 2 2h3a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h3a2 2 0 0 0 2-2v-7.586l.293.293a1 1 0 0 0 1.414-1.414Z" />
-                </svg>
-                Home
-              </a>
-            </li>
-            <li aria-current="page">
-              <div className="flex items-center">
-                <svg
-                  className="rtl:rotate-180 w-3 h-3 text-gray-400 mx-1"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 6 10"
-                >
-                  <path
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="m1 9 4-4-4-4"
-                  />
-                </svg>
-                <span className="ms-1 text-sm font-medium text-gray-500 md:ms-2 dark:text-gray-400">
-                  Orders
-                </span>
-              </div>
-            </li>
-            <li aria-current="page">
-              <div className="flex items-center">
-                <svg
-                  className="rtl:rotate-180 w-3 h-3 text-gray-400 mx-1"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 6 10"
-                >
-                  <path
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="m1 9 4-4-4-4"
-                  />
-                </svg>
-                <span className="ms-1 text-sm font-medium text-gray-500 md:ms-2 dark:text-gray-400">
-                  Order details
-                </span>
-              </div>
-            </li>
-          </ol>
-        </nav>
-      </div>
-
-      <div className="my-8 bg-white shadow-md rounded-lg p-6">
-        <div className="flex items-center justify-between mb-4">
-          <h1 className="text-2xl font-bold">Order ID: #{order.orderId}</h1>
+      <div className="bg-white shadow-md rounded-lg p-6 animate-fadeIn">
+        <div className="flex justify-between items-center mb-4">
+          <h1 className="text-2xl font-bold">
+            Order ID: #{order.orderId}
+          </h1>
           <span
-            className={`bg-${order.status === "cancelled" ? "red" : (order.status == "pending"? "blue": "green")}-500 text-white px-3 py-1 rounded-full`}
+            className={`flex items-center ${statusColor[order.status]} text-white px-3 py-1 rounded-full`}
           >
-            {order.status}
+            {statusIcon[order.status]} {order.status}
           </span>
         </div>
-        <div className="flex items-center mb-4">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-6 w-6 text-gray-500"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M8 7V3m8 4V3m-4 10v4m4-6H8m0 0l-3 3m3-3l3 3m-6 6h6m0 0l-3 3m3-3l-3-3"
-            />
-          </svg>
-          <span className="ml-2">
-            {new Date(order.transactionDate).toLocaleDateString()}
-          </span>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
           <OrderDetailsCard
             title="Customer"
             content={
-              <div>
-                <p>Full Name: {order.customer?.name}</p>
-                <p>Email: {order.email}</p>
-                <p>Phone: {order.phone}</p>
-                <div className="grid grid-cols-2 gap-6">
-                  <div className="">
-                    <p>Total orders made</p>
-                    <p className="border rounded-xl border-green-500 p-4">
-                      {" "}
-                      {order?.customer?.orderCount}
-                    </p>
-                  </div>
-                  <div className="">
-                    <p>Total amount spent</p>
-                    <p className="border rounded-xl border-green-500 p-4">
-                      {" "}
-                      {order?.customer?.totalSpent}
-                    </p>
-                  </div>
-                </div>
+              <div className="text-gray-700">
+                <p>{order.customer?.name}</p>
+                <p>{order.customer?.email}</p>
+                <p>{order.phone}</p>
+                <p>
+                  Total Orders:{" "}
+                  <span className="font-semibold">
+                    {order.customer?.orderCount}
+                  </span>
+                </p>
+                <p>
+                  Total Spent:{" "}
+                  <span className="font-semibold">
+                    {formatCurrency(order.customer?.totalSpent)}
+                  </span>
+                </p>
               </div>
             }
           />
           <OrderDetailsCard
             title="Order Info"
             content={
-              <div>
-                <p>Shipping Fee: {order.serviceFee?.fee}</p>
-                <p>Order Id: {order.transactionRef}</p>
-                <p >Order Status: <span style={{
-                  color: order.status == "pending"? "red":"blue"
-                }} className={`${order.status == "pending"? "text-red-500":"text-blue-500"}`}>{order.status}</span> </p>
-              </div>
-            }
-            buttonLabel="View profile"
-            onButtonClick={handleProfileClick}
-          />
-          <OrderDetailsCard
-            title="Deliver to"
-            content={
-              <div>
+              <div className="text-gray-700">
                 <p>
-                  Address: {order.streetAddress}, {order.apartment},{" "}
-                  {order.townCity}
+                  <span className="font-semibold">Shipping Fee:</span> {order.serviceFee?.fee}
+                </p>
+                <p>
+                  <span className="font-semibold">Order ID:</span> {order.transactionRef}
+                </p>
+                <p className={`${
+                  order.status === "pending"
+                    ? "text-yellow-600"
+                    : order.status === "cancelled"
+                    ? "text-red-600"
+                    : "text-blue-600"
+                }`}>
+                  Status: {order.status}
                 </p>
               </div>
             }
-            buttonLabel="View profile"
-            onButtonClick={handleProfileClick}
           />
-           <div className=" mb-4">
-        <OrderDetailsCard
-          title="Payment Info"
-          content={
-            <div>
-              <p>Method: {transaction?.method}</p>
-              <p>Transaction Reference: {transaction?.transactionRef}</p>
-              <p>Amount: ₦{transaction?.amount?.toLocaleString()}</p>
-              <p>Date: {new Date(transaction?.transactionDate).toLocaleDateString()}</p>
-            </div>
-          }
-          buttonLabel=""
-          onButtonClick={handleProfileClick}
-        />
-         
+          <OrderDetailsCard
+            title="Deliver To"
+            content={
+              <div className="text-gray-700">
+                <p>{order.streetAddress}</p>
+                <p>{order.apartment}</p>
+                <p>{order.townCity}</p>
+              </div>
+            }
+          />
+          <OrderDetailsCard
+            title="Payment Info"
+            content={
+              <div className="text-gray-700">
+                <p>
+                  <span className="font-semibold">Method:</span> {transaction?.method}
+                </p>
+                <p>
+                  <span className="font-semibold">Reference:</span> {transaction?.transactionRef}
+                </p>
+                <p>
+                  <span className="font-semibold">Amount:</span> ₦{transaction?.amount?.toLocaleString()}
+                </p>
+                <p>
+                  <span className="font-semibold">Date:</span> {new Date(transaction?.transactionDate).toLocaleDateString()}
+                </p>
+              </div>
+            }
+          />
         </div>
-        </div>
-       
-        <div className="flex items-end justify-center flex-col gap-4 w-full">
-          <h2>Update the order status</h2>
-<div className=" flex items-center gap-4">
 
-          <select
-            className="p-2 border rounded-lg"
-            value={selectedStatus}
-            onChange={handleStatusChange}
-          >
-            {statusOptions.map((status) => (
-              <option key={status.value} value={status.value}>
-                {status.title}
-              </option>
-            ))}
-          </select>
-        
-          <button
-            className="bg-green-500 text-white px-4 py-2 rounded"
-            onClick={handleSaveStatus}
-          >
-            {loading ? "loading" : "Save"}
-          </button>
-</div>
+        <div className="mt-8 flex flex-col md:flex-row items-center justify-between gap-4">
+          <h2 className="text-lg font-semibold text-gray-800">
+            Update Order Status
+          </h2>
+          <div className="flex items-center gap-4">
+            <select
+              className="p-2 border rounded-lg"
+              value={selectedStatus}
+              onChange={handleStatusChange}
+            >
+              {statusOptions.map((status) => (
+                <option key={status.value} value={status.value}>
+                  {status.title}
+                </option>
+              ))}
+            </select>
+            <button
+              className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition duration-300 ease-in-out"
+              onClick={handleSaveStatus}
+              disabled={loading}
+            >
+              {loading ? "Saving..." : "Save Status"}
+            </button>
+          </div>
         </div>
       </div>
     </div>
