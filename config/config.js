@@ -16,7 +16,6 @@ export default function init() {
     };
 
     const accessToken = getCookieValue("euodia_token");
-    console.log("accessToken")
     const adminToken = getCookieValue("admineu_token");
 
     axios.defaults.baseURL = API_URL;
@@ -40,7 +39,7 @@ export default function init() {
       (response) => response,
       async (error) => {
         if (error.response.status === 401) {
-          removeCookies(["gen_token", "admin_token"]);
+          removeCookies(["euodia_token", "admineu_token"]);
           window.location.href = '/'; // Redirect to the home page
         }
         return Promise.reject(error);

@@ -5,7 +5,6 @@ export function isAdmin(headers) {
   if (!authHeader) return false;
   
   const token = authHeader.split(' ')[1];
-  console.log("isAdmin ==>?>>>", token);
   if (!token) return false;
 
   try {

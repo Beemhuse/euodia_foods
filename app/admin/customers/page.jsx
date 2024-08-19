@@ -24,7 +24,8 @@ export default function CustomersPage() {
             email,
             orderCount,
             totalSpent,
-            isAnonymous
+            isAnonymous,
+            createdAt
           } | order(createdAt desc)
         `);
         setCustomers(data);
@@ -93,6 +94,16 @@ export default function CustomersPage() {
       key: "totalSpent",
       render: (data) => <span>{`$${data.totalSpent.toFixed(2)}`}</span>,
     },
+    {
+        title: "Date Joined",
+        key: "createdAt",
+        render: (data) => {
+          const date = new Date(data.createdAt);
+          const formattedDate = `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
+          return <span>{formattedDate}</span>;
+        }
+      },
+      
     {
       title: "Customer Type",
       key: "isAnonymous",

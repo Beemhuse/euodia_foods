@@ -1,30 +1,20 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import AdminCategoryPage from "@/components/reusables/category/adminpage";
 import ServiceFeeForm from "@/components/ServiceFeeForm";
 import { toast } from "react-toastify";
 import { getCookie } from "@/utils/getCookie";
-import { client } from "@/utils/sanity/client";
+import { useServiceFees } from '@/hooks/swr/useServiceFee';
+// import { useServiceFees } from '@/hooks/swr/useServiceFees';
 
 export default function AdminPage() {
   const adminToken = getCookie("admineu_token");
 
   const [activeTab, setActiveTab] = useState('categories');
-  const [serviceFees, setServiceFees] = useState([]);
   const [selectedServiceFee, setSelectedServiceFee] = useState(null);
   const [showForm, setShowForm] = useState(false);
 
-  useEffect(() => {
-    async function fetchServiceFees() {
-      const query = `*[_type == "serviceFee"]`;
-      const fetchedServiceFees = await client.fetch(query);
-      setServiceFees(fetchedServiceFees);
-    }
-
-    if (activeTab === 'serviceFees') {
-      fetchServiceFees();
-    }
-  }, [activeTab]);
+  const { serviceFees, isLoading, mutate } = useServiceFees();
 
   const handleEditServiceFee = (serviceFee) => {
     setSelectedServiceFee(serviceFee);
@@ -40,24 +30,19 @@ export default function AdminPage() {
           'Authorization': `Bearer ${adminToken}`, // Include your token here
         },
       });
+
       toast.success("Deleted Successfully");
-      setServiceFees(serviceFees.filter((fee) => fee._id !== id));
+      mutate(); // Revalidate the data after deletion
     }
   };
+
   const handleFormClose = () => {
     setSelectedServiceFee(null);
     setShowForm(false);
   };
-  const handleFormSuccess = (updatedServiceFee) => {
-    if (selectedServiceFee) {
-      setServiceFees(
-        serviceFees.map((fee) =>
-          fee._id === updatedServiceFee._id ? updatedServiceFee : fee
-        )
-      );
-    } else {
-      setServiceFees([...serviceFees, updatedServiceFee]);
-    }
+
+  const handleFormSuccess = () => {
+    mutate(); // Revalidate the data after form submission
     handleFormClose();
   };
 
@@ -100,37 +85,41 @@ export default function AdminPage() {
                 </button>
               </div>
 
-              <table className="min-w-full bg-white border border-gray-300">
-                <thead>
-                  <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
-                    <th className="px-6 py-3 text-left font-semibold">Location Name</th>
-                    <th className="px-6 py-3 text-left font-semibold">Fee</th>
-                    <th className="px-6 py-3 text-left font-semibold">Actions</th>
-                  </tr>
-                </thead>
-                <tbody className="text-gray-700 text-sm">
-                  {serviceFees?.map((service) => (
-                    <tr key={service._id} className="border-b border-gray-200 hover:bg-gray-100">
-                      <td className="px-6 py-3">{service.location}</td>
-                      <td className="px-6 py-3">{service.fee}</td>
-                      <td className="px-6 py-3 flex items-center gap-4">
-                        <button
-                          className="text-blue-500 hover:text-blue-700"
-                          onClick={() => handleEditServiceFee(service)}
-                        >
-                          Edit
-                        </button>
-                        <button
-                          className="text-red-500 hover:text-red-700"
-                          onClick={() => handleDeleteServiceFee(service._id)}
-                        >
-                          Delete
-                        </button>
-                      </td>
+              {isLoading ? (
+                <p>Loading...</p>
+              ) : (
+                <table className="min-w-full bg-white border border-gray-300">
+                  <thead>
+                    <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+                      <th className="px-6 py-3 text-left font-semibold">Location Name</th>
+                      <th className="px-6 py-3 text-left font-semibold">Fee</th>
+                      <th className="px-6 py-3 text-left font-semibold">Actions</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody className="text-gray-700 text-sm">
+                    {serviceFees?.map((service) => (
+                      <tr key={service._id} className="border-b border-gray-200 hover:bg-gray-100">
+                        <td className="px-6 py-3">{service.location}</td>
+                        <td className="px-6 py-3">{service.fee}</td>
+                        <td className="px-6 py-3 flex items-center gap-4">
+                          <button
+                            className="text-green-500 hover:text-black-700"
+                            onClick={() => handleEditServiceFee(service)}
+                          >
+                            Edit
+                          </button>
+                          <button
+                            className="text-red-500 hover:text-red-700"
+                            onClick={() => handleDeleteServiceFee(service._id)}
+                          >
+                            Delete
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
             </div>
 
             {showForm && (
@@ -139,6 +128,7 @@ export default function AdminPage() {
                   serviceFee={selectedServiceFee}
                   onClose={handleFormClose}
                   onSuccess={handleFormSuccess}
+                mutate={mutate}
                 />
               </div>
             )}

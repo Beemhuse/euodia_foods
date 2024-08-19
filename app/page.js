@@ -34,7 +34,6 @@ export default function Home() {
       setContent(data);
     });
   }, []);
-  console.log(content);
 
   return (
     <HomeLayout>

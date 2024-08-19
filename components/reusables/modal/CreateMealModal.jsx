@@ -68,7 +68,6 @@ const CreateMealModal = ({ isOpen, onClose, categories }) => {
 
       if (response.ok) {
         const result = await response.json();
-        console.log("Meal created successfully:", result);
         reset(); // Reset the form after successful submission
         setSelectedImage(null); // Clear the selected image
         onClose(); // Close the modal

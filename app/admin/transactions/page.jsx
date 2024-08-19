@@ -122,7 +122,7 @@ export default function Page() {
   return (
     <section className="p-4 my-6">
       <div className="shadow-lg p-2">
-        <h2 className="font-bold text-lg border-b-2 py-4 px-2 mb-3">Recent Orders</h2>
+        <h2 className="font-bold text-lg border-b-2 py-4 px-2 mb-3">All Transactions</h2>
 
         <div className="flex justify-between items-center mb-4">
           <input

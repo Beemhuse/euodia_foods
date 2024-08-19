@@ -48,7 +48,6 @@ const InputComponent = forwardRef(
       borderStyle === 'bottom'
         ? 'border-b-2 border-accent'
         : 'border border-accent rounded-md';
-console.log(error)
     return (
       <div className="grid">
         <p className="font-medium text-sm" style={{ color: labelColor }}>{label}</p>

@@ -22,7 +22,6 @@ export async function updateUserAfterOrder(userId, amount, order, isSuccess = tr
   })
   .commit();
 
-      console.log('User document updated successfully:', updatedUser);
       return updatedUser;
     } else {
       // If the user does not exist, create a new user document with the provided data
@@ -43,7 +42,6 @@ export async function updateTransaction(customerId, transaction) {
       .patch(customerId) // ID of the customer to update
       .append('transactions', [{ _type: 'reference', _ref: transaction._id, _key: uuidv4()  }]) // Add transaction reference to the array
       .commit(); // Commit the changes
-    console.log('Customer transactions updated successfully:', response);
   } catch (error) {
     console.error('Error updating customer transactions:', error);
     throw error;

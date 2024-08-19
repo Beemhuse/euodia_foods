@@ -13,7 +13,6 @@ const Cart = () => {
   const dispatch = useDispatch()
   const { cartItems } = useSelector(state => state.cart)
   const formatCurrency = useCurrencyFormatter()
-  console.log(cartItems);
 
 
   const calculateSubtotal = () => {

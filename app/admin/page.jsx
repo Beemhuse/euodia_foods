@@ -1,10 +1,12 @@
 "use client";
+import "../globals.css"
 
 import Table from "@/components/reusables/table/Table";
 import BestSellers from "@/components/pages/admin/BestSellers";
 import OrdersSummary from "@/components/pages/admin/OrderSummary";
 import { useEffect, useState } from "react";
 import { client } from "@/utils/sanity/client";
+import TopCustomers from "@/components/pages/admin/TopCustomers";
 
 
 export default function Dashboard() {
@@ -135,8 +137,14 @@ export default function Dashboard() {
     <div className="space-y-8">
       {/* Total Orders */}
      <OrdersSummary />
+     <div className="grid grid-cols-3 gap-4 ">
+
+<TopCustomers />
+<div className="col-span-2">
 
     <BestSellers />
+</div>
+     </div>
 
       {/* Recent Orders */}
       <div className="bg-white p-6 shadow-lg rounded-lg">

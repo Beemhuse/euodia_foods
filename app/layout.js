@@ -3,7 +3,6 @@ import "./globals.css"
 import StoreProvider from "./StoreProvider";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { SWRProvider } from "@/utils/lib/swrConfig";
 
 const inter = Inter({ subsets: ["latin"] });
 

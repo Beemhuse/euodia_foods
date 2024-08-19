@@ -86,7 +86,6 @@ const transactionRef = order && order?.transactionRef;
 }`;
 
       const transactionResult = await client.fetch(transactionQuery, {transactionRef});
-console.log("transaction result ====>>>>", transactionResult);
 
       setTransaction(transactionResult);
     };
@@ -95,7 +94,6 @@ console.log("transaction result ====>>>>", transactionResult);
 
   const handleProfileClick = () => {
     // Handle the profile button click
-    console.log("View profile clicked");
   };
 
   const handleStatusChange = (event) => {
@@ -120,7 +118,6 @@ console.log("transaction result ====>>>>", transactionResult);
   if (!order) {
     return <div>Loading...</div>;
   }
-  console.log("order details ===>>>", order);
 
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
@@ -200,7 +197,7 @@ console.log("transaction result ====>>>>", transactionResult);
         <div className="flex items-center justify-between mb-4">
           <h1 className="text-2xl font-bold">Order ID: #{order.orderId}</h1>
           <span
-            className={`bg-${order.status === "cancelled" ? "red" : "green"}-500 text-white px-3 py-1 rounded-full`}
+            className={`bg-${order.status === "cancelled" ? "red" : (order.status == "pending"? "blue": "green")}-500 text-white px-3 py-1 rounded-full`}
           >
             {order.status}
           </span>
@@ -255,9 +252,11 @@ console.log("transaction result ====>>>>", transactionResult);
             title="Order Info"
             content={
               <div>
-                <p>Shipping: {order.serviceFee?.fee}</p>
-                <p>Payment method: {order.transactionRef}</p>
-                <p>Status: {order.status}</p>
+                <p>Shipping Fee: {order.serviceFee?.fee}</p>
+                <p>Order Id: {order.transactionRef}</p>
+                <p >Order Status: <span style={{
+                  color: order.status == "pending"? "red":"blue"
+                }} className={`${order.status == "pending"? "text-red-500":"text-blue-500"}`}>{order.status}</span> </p>
               </div>
             }
             buttonLabel="View profile"

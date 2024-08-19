@@ -18,7 +18,6 @@ const ResetPassword = () => {
   } = useForm({ resolver: yupResolver(schema) });
 
   const onSubmit = (data) => {
-    console.log(data);
   };
 
   return (

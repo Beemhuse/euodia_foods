@@ -41,7 +41,6 @@ export default function Login() {
       const response = await axios.post('/api/login', { email, password });
       
       if (response) {
-        console.log(response)
         setCookie("euodia_token", response?.data?.token)
         setCookie("euodia_user", response?.data?.user._id)
       }

@@ -47,7 +47,6 @@ export default function Page() {
   const [categories, setCategories] = useState(null);
   const [products, setProducts] = useState(null);
 
-  console.log("products ==> ",products)
   useEffect(() => {
     async function getCategories() {
       const categories = await fetchCategories();

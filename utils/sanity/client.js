@@ -14,7 +14,6 @@ export const client = createClient({
 export const getUserByEmail = async (email) => {
   const query = '*[_type == "customer" && email == $email][0]';
   const params = { email };
-// console.log(email)
   try {
     const user = await client.fetch(query, params);
     return user;
@@ -24,7 +23,6 @@ export const getUserByEmail = async (email) => {
   }
 };
 
-import { client } from "@/utils/sanity/client";
 
 export const createAnonymousUser = async (email, fullName) => {
   try {
