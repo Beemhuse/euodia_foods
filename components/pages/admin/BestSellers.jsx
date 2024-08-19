@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { client } from "@/utils/sanity/client";
+import { toast } from "react-toastify";
 
 export default function BestSellers() {
   const [bestSellers, setBestSellers] = useState([]);
@@ -69,7 +70,7 @@ export default function BestSellers() {
     const exists = await checkIfExists(meal);
 
     if (exists) {
-      alert(`${meal.meal} is already in Best Selling Dishes.`);
+      toast.error(`${meal.meal} is already in Best Selling Dishes.`);
       return;
     }
 
@@ -83,7 +84,7 @@ export default function BestSellers() {
 
     try {
       await client.create(newBestSeller);
-      alert(`${meal.meal} has been added to Best Selling Dishes.`);
+      toast.success(`${meal.meal} has been added to Best Selling Dishes.`);
     } catch (error) {
       console.error('Error adding dish to Best Selling Dishes:', error);
       alert('Failed to add dish to Best Selling Dishes.');

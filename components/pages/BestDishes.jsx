@@ -110,17 +110,31 @@ const BestSellerDishes = () => {
   };
 
   const handleAddToCart = (dish) => {
-    dispatch(addCartItem({ dish }));
-    toast.success("Item added to cart", {
-      position: "top-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    });
-    handleCloseModal();
+    try{
+      
+      dispatch(addCartItem({ dish }));
+      toast.success("Item added to cart", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+      handleCloseModal();
+    }
+    catch(err){
+      toast.error(err.message || "Failed to add item to cart", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    }
   };
 
   const containerVariants = {
