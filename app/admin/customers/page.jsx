@@ -1,5 +1,4 @@
 "use client";
-
 import Pagination from '@/components/reusables/Pagination';
 import Table from '@/components/reusables/table/Table';
 import { client } from '@/utils/sanity/client';
@@ -10,7 +9,7 @@ export default function CustomersPage() {
   const [filteredCustomers, setFilteredCustomers] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize] = useState(10); // Number of rows per page
+  const [pageSize] = useState(10);
   const [filter, setFilter] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -29,7 +28,7 @@ export default function CustomersPage() {
           } | order(createdAt desc)
         `);
         setCustomers(data);
-        setFilteredCustomers(data); // Initialize filtered customers with all data
+        setFilteredCustomers(data);
       } catch (error) {
         console.error('Error fetching customers:', error);
       } finally {
@@ -40,11 +39,9 @@ export default function CustomersPage() {
     fetchCustomers();
   }, []);
 
-  // Handle Pagination
   const totalPages = Math.ceil(filteredCustomers.length / pageSize);
   const paginatedData = filteredCustomers.slice((currentPage - 1) * pageSize, currentPage * pageSize);
 
-  // Handle Filter
   useEffect(() => {
     let updatedCustomers = customers;
 
@@ -61,7 +58,7 @@ export default function CustomersPage() {
     }
 
     setFilteredCustomers(updatedCustomers);
-    setCurrentPage(1); // Reset to the first page after filtering
+    setCurrentPage(1);
   }, [filter, searchTerm, customers]);
 
   const handlePageChange = (pageNumber) => {
@@ -95,15 +92,14 @@ export default function CustomersPage() {
       render: (data) => <span>{`$${data.totalSpent.toFixed(2)}`}</span>,
     },
     {
-        title: "Date Joined",
-        key: "createdAt",
-        render: (data) => {
-          const date = new Date(data.createdAt);
-          const formattedDate = `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
-          return <span>{formattedDate}</span>;
-        }
+      title: "Date Joined",
+      key: "createdAt",
+      render: (data) => {
+        const date = new Date(data.createdAt);
+        const formattedDate = `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
+        return <span>{formattedDate}</span>;
       },
-      
+    },
     {
       title: "Customer Type",
       key: "isAnonymous",
@@ -117,14 +113,14 @@ export default function CustomersPage() {
 
   return (
     <section className="p-4 my-6">
-      <div className="shadow-lg p-2">
-        <h2 className="font-bold text-lg border-b-2 py-4 px-2 mb-3">Customer List</h2>
+      <div className="max-w-6xl mx-auto shadow-lg p-4">
+        <h2 className="font-bold text-xl border-b-2 pb-4 mb-6">Customer List</h2>
 
-        <div className="flex justify-between items-center mb-4">
+        <div className="flex justify-between items-center mb-6">
           <input
             type="text"
             placeholder="Search..."
-            className="border p-2 rounded"
+            className="border p-2 rounded w-1/2"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
@@ -139,17 +135,14 @@ export default function CustomersPage() {
           </select>
         </div>
 
-    
         <Table columns={customerColumns} isLoading={isLoading} data={paginatedData} isGray={false} />
 
-        {/* Use Pagination Component */}
-        <div className="my-6">
-
-        <Pagination
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onPageChange={handlePageChange}
-        />
+        <div className="my-6 flex justify-center">
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+          />
         </div>
       </div>
     </section>
