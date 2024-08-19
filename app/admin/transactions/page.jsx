@@ -5,6 +5,7 @@ import Table from "@/components/reusables/table/Table";
 import { client } from "@/utils/sanity/client";
 import { FcNext, FcPrevious } from "react-icons/fc";
 import Pagination from '@/components/reusables/Pagination';
+import useCurrencyFormatter from '@/hooks/useCurrencyFormatter';
 
 export default function Page() {
   const [transactions, setTransactions] = useState([]);
@@ -14,6 +15,7 @@ export default function Page() {
   const [pageSize] = useState(10); // You can change this value to the desired number of rows per page
   const [filter, setFilter] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
+  const formatCurrency = useCurrencyFormatter();
 
   useEffect(() => {
     const fetchTransactions = async () => {
@@ -115,7 +117,7 @@ export default function Page() {
     {
       title: "Amount",
       key: "amount",
-      render: (data) => <span>{data.amount ?? "Not Available"}</span>,
+      render: (data) => <span>{formatCurrency(data.amount ?? "Not Available")}</span>,
     },
   ];
 
