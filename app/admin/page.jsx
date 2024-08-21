@@ -134,7 +134,7 @@ export default function Dashboard() {
   
   
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       {/* Total Orders */}
      <OrdersSummary />
      <div className="grid grid-cols-3 gap-4 ">
