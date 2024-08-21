@@ -12,11 +12,12 @@ import {
   persistReducer,
   persistStore,
 } from 'redux-persist';
+import sessionStorage from 'redux-persist/es/storage/session';
 // import cartReducer from './slices/cartSlice';
 
 const persistConfig = {
   key: 'root',
-  storage,
+  storage: sessionStorage, // Use sessionStorage here
   whitelist: ['cart'], // Specify the slices you want to persist
 };
 
