@@ -1,18 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import InputComponent from "@/components/reusables/input/InputComponent";
 import SelectComponent from "@/components/reusables/input/SelectComponent";
 import Button from "@/components/reusables/buttons/Button";
-import { getCookie } from "@/utils/getCookie";
+import { client } from "@/utils/sanity/client";
 import { uploadImageToSanity } from "@/utils/sanity/uploadImageToSanity";
+import { mutate } from "swr";
 
 const mealSchema = yup.object().shape({
   title: yup.string().required("Title is required"),
   description: yup.string().required("Description is required"),
   price: yup.number().required("Price is required").positive("Price must be a positive number"),
-  category: yup.string().required("Category is required"),
   status: yup.string().required("Status is required"),
 });
 
@@ -21,19 +21,23 @@ const statusOptions = [
   { value: "false", label: "Unavailable" },
 ];
 
-
-const CreateMealModal = ({ isOpen, onClose, categories, mutate }) => {
-  const { register, handleSubmit, reset, formState: { errors } } = useForm({
+const EditMealModal = ({ isOpen, onClose, meal }) => {
+  const { register, handleSubmit, reset, setValue, formState: { errors } } = useForm({
     resolver: yupResolver(mealSchema),
   });
-  const categoryOptions = categories?.map((category) => ({
-    value: category?._id, // Use the category ID as the value
-    label: category?.title, // Use the category title as the label
-  }));
-  
-  const adminToken = getCookie("admineu_token");
+
   const [selectedImage, setSelectedImage] = useState(null);
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (meal) {
+      setValue("title", meal.title);
+      setValue("description", meal.description);
+      setValue("price", meal.price);
+      setValue("status", meal.status ? "true" : "false");
+      setSelectedImage(meal.image?.asset?.url || null);
+    }
+  }, [meal, setValue]);
 
   const handleImageChange = (event) => {
     const file = event.target.files[0];
@@ -44,51 +48,56 @@ const CreateMealModal = ({ isOpen, onClose, categories, mutate }) => {
     try {
       setLoading(true);
 
-      let imageAssetId = "";
-      if (selectedImage) {
+      let imageAssetId = meal.image?.asset?._ref;
+      
+      // Only upload a new image if the user selected a new one
+      if (selectedImage && typeof selectedImage !== 'string') {
         imageAssetId = await uploadImageToSanity(selectedImage);
       }
 
-      const response = await fetch('/api/admin/create-meal', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${adminToken}`, // Include your token here
-        },
-        body: JSON.stringify({
-          ...data,
+      const updatedMeal = {
+        _type: 'dish', // Make sure this matches the type in your schema
+        title: data.title,
+        description: data.description,
+        price: data.price,
+        status: data.status === "true",
+        // Only include image if it exists (either new or existing one)
+        ...(imageAssetId && {
           image: {
             _type: 'image',
             asset: {
               _type: 'reference',
-              _ref: imageAssetId, // Use the image asset ID
+              _ref: imageAssetId,
             },
-          },        }),
-      });
+          },
+        }),
+      };
 
-      if (response.ok) {
-        const result = await response.json();
-        mutate()
-        reset(); // Reset the form after successful submission
-        setSelectedImage(null); // Clear the selected image
-        onClose(); // Close the modal
-      } else {
-        const errorData = await response.json();
-        console.error("Failed to create meal:", errorData);
-      }
+      await client.patch(meal._id).set(updatedMeal).commit();
+      
+      // Trigger re-fetch or update data after mutation
+    //   if (mutate) {
+    // }
+    mutate(`*[_type == "dish" && status == true && !(_id in path("drafts.*"))]`); // Re-fetch or re-render in the parent component
+
+      reset(); // Reset the form after successful submission
+      setSelectedImage(null); // Clear the selected image
+      onClose(); // Close the modal
     } catch (error) {
-      console.error("Error creating meal:", error);
+      console.error("Error editing meal:", error);
     } finally {
       setLoading(false);
     }
   };
+
+  if (!isOpen) return null;
 
   return (
     <div className={`fixed inset-0 z-50 ${isOpen ? "block" : "hidden"}`}>
       <div className="fixed inset-0 bg-black opacity-50" onClick={onClose}></div>
       <div className="flex items-center justify-center min-h-screen">
         <div className="bg-white rounded-lg overflow-hidden shadow-xl max-w-2xl w-full p-6 relative z-50">
-          <h2 className="text-xl font-bold mb-4">Create a New Meal</h2>
+          <h2 className="text-xl font-bold mb-4">Edit Meal</h2>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div className="flex gap-x-6 w-full">
               <div className="w-full">
@@ -116,13 +125,7 @@ const CreateMealModal = ({ isOpen, onClose, categories, mutate }) => {
               error={errors.price?.message}
               register={register}
             />
-            <SelectComponent
-              label="Category"
-              name="category"
-              options={categoryOptions}
-              error={errors.category?.message}
-              register={register}
-            />
+
             <SelectComponent
               label="Status"
               options={statusOptions}
@@ -130,6 +133,7 @@ const CreateMealModal = ({ isOpen, onClose, categories, mutate }) => {
               error={errors.status?.message}
               register={register}
             />
+
             <div className="grid">
               <p className="font-medium text-sm">Image</p>
               <input
@@ -140,16 +144,17 @@ const CreateMealModal = ({ isOpen, onClose, categories, mutate }) => {
               />
               {selectedImage && (
                 <img
-                  src={URL.createObjectURL(selectedImage)}
+                  src={typeof selectedImage === 'string' ? selectedImage : URL.createObjectURL(selectedImage)}
                   alt="Selected"
                   className="mt-2 h-32 w-32 object-cover rounded-md"
                 />
               )}
             </div>
+
             <div className="relative z-999999">
               <Button
                 type="submit"
-                title="Submit"
+                title="Save Changes"
                 color="accent"
                 isLoading={loading}
               />
@@ -161,4 +166,4 @@ const CreateMealModal = ({ isOpen, onClose, categories, mutate }) => {
   );
 };
 
-export default CreateMealModal;
+export default EditMealModal;

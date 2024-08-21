@@ -8,6 +8,7 @@ import Image from "next/image";
 import Typography from "@/components/reusables/typography/Typography";
 import CreateCategoryModal from "@/components/reusables/modal/CreateCategoryModal";
 import { client } from "@/utils/sanity/client";
+import EditMealModal from "@/components/reusables/modal/EditMealModal";
 
 // Fetch function for SWR
 const fetcher = async (query) => {
@@ -26,7 +27,7 @@ const useCategories = () => {
 
 // Fetch products using SWR
 const useProducts = () => {
-  const { data, error } = useSWR(
+  const { data, error, mutate } = useSWR(
     `*[_type == "dish" && status == true && !(_id in path("drafts.*"))] | order(sortOrder asc) {
       _id,
       title,
@@ -50,6 +51,7 @@ const useProducts = () => {
     products: data,
     isLoading: !error && !data,
     isError: error,
+    mutate
   };
 };
 
@@ -58,7 +60,7 @@ export default function Page() {
   const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
 
   const { categories, isLoading: categoriesLoading, isError: categoriesError } = useCategories();
-  const { products, isLoading: productsLoading, isError: productsError } = useProducts();
+  const { products, isLoading: productsLoading, isError: productsError, mutate } = useProducts();
 
   const handleEditProduct = async (updatedProduct) => {
     // Since useSWR is used, you might need to manually mutate the cache after editing
@@ -149,12 +151,14 @@ export default function Page() {
       ))}
       </div>
 
-      {/* <CreateMealModal
+      <CreateMealModal
         isOpen={isMealModalOpen}
         onClose={() => setIsMealModalOpen(false)}
         categories={categories}
         ingredients={[]}
-      /> */}
+        mutate={mutate}
+      />
+     
       <CreateCategoryModal
         isOpen={isCategoryModalOpen}
         onClose={() => setIsCategoryModalOpen(false)}

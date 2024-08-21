@@ -54,6 +54,17 @@ const cartSlice = createSlice({
         state.totalPrice -= itemToDecrement.price;
       }
     },
+    updateCartItem: (state, action) => {
+      const updatedMeal = action.payload;
+      const index = state.findIndex(item => item._id === updatedMeal._id);
+      if (index !== -1) {
+        state[index] = {
+          ...state[index],
+          ...updatedMeal,
+          quantity: state[index].quantity, // Preserve quantity in the cart
+        };
+      }
+    },
     removeCartItem: (state, action) => {
       const { id } = action.payload;
       const itemToRemove = state.cartItems.find(
@@ -83,6 +94,7 @@ export const {
   incrementQuantity,
   decrementQuantity,
   removeCartItem,
+  updateCartItem,
   updateCartItemQuantity,
 } = cartSlice.actions;
 

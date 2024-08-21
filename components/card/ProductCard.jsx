@@ -3,13 +3,11 @@ import PropTypes from "prop-types";
 import { BsThreeDots } from "react-icons/bs";
 import { useState } from "react";
 import { client } from '@/utils/sanity/client'; // Assuming the client is set up for Sanity
+import EditMealModal from "../reusables/modal/EditMealModal";
 
-const ProductCard = ({ product, onEdit, onDelete }) => {
+const ProductCard = ({ product, onEdit, onDelete, categories, mutate }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
-  const [newTitle, setNewTitle] = useState(product.title);
-  const [description, setDescription] = useState(product.description);
-  const [price, setPrice] = useState(product.price);
+  const [isEditMealModalOpen, setIsEditMealModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   const toggleMenu = () => {
@@ -17,7 +15,7 @@ const ProductCard = ({ product, onEdit, onDelete }) => {
   };
 
   const handleEdit = () => {
-    setIsEditing(true);
+    setIsEditMealModalOpen(true);
     setIsMenuOpen(false); // Close menu after selecting edit
   };
 
@@ -38,30 +36,12 @@ const ProductCard = ({ product, onEdit, onDelete }) => {
     setIsMenuOpen(false); // Close menu after selecting delete
   };
 
-  const saveEdit = async () => {
-    setIsLoading(true);
-    try {
-      const updatedProduct = await client.patch(product._id)
-        .set({ title: newTitle, description: description, price })
-        .commit();
-
-      onEdit(updatedProduct); // Update the product list in the parent component
-      alert("Product updated successfully!");
-      setIsEditing(false);
-    } catch (error) {
-      console.error("Failed to update product:", error);
-      alert("Failed to update product.");
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   return (
     <div className="bg-[#F9FAFB] shadow-md rounded-lg p-4 w-full max-w-sm relative">
       <div className="flex items-center gap-6 justify-between">
         <div className="w-[120px] h-[120px]">
           <Image
-            src={product.image.asset.url}
+            src={product?.image?.asset?.url}
             alt={product.title}
             width={50}
             height={50}
@@ -69,27 +49,9 @@ const ProductCard = ({ product, onEdit, onDelete }) => {
           />
         </div>
         <div className="mt-4 space-y-4 flex-grow">
-          {isEditing ? (
-            <input
-              type="text"
-              value={newTitle}
-              onChange={(e) => setNewTitle(e.target.value)}
-              className="text-md font-semibold p-2 border rounded"
-            />
-          ) : (
-            <h2 className="text-md font-semibold">{product.title}</h2>
-          )}
+          <h2 className="text-md font-semibold">{product.title}</h2>
           <p className="text-gray-600">{product.category.title}</p>
-          {isEditing ? (
-            <input
-              type="text"
-              value={price}
-              onChange={(e) => setPrice(e.target.value)}
-              className="text-md font-semibold p-2 border rounded"
-            />
-          ) : (
           <p className="text-md font-bold">₦{product.price}</p>
-          )}
         </div>
         <button
           onClick={toggleMenu}
@@ -111,42 +73,23 @@ const ProductCard = ({ product, onEdit, onDelete }) => {
             >
               Delete
             </button>
-           
           </div>
         )}
       </div>
       <div className="mt-4">
         <h3 className="text-md font-semibold">Description</h3>
-        {isEditing ? (
-          <textarea
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            className="text-gray-600 p-2 border rounded w-full"
-          />
-        ) : (
-          <p className="text-gray-600">{product.description}</p>
-        )}
+        <p className="text-gray-600">{product.description}</p>
       </div>
     
-      {isEditing && (
-        <div className="mt-4 flex justify-end space-x-2">
-          <button
-            onClick={saveEdit}
-            className="bg-green-500 text-white px-4 py-2 rounded"
-            disabled={isLoading}
-          >
-            {isLoading ? 'Saving...' : 'Save'}
-          </button>
-          <button
-            onClick={() => setIsEditing(false)}
-            className="bg-gray-300 text-gray-700 px-4 py-2 rounded"
-            disabled={isLoading}
-          >
-            Cancel
-          </button>
-        </div>
-      )}
       {isLoading && <div className="absolute inset-0 bg-white opacity-50 flex items-center justify-center">Loading...</div>}
+
+      <EditMealModal
+        isOpen={isEditMealModalOpen}
+        onClose={() => setIsEditMealModalOpen(false)}
+        // categories={categories}
+        meal={product}
+        mutate={mutate}
+      />
     </div>
   );
 };
@@ -158,11 +101,12 @@ ProductCard.propTypes = {
     title: PropTypes.string.isRequired,
     category: PropTypes.object.isRequired,
     price: PropTypes.number.isRequired,
-    summary: PropTypes.string.isRequired,
-    sales: PropTypes.number.isRequired,
+    description: PropTypes.string.isRequired,
   }).isRequired,
   onEdit: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired,
+  categories: PropTypes.array.isRequired,
+  mutate: PropTypes.func.isRequired,
 };
 
 export default ProductCard;
