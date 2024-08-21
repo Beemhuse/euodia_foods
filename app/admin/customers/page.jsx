@@ -113,7 +113,7 @@ export default function CustomersPage() {
 
   return (
     <section className="p-4 my-6">
-      <div className="max-w-6xl mx-auto shadow-lg p-4">
+      <div className=" mx-auto shadow-lg p-4">
         <h2 className="font-bold text-xl border-b-2 pb-4 mb-6">Customer List</h2>
 
         <div className="flex justify-between items-center mb-6">

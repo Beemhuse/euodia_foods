@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
+import useSWR from "swr";
 import CreateMealModal from "@/components/reusables/modal/CreateMealModal";
 import ProductCard from "@/components/card/ProductCard";
 import Button from "@/components/reusables/buttons/Button";
@@ -8,71 +9,69 @@ import Typography from "@/components/reusables/typography/Typography";
 import CreateCategoryModal from "@/components/reusables/modal/CreateCategoryModal";
 import { client } from "@/utils/sanity/client";
 
-
-const fetchCategories = async () => {
-  try {
-    const query = `*[_type == "category"]`;
-    return await client.fetch(query);
-  } catch (error) {
-    console.error('Error fetching categories:', error);
-    return [];
-  }
+// Fetch function for SWR
+const fetcher = async (query) => {
+  return await client.fetch(query);
 };
-async function fetchProducts() {
-  const query = `*[_type == "dish" && status == true && !(_id in path("drafts.*"))] | order(sortOrder asc) {
-    _id,
-    title,
-    slug,
-    description,
-    price,
-    category->{
-      title
-    },
-    status,
-    sortOrder,
-    image {
-      asset->{
-        url
-      }
-    }
-  }`;
 
-  const content = await client.fetch(query);
-  return content;
-}
+// Fetch categories using SWR
+const useCategories = () => {
+  const { data, error } = useSWR(`*[_type == "category"]`, fetcher);
+  return {
+    categories: data,
+    isLoading: !error && !data,
+    isError: error,
+  };
+};
+
+// Fetch products using SWR
+const useProducts = () => {
+  const { data, error } = useSWR(
+    `*[_type == "dish" && status == true && !(_id in path("drafts.*"))] | order(sortOrder asc) {
+      _id,
+      title,
+      slug,
+      description,
+      price,
+      category->{
+        title
+      },
+      status,
+      sortOrder,
+      image {
+        asset->{
+          url
+        }
+      }
+    }`,
+    fetcher
+  );
+  return {
+    products: data,
+    isLoading: !error && !data,
+    isError: error,
+  };
+};
 
 export default function Page() {
   const [isMealModalOpen, setIsMealModalOpen] = useState(false);
   const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
-  const [categories, setCategories] = useState(null);
-  const [products, setProducts] = useState(null);
 
-  useEffect(() => {
-    async function getCategories() {
-      const categories = await fetchCategories();
-      setCategories(categories);
-    }
-    getCategories();
-  }, []);
-  useEffect(() => {
-    fetchProducts().then((data) => {
-      setProducts(data);
-    });
-  }, []);
+  const { categories, isLoading: categoriesLoading, isError: categoriesError } = useCategories();
+  const { products, isLoading: productsLoading, isError: productsError } = useProducts();
 
   const handleEditProduct = async (updatedProduct) => {
-    setProducts((prevProducts) =>
-      prevProducts.map((product) =>
-        product._id === updatedProduct._id ? updatedProduct : product
-      )
-    );
+    // Since useSWR is used, you might need to manually mutate the cache after editing
+    mutate(`*[_type == "dish" && status == true && !(_id in path("drafts.*"))]`);
   };
 
   const handleDeleteProduct = async (productId) => {
-    setProducts((prevProducts) =>
-      prevProducts.filter((product) => product._id !== productId)
-    );
+    // Similarly, mutate the cache after deletion
+    mutate(`*[_type == "dish" && status == true && !(_id in path("drafts.*"))]`);
   };
+
+  // if (productsLoading ) return <div>Loading...</div>;
+  // if (productsError ) return <div>Error loading data</div>;
 
   return (
     <section className="p-4">
@@ -150,12 +149,12 @@ export default function Page() {
       ))}
       </div>
 
-      <CreateMealModal
+      {/* <CreateMealModal
         isOpen={isMealModalOpen}
         onClose={() => setIsMealModalOpen(false)}
         categories={categories}
         ingredients={[]}
-      />
+      /> */}
       <CreateCategoryModal
         isOpen={isCategoryModalOpen}
         onClose={() => setIsCategoryModalOpen(false)}

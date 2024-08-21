@@ -1,163 +1,164 @@
-import React, { useState } from "react";
-import * as yup from "yup";
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import InputComponent from "@/components/reusables/input/InputComponent";
-import SelectComponent from "@/components/reusables/input/SelectComponent";
-import Button from "@/components/reusables/buttons/Button";
-import { getCookie } from "@/utils/getCookie";
-import { uploadImageToSanity } from "@/utils/sanity/uploadImageToSanity";
+// "use client";
+// import React, { useState, useEffect } from "react";
+// import useSWR from "swr";
+// import CreateMealModal from "@/components/reusables/modal/CreateMealModal";
+// import ProductCard from "@/components/card/ProductCard";
+// import Button from "@/components/reusables/buttons/Button";
+// import Image from "next/image";
+// import Typography from "@/components/reusables/typography/Typography";
+// import CreateCategoryModal from "@/components/reusables/modal/CreateCategoryModal";
+// import { client } from "@/utils/sanity/client";
 
-const mealSchema = yup.object().shape({
-  title: yup.string().required("Title is required"),
-  description: yup.string().required("Description is required"),
-  price: yup.number().required("Price is required").positive("Price must be a positive number"),
-  category: yup.string().required("Category is required"),
-  status: yup.string().required("Status is required"),
-});
+// // Fetch function for SWR
+// const fetcher = async (query) => {
+//   return await client.fetch(query);
+// };
 
-const statusOptions = [
-  { value: "available", label: "Available" },
-  { value: "unavailable", label: "Unavailable" },
-];
+// // Fetch categories using SWR
+// const useCategories = () => {
+//   const { data, error } = useSWR(`*[_type == "category"]`, fetcher);
+//   return {
+//     categories: data,
+//     isLoading: !error && !data,
+//     isError: error,
+//   };
+// };
 
+// // Fetch products using SWR
+// const useProducts = () => {
+//   const { data, error } = useSWR(
+//     `*[_type == "dish" && status == true && !(_id in path("drafts.*"))] | order(sortOrder asc) {
+//       _id,
+//       title,
+//       slug,
+//       description,
+//       price,
+//       category->{
+//         title
+//       },
+//       status,
+//       sortOrder,
+//       image {
+//         asset->{
+//           url
+//         }
+//       }
+//     }`,
+//     fetcher
+//   );
+//   return {
+//     products: data,
+//     isLoading: !error && !data,
+//     isError: error,
+//   };
+// };
 
-const CreateMealModal = ({ isOpen, onClose, categories }) => {
-  const { register, handleSubmit, reset, formState: { errors } } = useForm({
-    resolver: yupResolver(mealSchema),
-  });
-  const categoryOptions = categories?.map((category) => ({
-    value: category?._id, // Use the category ID as the value
-    label: category?.title, // Use the category title as the label
-  }));
-  
-  const adminToken = getCookie("admineu_token");
-  const [selectedImage, setSelectedImage] = useState(null);
-  const [loading, setLoading] = useState(false);
+// export default function Page() {
+//   const [isMealModalOpen, setIsMealModalOpen] = useState(false);
+//   const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
 
-  const handleImageChange = (event) => {
-    const file = event.target.files[0];
-    setSelectedImage(file);
-  };
+//   const { categories, isLoading: categoriesLoading, isError: categoriesError } = useCategories();
+//   const { products, isLoading: productsLoading, isError: productsError } = useProducts();
 
-  const onSubmit = async (data) => {
-    try {
-      setLoading(true);
+//   const handleEditProduct = async (updatedProduct) => {
+//     // Since useSWR is used, you might need to manually mutate the cache after editing
+//     mutate(`*[_type == "dish" && status == true && !(_id in path("drafts.*"))]`);
+//   };
 
-      let imageAssetId = "";
-      if (selectedImage) {
-        imageAssetId = await uploadImageToSanity(selectedImage);
-      }
+//   const handleDeleteProduct = async (productId) => {
+//     // Similarly, mutate the cache after deletion
+//     mutate(`*[_type == "dish" && status == true && !(_id in path("drafts.*"))]`);
+//   };
 
-      const response = await fetch('/api/admin/create-meal', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${adminToken}`, // Include your token here
-        },
-        body: JSON.stringify({
-          ...data,
-          image: {
-            _type: 'image',
-            asset: {
-              _type: 'reference',
-              _ref: imageAssetId, // Use the image asset ID
-            },
-          },        }),
-      });
+//   // if (productsLoading ) return <div>Loading...</div>;
+//   // if (productsError ) return <div>Error loading data</div>;
 
-      if (response.ok) {
-        const result = await response.json();
-        reset(); // Reset the form after successful submission
-        setSelectedImage(null); // Clear the selected image
-        onClose(); // Close the modal
-      } else {
-        const errorData = await response.json();
-        console.error("Failed to create meal:", errorData);
-      }
-    } catch (error) {
-      console.error("Error creating meal:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+//   return (
+//     <section className="p-4">
+//       <div className="flex flex-col md:flex-row w-full justify-between items-center mb-6">
+//         <div className="mb-4 md:mb-0">
+//           <Typography variant="h2" size="lg">
+//             All Products
+//           </Typography>
+//           <nav className="flex" aria-label="Breadcrumb">
+//             <ol className="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
+//               <li className="inline-flex items-center">
+//                 <a
+//                   href="#"
+//                   className="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white"
+//                 >
+//                   <svg
+//                     className="w-3 h-3 me-2.5"
+//                     aria-hidden="true"
+//                     xmlns="http://www.w3.org/2000/svg"
+//                     fill="currentColor"
+//                     viewBox="0 0 20 20"
+//                   >
+//                     <path d="m19.707 9.293-2-2-7-7a1 1 0 0 0-1.414 0l-7 7-2 2a1 1 0 0 0 1.414 1.414L2 10.414V18a2 2 0 0 0 2 2h3a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h3a2 2 0 0 0 2-2v-7.586l.293.293a1 1 0 0 0 1.414-1.414Z" />
+//                   </svg>
+//                   Products
+//                 </a>
+//               </li>
+//               <li aria-current="page">
+//                 <div className="flex items-center">
+//                   <svg
+//                     className="rtl:rotate-180 w-3 h-3 text-gray-400 mx-1"
+//                     aria-hidden="true"
+//                     xmlns="http://www.w3.org/2000/svg"
+//                     fill="none"
+//                     viewBox="0 0 6 10"
+//                   >
+//                     <path
+//                       stroke="currentColor"
+//                       strokeLinecap="round"
+//                       strokeLinejoin="round"
+//                       strokeWidth="2"
+//                       d="m1 9 4-4-4-4"
+//                     />
+//                   </svg>
+//                   <span className="ms-1 text-sm font-medium text-gray-500 md:ms-2 dark:text-gray-400">
+                    
+//                   </span>
+//                 </div>
+//               </li>
+//             </ol>
+//           </nav>
+//         </div>
+//         <div className="flex gap-2">
+//           <Button
+//             onClick={() => setIsMealModalOpen(true)}
+//             title="Add new Product"
+//             icon={<Image src={"/prod.svg"} height={20} width={20} alt="" />}
+//           />
+//           <Button
+//             onClick={() => setIsCategoryModalOpen(true)}
+//             title="Add Category"
+//             icon={<Image src={"/category.svg"} height={20} width={20} alt="" />}
+//           />
+//         </div>
+//       </div>
+      
+//       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+//       {products?.map((product) => (
+//         <ProductCard
+//           key={product._id}
+//           product={product}
+//           onEdit={handleEditProduct}
+//           onDelete={handleDeleteProduct}
+//         />
+//       ))}
+//       </div>
 
-  return (
-    <div className={`fixed inset-0 z-50 ${isOpen ? "block" : "hidden"}`}>
-      <div className="fixed inset-0 bg-black opacity-50" onClick={onClose}></div>
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="bg-white rounded-lg overflow-hidden shadow-xl max-w-2xl w-full p-6 relative z-50">
-          <h2 className="text-xl font-bold mb-4">Create a New Meal</h2>
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-            <div className="flex gap-x-6 w-full">
-              <div className="w-full">
-                <InputComponent
-                  label="Title"
-                  name="title"
-                  error={errors.title?.message}
-                  register={register}
-                />
-              </div>
-              <div className="w-full">
-                <InputComponent
-                  label="Description"
-                  name="description"
-                  error={errors.description?.message}
-                  register={register}
-                />
-              </div>
-            </div>
-
-            <InputComponent
-              label="Price"
-              type="number"
-              name="price"
-              error={errors.price?.message}
-              register={register}
-            />
-            <SelectComponent
-              label="Category"
-              name="category"
-              options={categoryOptions}
-              error={errors.category?.message}
-              register={register}
-            />
-            <SelectComponent
-              label="Status"
-              options={statusOptions}
-              name="status"
-              error={errors.status?.message}
-              register={register}
-            />
-            <div className="grid">
-              <p className="font-medium text-sm">Image</p>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleImageChange}
-                className="w-full py-1 px-3 outline-none bg-inherit rounded-md border border-accent text-sm"
-              />
-              {selectedImage && (
-                <img
-                  src={URL.createObjectURL(selectedImage)}
-                  alt="Selected"
-                  className="mt-2 h-32 w-32 object-cover rounded-md"
-                />
-              )}
-            </div>
-            <div className="relative z-999999">
-              <Button
-                type="submit"
-                title="Submit"
-                color="accent"
-                isLoading={loading}
-              />
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-export default CreateMealModal;
+//       <CreateMealModal
+//         isOpen={isMealModalOpen}
+//         onClose={() => setIsMealModalOpen(false)}
+//         categories={categories}
+//         ingredients={[]}
+//       />
+//       <CreateCategoryModal
+//         isOpen={isCategoryModalOpen}
+//         onClose={() => setIsCategoryModalOpen(false)}
+//       />
+//     </section>
+//   );
+// }
