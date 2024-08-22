@@ -1,3 +1,4 @@
+import { logoBase64 } from '@/utils/lib/imageBase';
 import sendMail from '@/utils/lib/sendMail';
 import { client } from '@/utils/sanity/client';
 import { NextResponse } from 'next/server';
@@ -26,7 +27,7 @@ export async function POST(req) {
     const htmlContent = `
       <div style="font-family: Arial, sans-serif; color: #333; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px;">
         <div style="text-align: center; margin-bottom: 20px;">
-          <img src="https://www.euodia-foods.vercel.app/logo.svg" alt="Euodia whole foods Logo" style="max-width: 150px;" />
+          <img src=${logoBase64} alt="Euodia whole foods Logo" style="max-width: 150px;" />
         </div>
 
         <div style="padding: 20px; background-color: #f9f9f9; border-radius: 10px;">
