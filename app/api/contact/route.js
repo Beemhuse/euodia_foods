@@ -51,7 +51,7 @@ export async function POST(req) {
       </div>
     `;
 
-    await sendMail(process.env.NEXT_PUBLIC_COMPANY_EMAIL, 'New Contact Form Submission', htmlContent);
+    await sendMail(email, 'New Contact Form Submission', htmlContent);
 
     return NextResponse.json({ message: 'Contact form submitted successfully' }, { status: 201 });
   } catch (error) {

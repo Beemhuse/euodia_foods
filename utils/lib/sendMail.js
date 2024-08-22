@@ -1,6 +1,6 @@
 import nodemailer from 'nodemailer';
 
-export default async function sendMail(to, subject, htmlContent) {
+export default async function sendMail(from, subject, htmlContent) {
   const transporter = nodemailer.createTransport({
     service: 'gmail', // or your preferred email service
     auth: {
@@ -10,8 +10,8 @@ export default async function sendMail(to, subject, htmlContent) {
   });
 
   const mailOptions = {
-    from: process.env.NEXT_PRIVATE_EMAIL,
-    to,
+    to: process.env.NEXT_PRIVATE_EMAIL,
+    from,
     subject,
     html: htmlContent,
   };
