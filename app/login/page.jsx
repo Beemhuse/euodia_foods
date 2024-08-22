@@ -11,6 +11,8 @@ import { handleGenericError } from "@/utils/errorHandler";
 import useCookies from "@/hooks/useCookies";
 import { toast, ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
+import "@/app/globals.css"
+
 
 const schema = yup.object().shape({
   email: yup.string().email("Invalid email").required("Email is required"),
@@ -22,8 +24,8 @@ const schema = yup.object().shape({
 
 export default function Login() {
   const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState('');
-  const [error, setError] = useState('');
+  // const [success, setSuccess] = useState('');
+  // const [error, setError] = useState('');
   const { setCookie } = useCookies();
 
   const {
@@ -50,7 +52,8 @@ export default function Login() {
       router.push('/');
     } catch (error) {
       const errMsg = handleGenericError(error);
-      setError(errMsg);
+      toast.error(errMsg)
+      // setError(errMsg);
       setLoading(false);
     }
   };
@@ -64,8 +67,8 @@ export default function Login() {
         <h2 className="text-3xl text-center text-accent font-bold">Log in to Euodia</h2>
         <p className="text-center text-gray-700">Quick & Simple way to start making your orders</p>
 
-        {error && <p className="text-red-500 text-center">{error}</p>}
-        {success && <p className="text-green-500 text-center">{success}</p>}
+        {/* {error && <p className="text-red-500 text-center">{error}</p>} */}
+        {/* {success && <p className="text-green-500 text-center">{success}</p>} */}
 
         <InputComponent
           label="Email"
@@ -74,14 +77,27 @@ export default function Login() {
           register={register}
           error={errors.email?.message}
         />
+        <div className="">
+
         <InputComponent
           label="Password"
           placeholder="Password"
           name="password"
+          password
           register={register}
           error={errors.password?.message}
           type="password"
         />
+        <div className="flex items-center justify-between">
+         <p className="text-center ">
+          Forgot password?{" "}
+          
+        </p>
+        <a href="/forgot-password" className="text-green-500">
+            Forgot password
+          </a>
+        </div>
+        </div>
         <Button
           type="submit"
           title="Log in"
@@ -90,7 +106,7 @@ export default function Login() {
         />
         <p className="text-center mt-2">
           don&apos;t have an account?{" "}
-          <a href="/auth/register" className="text-green-500">
+          <a href="/register" className="text-green-500">
             Sign up
           </a>
         </p>

@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React, { useState } from "react";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -11,8 +11,7 @@ import { handleGenericError } from "@/utils/errorHandler";
 import useCookies from "@/hooks/useCookies";
 import { toast } from "react-toastify";
 import Link from "next/link";
-import "@/app/globals.css"
-
+import "@/app/globals.css";
 
 const schema = yup.object().shape({
   email: yup.string().email("Invalid email").required("Email is required"),
@@ -24,8 +23,6 @@ const schema = yup.object().shape({
 
 export default function Login() {
   const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState('');
-  const [error, setError] = useState('');
   const { setCookie } = useCookies();
 
   const {
@@ -40,13 +37,15 @@ export default function Login() {
     const { email, password } = data;
     try {
       setLoading(true);
-      const response = await axios.post('/api/admin/login', { email, password });
+      const response = await axios.post("/api/admin/login", {
+        email,
+        password,
+      });
       if (response) {
-        setCookie("admineu_token", response?.data?.token)
+        setCookie("admineu_token", response?.data?.token);
       }
 
       setLoading(false);
-      // setSuccess('Login successful');
       toast.success("Welcome back Admin", {
         position: "top-right",
         autoClose: 5000,
@@ -56,8 +55,7 @@ export default function Login() {
         draggable: true,
         progress: undefined,
       });
-      router.push('/admin');
-      // window.location.reload()
+      router.push("/admin");
     } catch (error) {
       const errMsg = handleGenericError(error);
       toast.error(errMsg, {
@@ -69,7 +67,6 @@ export default function Login() {
         draggable: true,
         progress: undefined,
       });
-      // setError(errMsg);
       setLoading(false);
     }
   };
@@ -80,10 +77,11 @@ export default function Login() {
         onSubmit={handleSubmit(onSubmit)}
         className="bg-white  p-15 shadow-md p-10 flex flex-col gap-4 rounded-lg"
       >
-        <h2 className="text-3xl text-center text-accent font-bold"> Log in to Your dashboard</h2>
+        <h2 className="text-3xl text-center text-accent font-bold">
+          {" "}
+          Log in to Your dashboard
+        </h2>
         <p className="text-center text-gray-700">Welcome back Admin</p>
-
-
         <InputComponent
           label="Email"
           placeholder="johndoe@gmail.com"
@@ -91,26 +89,29 @@ export default function Login() {
           register={register}
           error={errors.email?.message}
         />
-        <InputComponent
-          label="Password"
-          placeholder="Password"
-          name="password"
-          register={register}
-          error={errors.password?.message}
-          type="password"
-        />
+        <div className="">
+          <InputComponent
+            label="Password"
+            placeholder="Password"
+            name="password"
+            password
+            register={register}
+            error={errors.password?.message}
+            type="password"
+          />
+          <div className="flex items-center justify-between">
+            <p className="text-center ">Forgot password? </p>
+            <a href="/auth/forgot-password" className="text-green-500">
+              Forgot password
+            </a>
+          </div>
+        </div>
         <Button
           type="submit"
           title="Log in"
           color="accent"
           isLoading={loading}
         />
-        <p className="text-center mt-2">
-          don&apos;t have an account?{" "}
-          <Link href="/auth/admin/register" className="text-green-500">
-            Sign up
-          </Link>
-        </p>
       </form>
     </div>
   );

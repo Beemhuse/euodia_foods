@@ -28,7 +28,7 @@ const Navbar = () => {
 
   const handleLogout = () => {
     removeCookie("euodia_token");
-    router.push("/auth/login");
+    router.push("/login");
   };
 
   return (
@@ -83,11 +83,11 @@ const Navbar = () => {
               </div>
             ) : (
               <Button
-                color="green"
+                color="black"
                 title="Login"
                 hoverAnimation={"bounce"}
                 isBorder
-                onClick={() => router.push("/auth/login")}
+                onClick={() => router.push("/login")}
               />
             )}
           </div>

@@ -11,7 +11,7 @@ import { handleGenericError } from "@/utils/errorHandler";
 import useCookies from "@/hooks/useCookies";
 import 'react-toastify/dist/ReactToastify.css';
 import { toast, ToastContainer } from "react-toastify";
-
+import "@/app/globals.css"
 
 const schema = yup.object().shape({
   name: yup.string().required("Name is required"),
@@ -81,6 +81,7 @@ export default function Signup() {
           placeholder="Password"
           name="password"
           register={register}
+          password 
           error={errors.password?.message}
           type="password"
         />
@@ -105,7 +106,7 @@ export default function Signup() {
         </button>
         <p className="text-center mt-4">
           Already have an account?{" "}
-          <a href="/auth/login" className="text-green-500">
+          <a href="/login" className="text-green-500">
             Log in
           </a>
         </p>

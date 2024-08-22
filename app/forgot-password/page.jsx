@@ -3,13 +3,10 @@ import { useState } from 'react';
 import InputComponent from "@/components/reusables/input/InputComponent";
 import Button from "@/components/reusables/buttons/Button";
 import { toast, ToastContainer } from "react-toastify";
-// import 'react-toastify/dist/ReactToastify.css';
 import "@/app/globals.css"
 
 export default function Page() {
   const [email, setEmail] = useState('');
-  const [message, setMessage] = useState('');
-  const [error, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e) => {
@@ -30,15 +27,18 @@ export default function Page() {
       const data = await res.json();
 
       if (res.ok) {
-        setMessage('Password reset link has been sent to your email address.');
         toast.success('Password reset link has been sent to your email address.');
+        setIsSubmitting(false);
+
       } else {
-        setError(data.message || 'Something went wrong. Please try again.');
         toast.error(data.message || 'Something went wrong. Please try again.');
+        setIsSubmitting(false);
+
       }
     } catch (error) {
-      setError('Something went wrong. Please try again.');
       toast.error('Something went wrong. Please try again.');
+      setIsSubmitting(false);
+
     } finally {
       setIsSubmitting(false);
     }
@@ -55,8 +55,6 @@ export default function Page() {
           Enter your email address and we'll send you a link to reset your password.
         </p>
 
-        {error && <p className="text-red-500 text-center">{error}</p>}
-        {message && <p className="text-green-500 text-center">{message}</p>}  
 
         <InputComponent
           label="Email"
@@ -64,7 +62,7 @@ export default function Page() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           name="email"
-          error={error}
+          // error={error}
         />
 
         <Button
@@ -76,7 +74,7 @@ export default function Page() {
 
         <p className="text-center mt-2">
           Remember your password?{" "}
-          <a href="/auth/login" className="text-green-500">
+          <a href="/login" className="text-green-500">
             Log in
           </a>
         </p>
