@@ -1,4 +1,4 @@
-import sendResetEmail from '@/utils/lib/sendResetMail';
+import sendResetMailToUser from '@/utils/lib/sendResetMailToUser';
 import { client } from '@/utils/sanity/client';
 import { NextResponse } from 'next/server';
 import { v4 as uuidv4 } from 'uuid';
@@ -24,8 +24,8 @@ export async function POST(req) {
       .set({ resetToken, resetTokenExpiry })
       .commit();
 
-    // 4. Send the reset email
-    await sendResetEmail(user.email, resetToken);
+    // 4. Send the reset email to user
+    await sendResetMailToUser(user.email, resetToken);
 
     return NextResponse.json({ message: 'Password reset link sent' }, { status: 200 });
   } catch (error) {

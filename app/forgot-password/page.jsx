@@ -12,8 +12,6 @@ export default function Page() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-    setError('');
-    setMessage('');
 
     try {
       const res = await fetch('/api/password-reset', {
@@ -54,15 +52,12 @@ export default function Page() {
         <p className="text-center text-gray-700 mb-4">
           Enter your email address and we'll send you a link to reset your password.
         </p>
-
-
         <InputComponent
           label="Email"
           placeholder="johndoe@gmail.com"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           name="email"
-          // error={error}
         />
 
         <Button

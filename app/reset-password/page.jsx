@@ -6,6 +6,7 @@ import Button from "@/components/reusables/buttons/Button";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "@/app/globals.css";
+import Link from "next/link";
 
 export default function ResetPassword() {
   const router = useRouter();
@@ -31,7 +32,7 @@ export default function ResetPassword() {
         setLoading(false);
 
         setTimeout(() => {
-          router.push("/auth/login");
+          router.push("/login");
         }, 3000);
       } else {
         const data = await res.json();
@@ -64,7 +65,6 @@ export default function ResetPassword() {
           password
           onChange={(e) => setNewPassword(e.target.value)}
           type="password"
-          error={error}
         />
 
         <Button
@@ -73,6 +73,7 @@ export default function ResetPassword() {
           color="accent"
           isLoading={loading}
         />
+        <Link href={"/"}>Home</Link>
       </form>
 
       <ToastContainer />
