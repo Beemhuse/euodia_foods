@@ -3,7 +3,8 @@ import { useState } from 'react';
 import InputComponent from "@/components/reusables/input/InputComponent";
 import Button from "@/components/reusables/buttons/Button";
 import { toast, ToastContainer } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
+// import 'react-toastify/dist/ReactToastify.css';
+import "@/app/globals.css"
 
 export default function Page() {
   const [email, setEmail] = useState('');
@@ -55,7 +56,7 @@ export default function Page() {
         </p>
 
         {error && <p className="text-red-500 text-center">{error}</p>}
-        {message && <p className="text-green-500 text-center">{message}</p>}
+        {message && <p className="text-green-500 text-center">{message}</p>}  
 
         <InputComponent
           label="Email"

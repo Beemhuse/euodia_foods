@@ -17,7 +17,8 @@ const InputComponent = forwardRef(
       borderStyle = 'full',
       register,
       name,
-      defaultValue
+      defaultValue,
+      onChange
     },
     ref
   ) => {
@@ -58,6 +59,7 @@ const InputComponent = forwardRef(
             }`}
           >
             <input
+            onChange={onChange}
               ref={ref}
               defaultValue={defaultValue}
               className={baseInputClass}
@@ -87,7 +89,8 @@ InputComponent.propTypes = {
   defaultValue: PropTypes.string,
   labelColor: PropTypes.string,
   error: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
-  register: PropTypes.func.isRequired,
+  register: PropTypes.func,
+  onChange: PropTypes.func,
   name: PropTypes.string.isRequired,
   accept: PropTypes.string,
   borderStyle: PropTypes.oneOf(['full', 'bottom']),

@@ -9,8 +9,8 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { handleGenericError } from "@/utils/errorHandler";
 import useCookies from "@/hooks/useCookies";
-import { toast } from "react-toastify";
-import Link from "next/link";
+import { toast, ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 const schema = yup.object().shape({
   email: yup.string().email("Invalid email").required("Email is required"),
@@ -38,36 +38,19 @@ export default function Login() {
     const { email, password } = data;
     try {
       setLoading(true);
-      const response = await axios.post('/api/admin/login', { email, password });
+      const response = await axios.post('/api/login', { email, password });
+      
       if (response) {
-        setCookie("admineu_token", response?.data?.token)
+        setCookie("euodia_token", response?.data?.token)
+        setCookie("euodia_user", response?.data?.user._id)
       }
 
       setLoading(false);
-      // setSuccess('Login successful');
-      toast.success("Welcome back Admin", {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
-      router.push('/admin');
-      // window.location.reload()
+      toast.success('Login successful');
+      router.push('/');
     } catch (error) {
       const errMsg = handleGenericError(error);
-      toast.error(errMsg, {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
-      // setError(errMsg);
+      setError(errMsg);
       setLoading(false);
     }
   };
@@ -76,11 +59,13 @@ export default function Login() {
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="bg-white  p-15 shadow-md p-10 flex flex-col gap-4 rounded-lg"
+        className="bg-white p-15 shadow-md p-10 flex flex-col gap-4 rounded-lg"
       >
-        <h2 className="text-3xl text-center text-accent font-bold"> Log in to Your dashboard</h2>
-        <p className="text-center text-gray-700">Welcome back Admin</p>
+        <h2 className="text-3xl text-center text-accent font-bold">Log in to Euodia</h2>
+        <p className="text-center text-gray-700">Quick & Simple way to start making your orders</p>
 
+        {error && <p className="text-red-500 text-center">{error}</p>}
+        {success && <p className="text-green-500 text-center">{success}</p>}
 
         <InputComponent
           label="Email"
@@ -105,11 +90,13 @@ export default function Login() {
         />
         <p className="text-center mt-2">
           don&apos;t have an account?{" "}
-          <Link href="/auth/admin/register" className="text-green-500">
+          <a href="/auth/register" className="text-green-500">
             Sign up
-          </Link>
+          </a>
         </p>
       </form>
+
+      <ToastContainer />
     </div>
   );
 }

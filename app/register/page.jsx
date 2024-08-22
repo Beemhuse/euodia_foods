@@ -62,9 +62,6 @@ export default function Signup() {
       >
         <h2 className="text-3xl text-center text-accent font-bold">Sign up to Euodia</h2>
         <p className="text-center text-gray-700 mb-4">Quick & Simple way to start making your orders</p>
-
-      
-
         <InputComponent
           label="Name"
           placeholder="John Doe"
