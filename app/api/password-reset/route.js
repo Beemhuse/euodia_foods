@@ -11,7 +11,7 @@ export async function POST(req) {
     const user = await client.fetch(`*[_type == "customer" && email == $email][0]`, { email });
 
     if (!user) {
-      return NextResponse.json({ message: 'User not found' }, { status: 404 });
+      return NextResponse.json({ message: 'User with this email does not exist.' }, { status: 404 });
     }
 
     // 2. Generate a reset token and expiry date
