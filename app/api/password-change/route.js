@@ -23,7 +23,7 @@ export async function POST(req) {
     await client
       .patch(user._id)
       .set({ password: hashedPassword,
-        anonymousUser: false, // Switch anonymousUser to false
+        isAnonymous: false, // Switch anonymousUser to false
 
        })
       .unset(['resetToken', 'resetTokenExpiry'])
