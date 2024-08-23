@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import mealImage from "@/public/meal.png";
+import mealImage from "@/public/meal.jpg";
 
 const quality = [
     {

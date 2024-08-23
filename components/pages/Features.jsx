@@ -5,22 +5,23 @@ import { motion } from 'framer-motion';
 const features = [
     {
         title: "Quality Food",
-        description: "Contrary to popular belief, Lorem Ipsum is not simply random text",
-        icon: "/01.png" 
-    },
-    {
-        title: "Speed Delivery",
-        description: "Contrary to popular belief, Lorem Ipsum is not simply random text",
-        icon: "/02.png"
+        description: "Quality food isn't just about taste; it's about using fresh ingredients and meticulous preparation.",
+        icon: "/01.png"
     },
     {
         title: "Affordable Pricing",
-        description: "Contrary to popular belief, Lorem Ipsum is not simply random text",
-        icon: "/image 25.png" 
+        description: "Affordable pricing means offering true value, balancing quality and cost without compromising on either.",
+        icon: "/image 25.png"
     },
     {
+        title: "Speed Delivery",
+        description: "Contrary to popular belief, speed delivery isn't just about being fast. it's about efficiency and reliability.",
+        icon: "/02.png"
+    },
+
+    {
         title: "Quality Packaging",
-        description: "Contrary to popular belief, Lorem Ipsum is not simply random text",
+        description: "Quality packaging isn't just about appearance. it's about protecting and preserving your products effectively.",
         icon: "/5.png"
     }
 ];
@@ -46,8 +47,8 @@ const Features = () => {
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="grid gap-8 lg:grid-cols-4 md:grid-cols-2 sm:grid-cols-1">
                     {features.map((feature, index) => (
-                        <motion.div 
-                            key={index} 
+                        <motion.div
+                            key={index}
                             className="bg-white p-6 rounded-lg shadow-lg text-center flex flex-col items-center"
                             variants={itemVariants}
                             whileHover={{ scale: 1.05 }}
