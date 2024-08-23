@@ -22,13 +22,13 @@ const Category = ({ categories, onCategorySelect }) => {
   useEffect(() => {
     const scrollContainer = scrollRef.current;
 
-    if (!scrollContainer || !categories?.categories?.length) return;
+    if (!scrollContainer || !categories?.length) return;
 
     const handleScroll = () => {
       const containerWidth = scrollContainer.offsetWidth;
       const scrollLeft = scrollContainer.scrollLeft;
       const newIndex = Math.round(
-        scrollLeft / (containerWidth / categories.categories.length)
+        scrollLeft / (containerWidth / categories.length)
       );
       setActiveIndex(newIndex);
     };
@@ -40,11 +40,11 @@ const Category = ({ categories, onCategorySelect }) => {
         scrollContainer.removeEventListener('scroll', handleScroll);
       }
     };
-  }, [categories?.categories?.length]);
+  }, [categories?.length]);
 
   const handleCategoryClick = (index, title) => {
-    if (categories?.categories?.length) {
-      setActiveIndex(index % categories.categories.length);
+    if (categories?.length) {
+      setActiveIndex(index % categories.length);
       onCategorySelect(title);
     }
   };
@@ -75,11 +75,11 @@ const Category = ({ categories, onCategorySelect }) => {
         className="flex space-x-6 overflow-x-auto scroll-smooth whitespace-nowrap no-scrollbar"
         style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }} // Firefox and IE
       >
-        {categories?.categories?.map((category, index) => (
+        {categories?.map((category, index) => (
           <motion.div
             key={index}
             className={`${
-              activeIndex === index % categories.categories.length
+              activeIndex === index % categories?.length
                 ? 'text-white'
                 : 'text-black'
             } font-semibold px-4 cursor-pointer hover:underline capitalize`}
@@ -87,9 +87,9 @@ const Category = ({ categories, onCategorySelect }) => {
             animate={{ opacity: 1, y: 0 }}
             transition={{
               duration: 0.3,
-              delay: (index % categories.categories.length) * 0.1,
+              delay: (index % categories?.length) * 0.1,
             }}
-            onClick={() => handleCategoryClick(index, category.title)}
+            onClick={() => handleCategoryClick(index, category?.title)}
           >
             {category.title}
           </motion.div>

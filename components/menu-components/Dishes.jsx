@@ -122,7 +122,9 @@ const Dishes = ({ selectedCategory }) => {
     fetchDishes();
   }, []);
 
-
+useEffect(()=>{
+handleDishClick
+}, [selectedCategory])
 
   const handleDishClick = (dish) => {
     setSelectedDish(dish);

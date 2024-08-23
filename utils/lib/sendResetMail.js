@@ -1,5 +1,4 @@
 import nodemailer from 'nodemailer';
-import { logoBase64 } from './imageBase';
 
 export default async function sendResetEmail(to, token) {
   const transporter = nodemailer.createTransport({
@@ -19,7 +18,7 @@ export default async function sendResetEmail(to, token) {
     html: `
       <div style="font-family: Arial, sans-serif; color: #333; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px;">
         <div style="text-align: center; margin-bottom: 20px;">
-          <img src=${logoBase64} alt="Euodia whole foods Logo" style="max-width: 150px;" />
+          <img src="https://euodia-foods.vercel.app/logo.svg" alt="Euodia whole foods Logo" style="max-width: 150px;" />
         </div>
 
         <div style="padding: 20px; background-color: #f9f9f9; border-radius: 10px;">

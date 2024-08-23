@@ -13,15 +13,18 @@ const Navbar = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const totalQuantities = useSelector(state => state.cart.totalQuantities);
 
-  const router = useRouter();
+  const router = useRouter();     
   const pathname = usePathname(); // Get current route
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
-  };
+  }
+
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
-  };
+  }
+
   const { getCookie, removeCookie } = useCookies();
+  
   let euodia_token = getCookie("euodia_token");
 
   useEffect(() => { }, [euodia_token]);

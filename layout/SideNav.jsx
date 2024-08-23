@@ -8,6 +8,7 @@ import { TbLogout } from "react-icons/tb";
 import { FaRegCaretSquareLeft, FaRegCaretSquareRight } from "react-icons/fa";
 
 import Link from "next/link";
+import { removeCookies } from "@/utils/removeCookie";
 
 const sideData = [
   {
@@ -73,6 +74,12 @@ export default function SideNav({ ...props }) {
     setIsExpanded((prev) => !prev);
   };
 
+  const handleLogout = () => {
+    removeCookies("admineu_token");
+    router.push("/auth/login");
+    // window.location.reload()
+  };
+
   return (
     <menu
       {...props}
@@ -106,7 +113,7 @@ export default function SideNav({ ...props }) {
 
 
       <button onClick={toggleSidebar} className="my-4 bg-green-500 p-2 rounded">
-        {isExpanded ? <div className="flex items-center text-white gap-4"><TbLogout /> <span>Logout</span> </div>  : <TbLogout />}
+        {isExpanded ? <div  onClick={handleLogout} className="flex items-center text-white gap-4"><TbLogout /> <span>Logout</span> </div>  : <TbLogout />}
       </button>
     </menu>
   );

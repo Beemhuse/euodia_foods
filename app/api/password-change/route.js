@@ -22,7 +22,10 @@ export async function POST(req) {
     // 3. Update the user's password and clear the reset token
     await client
       .patch(user._id)
-      .set({ password: hashedPassword })
+      .set({ password: hashedPassword,
+        anonymousUser: false, // Switch anonymousUser to false
+
+       })
       .unset(['resetToken', 'resetTokenExpiry'])
       .commit();
 

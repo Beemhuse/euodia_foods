@@ -5,6 +5,8 @@ import { IoNotifications } from "react-icons/io5";
 import { FiUser, FiLogOut } from "react-icons/fi";
 import Image from "next/image";
 import { useState, useEffect, useRef } from "react";
+import { useRouter } from "next/navigation";
+import { removeCookies } from "@/utils/removeCookie";
 
 const NotificationIcon = ({ notifications }) => {
   return (
@@ -26,14 +28,18 @@ NotificationIcon.propTypes = {
 export default function TopNav({ title, openSideBar, ...props }) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
+  const router = useRouter();
+
   const notifications = 4;
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
 
+ 
   const handleLogout = () => {
-    // Add logout logic here
+    removeCookies("admineu_token");
+    router.push("/auth/login");
   };
 
   const handleClickOutside = (event) => {
@@ -49,11 +55,13 @@ export default function TopNav({ title, openSideBar, ...props }) {
       document.removeEventListener('mousedown', handleClickOutside);
     }
 
+
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [isDropdownOpen]);
 
+  
   return (
     <menu className="flex bg-white dark:text-white dark:bg-black items-center justify-between px-4 py-6 md:px-12" {...props}>
       <div className="flex items-center gap-2">
@@ -79,9 +87,6 @@ export default function TopNav({ title, openSideBar, ...props }) {
           )}
         </div>
       </aside>
-      <button className="md:hidden" onClick={openSideBar}>
-        {/* <Icon icon="clarity:menu-line" width={24} /> */}
-      </button>
     </menu>
   );
 }

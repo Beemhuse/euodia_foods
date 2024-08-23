@@ -1,17 +1,25 @@
 "use client"
 import SearchComponent from "@/components/reusables/input/SearchComponent";
 import Typography from "@/components/reusables/typography/Typography";
+import { removeCookies } from "@/utils/removeCookie";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useState } from 'react';
 import { FaChevronUp, FaChevronDown } from 'react-icons/fa';
 
 
 export default function TopNav({ ...props }) {
     const [menuOpen, setMenuOpen] = useState(false);
+const router = useRouter()
 
     const toggleMenu = () => {
       setMenuOpen(!menuOpen);
     };
+    
+  const handleLogout = () => {
+    removeCookies("admineu_token");
+    router.push("/auth/login");
+  };
   return (
     <div className="p-4  w-full border flex justify-between items-center px-8 border-gray-300" {...props}>
       <Image
@@ -33,9 +41,9 @@ export default function TopNav({ ...props }) {
       {menuOpen && (
         <div className="absolute top-full mt-2 right-0 bg-white border border-gray-200 shadow-lg rounded-md w-48">
           <ul className="flex flex-col p-2">
-            <li className="hover:bg-gray-100 p-2 rounded-md">Profile</li>
-            <li className="hover:bg-gray-100 p-2 rounded-md">Settings</li>
-            <li className="hover:bg-gray-100 p-2 rounded-md">Signout</li>
+            {/* <li className="hover:bg-gray-100 p-2 rounded-md">Profile</li> */}
+            {/* <li className="hover:bg-gray-100 p-2 rounded-md">Settings</li> */}
+            <li onClick={handleLogout} className="hover:bg-gray-100 p-2 rounded-md">Logout</li>
           </ul>
         </div>
       )}

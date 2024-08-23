@@ -1,65 +1,56 @@
-"use client"
+"use client";
 import HomeLayout from '@/components/layout/HomeLayout';
 import Dishes from '@/components/menu-components/Dishes';
 import Category from '@/components/reusables/category/page';
 import React, { useEffect, useState } from 'react';
-
-const fetchCategories = async () => {
-  try {
-    const query = `*[_type == "category" && active == true]{
-      _id,
-      title,
-      description,
-      slug,
-    }`;
-    return await client.fetch(query);
-  } catch (error) {
-    console.error('Error fetching categories:', error);
-    return [];
-  }
-};
+import { client } from '@/utils/sanity/client';
 
 export default function Page() {
+  const [dishes, setDishes] = useState([]);
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
-  const [dishes, setDishes] = useState([]);
 
   useEffect(() => {
-    async function getCategories() {
+    async function getDishes() {
       try {
-        const response = await fetch("api/admin/category");
-        const result = await response.json();
-        setCategories(result);
+        const query = `*[_type == "dish" && !(_id in path("drafts.*"))] | order(sortOrder asc) {
+          _id,
+          title,
+          description,
+          price,
+          category->{
+            _id,
+            title,
+          },
+          image {
+            asset->{
+              url
+            }
+          }
+        }`;
+        const result = await client.fetch(query);
 
-        // Automatically select the first category on load and fetch its dishes
-        if (result.length > 0) {
-          const firstCategory = result[0];
-          setSelectedCategory(firstCategory._id);
-          fetchDishes(firstCategory._id);
+        setDishes(result);
+
+        // Extract unique categories from the fetched dishes
+        const uniqueCategories = [...new Set(result.map(dish => dish.category))];
+        setCategories(uniqueCategories);
+
+        // Automatically select the first category on load
+        if (uniqueCategories.length > 0) {
+          setSelectedCategory(uniqueCategories[0].title);
         }
       } catch (error) {
-        console.error('Error fetching categories:', error);
+        console.error('Error fetching dishes:', error);
       }
     }
-    getCategories();
+    getDishes();
   }, []);
 
-  const fetchDishes = async (categoryId) => {
-    try {
-      const response = await fetch(`api/admin/dishes?category=${categoryId}`);
-      const result = await response.json();
-      setDishes(result);
-    } catch (error) {
-      console.error('Error fetching dishes:', error);
-      setDishes([]); // Clear dishes if there's an error
-    }
+  const handleCategorySelect = (categoryTitle) => {
+    setSelectedCategory(categoryTitle);
   };
-
-  const handleCategorySelect = (categoryId) => {
-    setSelectedCategory(categoryId);
-    fetchDishes(categoryId);
-  };
-
+console.log(categories)
   return (
     <HomeLayout>
       <div className='bg-white min-h-screen border border-t-2'>
