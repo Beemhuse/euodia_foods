@@ -4,7 +4,6 @@ import { v4 as uuidv4 } from 'uuid'; // Import the UUID library for generating u
 
 export const client = createClient({
   projectId: '8bms2xqg',
-  // dataset: 'main',
   dataset: 'production',
   apiVersion: '2024-03-11',
   useCdn: true,
