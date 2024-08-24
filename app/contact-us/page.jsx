@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import HomeLayout from "@/components/layout/HomeLayout";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import { handleGenericError } from "@/utils/errorHandler";
 
 // Validation Schema using yup
@@ -28,8 +28,8 @@ const ContactUs = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
     reset,
+    formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
   });
@@ -171,6 +171,7 @@ const ContactUs = () => {
           </div>
         </div>
       </div>
+      <ToastContainer />
     </HomeLayout>
   );
 };
