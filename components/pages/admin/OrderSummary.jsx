@@ -48,7 +48,7 @@ export default function OrdersSummary() {
       const pendingOrdersCount = currentMonthOrders.filter(order => order.status === "pending").length;
 
       const completedOrdersAmount = currentMonthOrders
-        .filter(order => order.status === "completed")
+        .filter(order => order.status === "delivered")
         .reduce((sum, order) => sum + (order.total || 0), 0);
       const rejectedOrdersAmount = currentMonthOrders
         .filter(order => order.status === "rejected")

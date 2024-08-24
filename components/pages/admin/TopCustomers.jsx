@@ -67,7 +67,7 @@ export default function TopCustomers() {
             <div>
               <h2 className="font-bold">{customer.name}</h2>
               <p className="text-gray-500">
-                {customer.isAnonymous ?  <span className="bg-red-500 text-white p-1 rounded-full">Anonymous User </span>   : "Registered User"}
+                {customer.isAnonymous ?  <span className="bg-red-500 text-white p-1 rounded-full">Anonymous User </span>   : <span className="bg-green-500 text-white p-1 rounded-full">Registered User </span> }
               </p>
               <p className="text-gray-500">{customer.total_orders} orders</p>
             </div>
