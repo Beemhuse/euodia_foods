@@ -1,5 +1,5 @@
 "use client";
-import "../globals.css"
+import "../globals.css";
 
 import Table from "@/components/reusables/table/Table";
 import BestSellers from "@/components/pages/admin/BestSellers";
@@ -7,7 +7,6 @@ import OrdersSummary from "@/components/pages/admin/OrderSummary";
 import { useEffect, useState } from "react";
 import { client } from "@/utils/sanity/client";
 import TopCustomers from "@/components/pages/admin/TopCustomers";
-
 
 export default function Dashboard() {
   const [orders, setOrders] = useState([]);
@@ -65,17 +64,17 @@ export default function Dashboard() {
     fetchOrders();
   }, []);
   const mappedOrders = orders
-  .sort((a, b) => new Date(b.transactionDate) - new Date(a.transactionDate)) // Sort orders by transactionDate in descending order
-  .slice(0, 10) // Take the top 10 recent orders
-  .map((order, index) => ({
-    sn: index + 1,
-    product: order.products?.map(product => product?.title).join(", "),
-    order_id: order.orderId,
-    date: new Date(order.transactionDate).toLocaleDateString(),
-    name: order.customer?.name ?? "Not Available",
-    status: order.status ?? "Not Available",
-    amount: order.total ?? "Not Available",
-  }));
+    .sort((a, b) => new Date(b.transactionDate) - new Date(a.transactionDate)) // Sort orders by transactionDate in descending order
+    .slice(0, 10) // Take the top 10 recent orders
+    .map((order, index) => ({
+      sn: index + 1,
+      product: order.products?.map((product) => product?.title).join(", "),
+      order_id: order.orderId,
+      date: new Date(order.transactionDate).toLocaleDateString(),
+      name: order.customer?.name ?? "Not Available",
+      status: order.status ?? "Not Available",
+      amount: order.total ?? "Not Available",
+    }));
 
   const customerColumn = [
     {
@@ -129,26 +128,24 @@ export default function Dashboard() {
       key: "amount",
       render: (data) => <span>{data.amount ?? "Not Available"}</span>,
     },
-   
   ];
-  
-  
+
   return (
     <div className="space-y-6">
       {/* Total Orders */}
-     <OrdersSummary />
-     <div className="grid grid-cols-3 gap-4 ">
-
-<TopCustomers />
-<div className="col-span-2">
-
-    <BestSellers />
-</div>
-     </div>
+      <OrdersSummary />
+      <div className="grid grid-cols-3 gap-4 ">
+        <TopCustomers />
+        <div className="col-span-2">
+          <BestSellers />
+        </div>
+      </div>
 
       {/* Recent Orders */}
       <div className="bg-white p-6 shadow-lg rounded-lg">
-        <h2 className="font-bold text-lg border-b-2 pb-4 mb-4">Recent Orders</h2>
+        <h2 className="font-bold text-lg border-b-2 pb-4 mb-4">
+          Recent Orders
+        </h2>
         <Table columns={customerColumn} data={mappedOrders} isGray={false} />
       </div>
     </div>

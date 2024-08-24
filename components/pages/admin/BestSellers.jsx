@@ -75,7 +75,7 @@ export default function BestSellers() {
     }
 
     const newBestSeller = {
-      _type: 'bestSellingDish',
+      _type: "bestSellingDish",
       title: meal.meal,
       image: meal.img,
       total_sales: meal.total_sales,
@@ -86,8 +86,8 @@ export default function BestSellers() {
       await client.create(newBestSeller);
       toast.success(`${meal.meal} has been added to Best Selling Dishes.`);
     } catch (error) {
-      console.error('Error adding dish to Best Selling Dishes:', error);
-      alert('Failed to add dish to Best Selling Dishes.');
+      console.error("Error adding dish to Best Selling Dishes:", error);
+      alert("Failed to add dish to Best Selling Dishes.");
     }
   };
 
@@ -96,13 +96,9 @@ export default function BestSellers() {
       <h2 className="font-bold text-lg border-b-2 pb-4 mb-4">
         Best Sellers Dishes
       </h2>
-      <div className=" flex items-center justify-center flex-wrap gap-6">
-        {
-          bestSellers.length === 0 && <div>
-No available content
-          </div>
-        }
-        {bestSellers.slice(0,4).map((meal) => (
+      <div className=" flex items-center justify-start flex-wrap gap-6">
+        {bestSellers?.length === 0 && <div>No available content</div>}
+        {bestSellers?.slice(0, 4).map((meal) => (
           <div
             key={meal.id}
             className="flex justify-between items-center border shadow-xl p-4"

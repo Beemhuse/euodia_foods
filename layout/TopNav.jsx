@@ -30,7 +30,7 @@ export default function TopNav({ title, openSideBar, ...props }) {
   const dropdownRef = useRef(null);
   const router = useRouter();
 
-  const notifications = 4;
+  // const notifications = 4;
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
@@ -71,7 +71,7 @@ export default function TopNav({ title, openSideBar, ...props }) {
         </Typography>
       </div>
       <aside className="hidden md:flex items-center gap-10 relative">
-        <NotificationIcon notifications={notifications} />
+        {/* <NotificationIcon notifications={notifications} /> */}
         <div className="relative" ref={dropdownRef}>
           <button onClick={toggleDropdown} className="flex items-center gap-2">
             <FiUser className="text-xl" />
