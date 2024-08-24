@@ -49,7 +49,7 @@ const Hero = () => {
       </div>
       <div className="relative z-10 flex items-center justify-center h-full bg-black bg-opacity-50">
         <div className="text-center text-white p-4 mt-8 sm:mt-4 md:mt-0">
-          <h1 className="text-2xl sm:text-3xl md:text-5xl font-bold mb-4">Welcome to Euodia Whole Foods</h1>
+          <h1 className="text-2xl sm:text-3xl md:text-5xl font-bold mb-4">Welcome </h1>
           <p className="text-sm sm:text-lg md:text-2xl mb-6">Discover nutritious drinks and meals that support your wellness journey. From fresh produce to wholesome options, we’re here to help you eat healthy and stay vibrant.</p>
           <a href="/menu" className="inline-block px-4 py-2 sm:px-6 sm:py-3 bg-green-500 text-white font-semibold text-sm sm:text-lg rounded hover:bg-green-700 transition-colors duration-300">
             Order Now
