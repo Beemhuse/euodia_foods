@@ -60,14 +60,11 @@ const Success = () => {
                 <h2 className="text-2xl font-semibold mb-4">Thank you for your order!</h2>
                 <p className="text-gray-600 mb-4">Check your email inbox for the receipt.</p>
                 <p className="text-gray-600 mb-6">
-                    If you have any questions, please email{' '}
-                    {/* <a className="text-blue-500" href="mailto:gadgetcartel@gmail.com">
-                    
-                    </a> */}
+                   Track your order on Whatsapp{' '}
                 </p>
-                <Link href="/orders">
+                <Link href="https://wa.link/91mtgr">
                     <button type="button" className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors duration-300">
-                        See your orders
+                        Track your Order Here
                     </button>
                 </Link>
             </div>
