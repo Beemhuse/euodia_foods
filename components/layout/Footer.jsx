@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 export default function Footer() {
   // const [email, setEmail] = useState('');
-  // const [showPopup, setShowPopup] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
 
   // const handleSubscribe = () => {
   //   if (email) {
