@@ -16,7 +16,7 @@ const DishModal = ({ dish, onClose, onAddToCart }) => {
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-70 overflow-auto">
       <div className="bg-white rounded-lg w-full max-w-3xl p-4 sm:p-6 md:p-8 relative flex flex-col md:flex-row max-h-[90vh] overflow-y-auto">
         <button
-          className="absolute top-4 right-4 text-3xl font-bold text-gray-600"
+          className="absolute top-4 right-4 text-3xl font-bold text-white md:text-gray-600 lg:text-gray-600"
           onClick={onClose}
         >
           &times;
