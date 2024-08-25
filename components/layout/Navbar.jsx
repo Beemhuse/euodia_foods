@@ -96,7 +96,17 @@ const Navbar = () => {
           </div>
         </div>
         <div className="md:hidden flex items-center">
-          <button onClick={toggleSidebar}>
+          <Link href="/cart">
+            <button className="hover:text-green-800 relative">
+              <FiShoppingCart className="text-xl" />
+              {totalQuantities !== 0 && (
+                <p className='absolute -top-2 right-0 bg-red h-4 w-4 text-white flex items-center justify-center p-1 text-sm rounded-full'>
+                  {totalQuantities}
+                </p>
+              )}
+            </button>
+          </Link>
+          <button onClick={toggleSidebar} className="ml-4">
             {isOpen ? (
               <FiX className="h-6 w-6 text-green-600" />
             ) : (

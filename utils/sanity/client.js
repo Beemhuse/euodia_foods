@@ -4,7 +4,11 @@ import { v4 as uuidv4 } from 'uuid'; // Import the UUID library for generating u
 
 export const client = createClient({
   projectId: '8bms2xqg',
+<<<<<<< HEAD
   dataset: 'production',
+=======
+  dataset: 'main',
+>>>>>>> 9fcc4ddfe473eb41c39d9d85468f83e19c396891
   apiVersion: '2024-03-11',
   useCdn: true,
   token: process.env.NEXT_PUBLIC_SANITY_TOKEN

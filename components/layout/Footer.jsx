@@ -3,22 +3,22 @@ import { FiArrowRight } from 'react-icons/fi';
 import { useState } from 'react';
 
 export default function Footer() {
-  const [email, setEmail] = useState('');
-  // const [showPopup, setShowPopup] = useState(false);
+  // const [email, setEmail] = useState('');
+  const [showPopup, setShowPopup] = useState(false);
 
-  const handleSubscribe = () => {
-    if (email) {
-      // setShowPopup(true);
-      setEmail('');
-      // setTimeout(() => setShowPopup(false), 3000); // Hide popup after 3 seconds
-    }
-  };
+  // const handleSubscribe = () => {
+  //   if (email) {
+  //     setShowPopup(true);
+  //     setEmail('');
+  //     setTimeout(() => setShowPopup(false), 3000); // Hide popup after 3 seconds
+  //   }
+  // };
 
   return (
     <footer className="bg-white py-10 border-t mt-auto relative">
       <div className="container mx-auto px-4">
         {/* Newsletter Section */}
-        <div className="flex flex-col md:flex-row md:justify-between md:items-center mb-8">
+        {/* <div className="flex flex-col md:flex-row md:justify-between md:items-center mb-8">
           <div className="mb-6 md:mb-0">
             <h2 className="text-2xl font-semibold">
               Join Our <span className="text-green-600">Newsletter</span>
@@ -42,7 +42,7 @@ export default function Footer() {
               Subscribe
             </button>
           </div>
-        </div>
+        </div> */}
 
         <hr className="mb-8" />
 
