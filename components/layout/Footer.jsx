@@ -33,7 +33,7 @@ export default function Footer() {
           </div>
         </div> */}
 
-        <hr className="mb-8" />
+        {/* <hr className="mb-8" /> */}
 
         {/* Consolidated Footer Links Section */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">

@@ -15,7 +15,7 @@ const DishModal = ({ dish, onClose, onAddToCart }) => {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 md:p-8 bg-black bg-opacity-70">
       <div className="bg-white rounded-lg w-full max-w-4xl h-auto p-4 sm:p-6 md:p-8 relative">
-        <button className="absolute top-4 right-4 text-3xl font-bold text-gray-600" onClick={onClose}>&times;</button>
+        <button className="absolute top-4 right-4 text-3xl font-bold text-white md:text-gray-600 lg:text-gray-600" onClick={onClose}>&times;</button>
         <div className="flex flex-col md:flex-row">
           <div className="w-full md:w-1/2 mb-4 md:mb-0 md:pr-4">
             <Image
@@ -172,7 +172,7 @@ handleDishClick
               />
             </div>
             <div className="flex justify-between items-center mb-2">
-              <h3 className="text-xl font-semibold">{dish.title}</h3>
+              <h3 className="text-xl font-semibold leading-[1.10]">{dish.title}</h3>
               <p className="text-green-500 text-lg font-bold">{formatCurrency(dish.price)}</p>
             </div>
             <p className="text-gray-600 mb-2">{dish.description}</p>
