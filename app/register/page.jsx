@@ -12,6 +12,7 @@ import useCookies from "@/hooks/useCookies";
 import 'react-toastify/dist/ReactToastify.css';
 import { toast, ToastContainer } from "react-toastify";
 import "@/app/globals.css"
+import LoadingScreen from "@/components/reusables/LoadingScreen";
 
 const schema = yup.object().shape({
   name: yup.string().required("Name is required"),
@@ -25,6 +26,7 @@ const schema = yup.object().shape({
 
 export default function Signup() {
   const [loading, setLoading] = useState(false);
+
   // const [success, setSuccess] = useState("");
   // const [error, setError] = useState("");
   const { setCookie } = useCookies();
@@ -44,7 +46,7 @@ export default function Signup() {
       setLoading(false);
       toast.success("Signup successful");
       setCookie("euodia_token", response?.data?.token);
-      router.push("/auth/login");
+      router.push("/login");
       
     } catch (error) {
       const errMsg = handleGenericError(error);
@@ -54,6 +56,9 @@ export default function Signup() {
     }
   };
 
+  if (loading) {
+    return <LoadingScreen />;
+  }
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <form

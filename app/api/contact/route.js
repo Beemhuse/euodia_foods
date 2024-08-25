@@ -1,20 +1,23 @@
-import sendMail from '@/utils/lib/sendMail';
-import { client } from '@/utils/sanity/client';
-import { NextResponse } from 'next/server';
+import sendMail from "@/utils/lib/sendMail";
+import { client } from "@/utils/sanity/client";
+import { NextResponse } from "next/server";
 
 export async function POST(req) {
   try {
     const { name, email, message, phone } = await req.json();
-
-    if (!name || !email || !message || !phone) {
-      return NextResponse.json({ message: 'All fields are required' }, { status: 400 });
+    const formattedEmail = email.toLowerCase();
+    if (!name || !formattedEmail || !message || !phone) {
+      return NextResponse.json(
+        { message: "All fields are required" },
+        { status: 400 }
+      );
     }
 
     // 1. Create a new contact document in Sanity
     const newContact = {
-      _type: 'contact',
+      _type: "contact",
       name,
-      email,
+      email: formattedEmail,
       message,
       phone,
       submittedAt: new Date().toISOString(),
@@ -33,7 +36,7 @@ export async function POST(req) {
           <h2 style="color: #333; text-align: center;">New Contact Form Submission</h2>
           <hr style="border: 1px solid #ddd; margin: 20px 0;" />
           <p style="font-size: 16px;"><strong>Name:</strong> ${name}</p>
-          <p style="font-size: 16px;"><strong>Email:</strong> ${email}</p>
+          <p style="font-size: 16px;"><strong>Email:</strong> ${formattedEmail}</p>
           <p style="font-size: 16px;"><strong>Phone:</strong> ${phone}</p>
           <p style="font-size: 16px;"><strong>Message:</strong></p>
           <div style="background-color: #fff; padding: 15px; border-radius: 8px; border: 1px solid #ddd;">
@@ -51,11 +54,17 @@ export async function POST(req) {
       </div>
     `;
 
-    await sendMail(email, 'New Contact Form Submission', htmlContent);
+    await sendMail(formattedEmail, "New Contact Form Submission", htmlContent);
 
-    return NextResponse.json({ message: 'Contact form submitted successfully' }, { status: 201 });
+    return NextResponse.json(
+      { message: "Contact form submitted successfully" },
+      { status: 201 }
+    );
   } catch (error) {
-    console.error('Error submitting contact form:', error);
-    return NextResponse.json({ message: 'Internal server error' }, { status: 500 });
+    console.error("Error submitting contact form:", error);
+    return NextResponse.json(
+      { message: "Internal server error" },
+      { status: 500 }
+    );
   }
 }

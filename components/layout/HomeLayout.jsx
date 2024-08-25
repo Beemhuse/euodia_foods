@@ -63,14 +63,12 @@ export function generateViewport() {
 }
 export default function HomeLayout({ children }) {
   return (
-    <html lang="en" className="h-full">
-    <body className="bg-[#FF9E0C]/5 flex flex-col min-h-screen h-full">
+    <div className="bg-[#FF9E0C]/5 flex flex-col min-h-screen h-full">
       <Navbar />
       <main  className="flex-grow">
         {children}
       </main>
       <Footer />
-    </body>
-  </html>
+    </div>
   );
 }

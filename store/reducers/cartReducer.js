@@ -9,17 +9,18 @@ const cartSlice = createSlice({
   },
   reducers: {
     addCartItem: (state, action) => {
-      const {dish} = action.payload;
+      const { dish, userId = '' } = action.payload;
 
       const existingItem = state.cartItems.find((item) => item._id === dish._id);
       if (existingItem) {
         throw new Error("Product already exists in the cart");
       } else {
-        state.cartItems.push({ ...dish, quantity: 1 });
+        state.cartItems.push({ ...dish, quantity: 1, userId });
         state.totalQuantities += 1;
         state.totalPrice += dish.price;
       }
     },
+
 
     updateCartItemQuantity: (state, action) => {
       const { id, value } = action.payload;
