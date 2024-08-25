@@ -7,6 +7,7 @@ import { useDispatch } from 'react-redux';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import useCurrencyFormatter from '@/hooks/useCurrencyFormatter';
+import { getCookie } from '@/utils/getCookie';
 
 // Modal Component
 const DishModal = ({ dish, onClose, onAddToCart }) => {
@@ -72,13 +73,14 @@ async function getContent() {
 // Main Dishes Component
 const Dishes = ({ selectedCategory }) => {
   const [dishes, setDishes] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [selectedDish, setSelectedDish] = useState(null);
   const dispatch = useDispatch();
   const formatCurrency = useCurrencyFormatter();
-
+const userId = getCookie("euodia_user")
   const handleAddToCart = (dish) => {
     try {
-      dispatch(addCartItem({ dish }));
+      dispatch(addCartItem({ dish, userId: userId}));
       toast.success("Item added to cart", {
         position: "top-right",
         autoClose: 5000,
@@ -103,10 +105,14 @@ const Dishes = ({ selectedCategory }) => {
 
   useEffect(() => {
     const fetchDishes = async () => {
+      setLoading(true)
       try {
         const fetchedDishes = await getContent();
         setDishes(fetchedDishes);
+        setLoading(false)
+
       } catch (error) {
+        setLoading(false)
         toast.error("Failed to load dishes", {
           position: "top-right",
           autoClose: 5000,
@@ -142,37 +148,46 @@ handleDishClick
   return (
     <div className="py-12 bg-white">
       <div className="container mx-auto px-4">
-        <div className="grid gap-8 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1">
-          {filteredDishes.length > 0 ? (
-            filteredDishes.map((dish) => (
-              <div
-                key={dish._id}
-                className="bg-white p-6 rounded-lg shadow-lg cursor-pointer"
-                onClick={() => handleDishClick(dish)}
-              >
-                <div className="relative h-48 mb-4 border-3 border-green-600">
-                  <Image
-                    src={dish.image.asset.url}
-                    alt={dish.title}
-                    layout="fill"
-                    objectFit="cover"
-                    className="rounded-lg"
-                  />
-                </div>
-                <div className="flex justify-between items-center mb-2">
-                  <h3 className="text-xl font-semibold">{dish.title}</h3>
-                  <p className="text-green-500 text-lg font-bold">{formatCurrency(dish.price)}</p>
-                </div>
-                <p className="text-gray-600 mb-2">{dish.description}</p>
-                <button className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
-                  View Details
-                </button>
-              </div>
-            ))
-          ) : (
-            <p>No dishes available in this category.</p>
-          )}
-        </div>
+      <div className="grid gap-8 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1">
+  {
+    loading ? (
+      <div className="col-span-full flex justify-center items-center">
+        <div className="w-16 h-16 border-t-4 border-b-4 border-accent rounded-full animate-spin"></div>
+      </div>
+    ) : (
+      filteredDishes.length > 0 ? (
+        filteredDishes.map((dish) => (
+          <div
+            key={dish._id}
+            className="bg-white p-6 rounded-lg shadow-lg cursor-pointer"
+            onClick={() => handleDishClick(dish)}
+          >
+            <div className="relative h-48 mb-4 border-3 border-green-600">
+              <Image
+                src={dish.image.asset.url}
+                alt={dish.title}
+                layout="fill"
+                objectFit="cover"
+                className="rounded-lg"
+              />
+            </div>
+            <div className="flex justify-between items-center mb-2">
+              <h3 className="text-xl font-semibold">{dish.title}</h3>
+              <p className="text-green-500 text-lg font-bold">{formatCurrency(dish.price)}</p>
+            </div>
+            <p className="text-gray-600 mb-2">{dish.description}</p>
+            <button className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+              View Details
+            </button>
+          </div>
+        ))
+      ) : (
+        <p className="col-span-full text-center">No dishes available in this category.</p>
+      )
+    )
+  }
+</div>
+
       </div>
       {selectedDish && (
         <DishModal

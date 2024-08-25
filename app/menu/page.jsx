@@ -50,7 +50,6 @@ export default function Page() {
   const handleCategorySelect = (categoryTitle) => {
     setSelectedCategory(categoryTitle);
   };
-console.log(categories)
   return (
     <HomeLayout>
       <div className='bg-white min-h-screen border border-t-2'>

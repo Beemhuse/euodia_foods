@@ -12,6 +12,7 @@ import useCookies from "@/hooks/useCookies";
 import { toast, ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import "@/app/globals.css"
+import LoadingScreen from "@/components/reusables/LoadingScreen";
 
 
 const schema = yup.object().shape({
@@ -57,7 +58,9 @@ export default function Login() {
       setLoading(false);
     }
   };
-
+  // if (loading) {
+  //   return <LoadingScreen />;
+  // }
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <form

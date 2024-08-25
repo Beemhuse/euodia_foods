@@ -73,7 +73,7 @@ export default function ResetPassword() {
           color="accent"
           isLoading={loading}
         />
-        <Link href={"/"}>Home</Link>
+        <Link href={"/"} className="text-center text-blue-700">Home</Link>
       </form>
 
       <ToastContainer />

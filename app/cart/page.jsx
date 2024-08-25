@@ -1,5 +1,5 @@
 "use client"
-import React from 'react';
+import React, { useEffect } from 'react';
 import HomeLayout from '@/components/layout/HomeLayout';
 import Link from 'next/link';
 import { useDispatch, useSelector } from 'react-redux';
@@ -8,12 +8,45 @@ import { decrementQuantity, incrementQuantity, removeCartItem } from '@/store/re
 import useCurrencyFormatter from '@/hooks/useCurrencyFormatter';
 import { toast } from 'react-toastify';
 import { RiDeleteBinLine } from "react-icons/ri";
+import { getCookie } from '@/utils/getCookie';
+import { saveCartToSanity } from '@/utils/sanity/saveCartToSanity';
 
 const Cart = () => {
   const dispatch = useDispatch()
   const { cartItems } = useSelector(state => state.cart)
-  const formatCurrency = useCurrencyFormatter()
+  const userId = getCookie("euodia_user"); // Assuming user ID is stored in Redux
 
+  const formatCurrency = useCurrencyFormatter()
+  useEffect(() => {
+    const saveCart = async () => {
+      if (cartItems.length > 0) {
+        try {
+          console.log(userId)
+          await saveCartToSanity(cartItems, userId);
+        } catch (error) {
+          console.error("Failed to save cart:", error);
+        }
+      }
+    };
+
+    saveCart();
+  }, [cartItems, userId]);
+  useEffect(() => {
+    const handleBeforeUnload = (event) => {
+      if (cartItems.length > 0) {
+        event.preventDefault();
+        event.returnValue = '';
+
+        // sessionStorage.clear();
+      }
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, [cartItems]);
 
   const calculateSubtotal = () => {
     return cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);

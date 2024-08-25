@@ -1,18 +1,7 @@
 "use client"
 import { FiArrowRight } from 'react-icons/fi';
-import { useState } from 'react';
 
 export default function Footer() {
-  // const [email, setEmail] = useState('');
-  const [showPopup, setShowPopup] = useState(false);
-
-  // const handleSubscribe = () => {
-  //   if (email) {
-  //     setShowPopup(true);
-  //     setEmail('');
-  //     setTimeout(() => setShowPopup(false), 3000); // Hide popup after 3 seconds
-  //   }
-  // };
 
   return (
     <footer className="bg-white py-10 border-t mt-auto relative">

@@ -31,6 +31,7 @@ const Navbar = () => {
 
   const handleLogout = () => {
     removeCookie("euodia_token");
+    removeCookie("euodia_user");
     router.push("/login");
   };
 
@@ -67,13 +68,13 @@ const Navbar = () => {
               </button>
             </Link>
             {euodia_token ? (
-              <div className="relative">
+              <div className="relative z-50">
                 <button onClick={toggleDropdown} className="hover:text-green-800">
                   <FiUser className="h-5 w-5" />
                 </button>
                 {isDropdownOpen && (
                   <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-300 shadow-lg rounded-md py-2 z-10">
-                    <Link href="/orders" className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100">
+                    <Link href="/order" className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100">
                       <FiList className="mr-2" />
                       My Orders
                     </Link>
@@ -116,7 +117,7 @@ const Navbar = () => {
         </div>
       </div>
       {isOpen && (
-        <div className="md:hidden flex flex-col items-center bg-white shadow-lg p-4 space-y-4">
+        <div className="md:hidden z-99999 flex flex-col items-center bg-white shadow-lg p-4 space-y-4">
           <Link href="/" className={`hover:text-green-800 ${pathname === '/' ? 'text-green-600' : ''}`} onClick={toggleSidebar}>
             Home
           </Link>
