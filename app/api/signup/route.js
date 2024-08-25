@@ -17,7 +17,8 @@ export  async function POST(req) {
 
       const res = await req.json()
       const { name, email, password } = res;
-      const existingUser = await getUserByEmail(email);
+      const formattedEmail = email.toLowerCase();
+      const existingUser = await getUserByEmail(formattedEmail);
     
       if (existingUser) {
         return new Response(JSON.stringify({ message: 'User with this email already exists' }), {
@@ -30,7 +31,7 @@ export  async function POST(req) {
       const hashedPassword = await bcrypt.hash(password, 10);
       const user = {
         id: uuidv4(),
-        email,
+        email: formattedEmail,
         name,
         password: hashedPassword,
       };

@@ -12,9 +12,9 @@ export async function POST(req) {
   try {
     const body = await req.json();
     const { email, password } = body;
-
+const formattedEmail = email.toLowerCase();
     // Retrieve user from Sanity (implement this function)
-    const user = await getUserIdByEmail(email);
+    const user = await getUserIdByEmail(formattedEmail);
     if (!user) {
       return new Response(JSON.stringify({ error: 'Invalid credentials' }), {
         status: 401,

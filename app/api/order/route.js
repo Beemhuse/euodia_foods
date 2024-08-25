@@ -83,14 +83,14 @@ export async function POST(req) {
 
   let currentUserId;
   let isAnonymous = false;
-
+  const formattedEmail = email.toLowerCase();
   try {
     // Check if the user is signed in
     let session = await getSession(req);
 
     if (!session || !session.user) {
       // User is not signed in, create an anonymous user
-      const anonymousUser = await createAnonymousUser(email, fullName);
+      const anonymousUser = await createAnonymousUser(formattedEmail, fullName);
       currentUserId = anonymousUser._id; // Use the anonymous user's ID
       isAnonymous = true;
     } else {
@@ -98,14 +98,14 @@ export async function POST(req) {
     }
 
     // Proceed with the order processing
-    const paymentResponse = await initializePaystack(email, amount);
+    const paymentResponse = await initializePaystack(formattedEmail, amount);
     const transactionRef = paymentResponse?.data.reference;
 
     const order = await createOrder({
       total: amount,
       products: cartItems,
       serviceFee: { _type: "reference", _ref: serviceFee },
-      email,
+      email: formattedEmail,
       name: fullName,
       streetAddress,
       apartment,

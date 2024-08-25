@@ -6,9 +6,9 @@ import { v4 as uuidv4 } from 'uuid';
 export async function POST(req) {
   try {
     const { email } = await req.json();
-
+const formattedEmail = email.toLowerCase();
     // 1. Find the user by email
-    const user = await client.fetch(`*[_type == "customer" && email == $email][0]`, { email });
+    const user = await client.fetch(`*[_type == "customer" && email == $email][0]`, { formattedEmail });
 
     if (!user) {
       return NextResponse.json({ message: 'User with this email does not exist.' }, { status: 404 });

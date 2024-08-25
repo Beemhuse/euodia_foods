@@ -4,13 +4,13 @@ import { useState } from 'react';
 
 export default function Footer() {
   const [email, setEmail] = useState('');
-  const [showPopup, setShowPopup] = useState(false);
+  // const [showPopup, setShowPopup] = useState(false);
 
   const handleSubscribe = () => {
     if (email) {
-      setShowPopup(true);
+      // setShowPopup(true);
       setEmail('');
-      setTimeout(() => setShowPopup(false), 3000); // Hide popup after 3 seconds
+      // setTimeout(() => setShowPopup(false), 3000); // Hide popup after 3 seconds
     }
   };
 
@@ -106,11 +106,11 @@ export default function Footer() {
       </div>
 
       {/* Popup Message */}
-      {showPopup && (
+      {/* {showPopup && (
         <div className="absolute bottom-4 right-4 bg-green-600 text-white px-4 py-3 rounded-lg shadow-lg">
           Thank you for subscribing!
         </div>
-      )}
+      )} */}
     </footer>
   );
 }
