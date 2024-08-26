@@ -1,11 +1,9 @@
-// pages/checkout.js
+
 "use client";
 import HomeLayout from "@/components/layout/HomeLayout";
 import { clearCart } from "@/store/reducers/cartReducer";
-// import useLoggedInStatus from "@/hooks/useLoggedinStatus";
 import { client } from '@/utils/sanity/client';
 import useCurrencyFormatter from '@/hooks/useCurrencyFormatter';
-
 import { handleGenericError } from "@/utils/errorHandler";
 import axios from "axios";
 import React, { useState, useEffect } from "react";
@@ -13,6 +11,7 @@ import { useForm } from "react-hook-form";
 import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { getCookie } from "@/utils/getCookie";
+import LoadingScreen from "@/components/reusables/LoadingScreen";
 
 const Checkout = () => {
   const { cartItems } = useSelector((state) => state.cart);
@@ -39,13 +38,10 @@ const Checkout = () => {
         (fee) => fee._id === selectedLocation
       );
       setSelectedServiceFee(selectedFee ? selectedFee.fee : 0);
-    }
-    else {
+    } else {
       setSelectedServiceFee(0);
-
     }
   }, [selectedLocation, serviceFees]);
-
 
   useEffect(() => {
     async function fetchServiceFees() {
@@ -57,7 +53,6 @@ const Checkout = () => {
     fetchServiceFees();
   }, []);
 
-
   const calculateSubtotal = () => {
     return cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
   };
@@ -66,24 +61,19 @@ const Checkout = () => {
   const vat = subtotal * 0.07;
   const calculateTotal = () => {
     const subtotal = calculateSubtotal();
-    const serviceFee = selectedServiceFee ?? 0; // Default to 650 if no location is selected
-    const vat = Number(subtotal) * 0.075; // Example VAT rate (7%)
+    const serviceFee = selectedServiceFee ?? 0;
+    const vat = Number(subtotal) * 0.075;
     return Number(subtotal) + Number(serviceFee) + Number(vat);
-
   };
-  const token = getCookie("euodia_token"); // Assuming the API returns a token if the user exists
-  const id = getCookie("euodia_user"); // Assuming the API returns a token if the user exists
- 
+  const token = getCookie("euodia_token");
+  const id = getCookie("euodia_user");
 
   const handleCheckout = async (data) => {
     try {
       if (data.firstName !== "") {
         setLoading(true);
 
-
-        const userId = id
-
-        // Combine the form data with the selected service fee object and user ID
+        const userId = id;
         const orderData = {
           ...data,
           serviceFee: {
@@ -91,35 +81,32 @@ const Checkout = () => {
             _ref: data.serviceFee,
           },
           cartItems,
-          userId, // Pass the user ID to the order data
+          userId,
           amount: Math.round(calculateTotal()),
         };
 
-        // Configure headers to include the token if available
         const config = token
           ? {
             headers: {
-              Authorization: `Bearer ${token}`, 
+              Authorization: `Bearer ${token}`,
             },
           }
           : {};
 
-        await axios
-          .post("/api/order", orderData, config)
-          .then((res) => {
-            setLoading(false);
-            dispatch(clearCart());
-            toast.success("order placed", {
-              position: "top-right",
-              duration: 3000,
-            })
-            const paymentLink =
-              res?.data?.paymentResponse?.data?.authorization_url;
-
-            if (paymentLink) {
-              window.location.href = paymentLink;
-            }
+        await axios.post("/api/order", orderData, config).then((res) => {
+          setLoading(false);
+          dispatch(clearCart());
+          toast.success("order placed", {
+            position: "top-right",
+            duration: 3000,
           });
+          const paymentLink =
+            res?.data?.paymentResponse?.data?.authorization_url;
+
+          if (paymentLink) {
+            window.location.href = paymentLink;
+          }
+        });
       } else {
         toast.error("Please add an address to proceed with checkout");
       }
@@ -130,7 +117,6 @@ const Checkout = () => {
         duration: 3000,
       });
       setLoading(false);
-
       console.error("Error handling checkout:", error);
     }
   };
@@ -147,6 +133,7 @@ const Checkout = () => {
                   onSubmit={handleSubmit(handleCheckout)}
                   className="space-y-4"
                 >
+                  {/* Delivery Details Form */}
                   <div className="mb-4">
                     <label
                       className="block text-sm font-medium text-gray-700"
@@ -293,7 +280,6 @@ const Checkout = () => {
                       <p className="text-red-600">{errors.serviceFee.message}</p>
                     )}
                   </div>
-
                   <div className="mb-4">
                     <label
                       className="block text-sm font-medium text-gray-700"
@@ -307,7 +293,6 @@ const Checkout = () => {
                       className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                     />
                   </div>
-
                   <button
                     type="submit"
                     className="w-full bg-green-600 text-white p-2 rounded-md"
@@ -321,62 +306,66 @@ const Checkout = () => {
               <div>
                 <h2 className="text-2xl font-bold mb-6">Your Order</h2>
                 <div className="border p-4 rounded-lg">
-                  <div className="mb-4">
-                    {cartItems.map((item) => (
-                      <div key={item._id} className="flex justify-between">
-                        <span>
-                          {item.title} x {item.quantity}
-                        </span>
-                        <span>
-                          ₦{(item.price * item.quantity).toLocaleString()}
-                        </span>
+                  {/* Order Summary */}
+                  <div>
+                    <h2 className="text-2xl font-bold mb-6">Your Order</h2>
+                    <div className="border p-4 rounded-lg">
+                      <div className="mb-4">
+                        {cartItems.map((item) => (
+                          <div key={item._id} className="flex justify-between">
+                            <span>
+                              {item.title} x {item.quantity}
+                            </span>
+                            <span>
+                              ₦{(item.price * item.quantity).toLocaleString()}
+                            </span>
+                          </div>
+                        ))}
                       </div>
-                    ))}
-                  </div>
-                  <hr />
-                  <div className="my-4">
-                    <div className="flex justify-between">
-                      <span>Subtotal:</span>
-                      <span>₦{calculateSubtotal().toLocaleString()}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span>Service Fee:</span>
-                      <span>₦{selectedServiceFee}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span>VAT:</span>
-                      <span>
-                        {formatCurrency(vat.toFixed(2))}
-                      </span>
-                    </div>
-                    <div className="flex justify-between font-bold">
-                      <span>Total:</span>
-                      <span>₦{calculateTotal().toLocaleString()}</span>
-                    </div>
-                  </div>
-                  <hr />
-
-                  <div className="my-4">
-                    <label className="block text-sm font-medium text-gray-700">
-                      Payment Method
-                    </label>
-                    <div className="flex items-center justify-between mb-4">
-                      <div>
-                        <input
-                          type="radio"
-                          name="paymentMethod"
-                          className="mr-2"
-                        />
-                        <span>Card</span>
+                      <hr />
+                      <div className="my-4">
+                        <div className="flex justify-between">
+                          <span>Subtotal:</span>
+                          <span>₦{calculateSubtotal().toLocaleString()}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span>Service Fee:</span>
+                          <span>₦{selectedServiceFee}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span>VAT:</span>
+                          <span>
+                            {formatCurrency(vat.toFixed(2))}
+                          </span>
+                        </div>
+                        <div className="flex justify-between font-bold">
+                          <span>Total:</span>
+                          <span>{calculateTotal().toLocaleString()}</span>
+                        </div>
                       </div>
-                      <img
-                        src="/paystack.png"
-                        alt="Paystack"
-                        className=" "
-                      />
+                      <hr />
 
-                    </div>
-                    {/* <div className="flex items-center mb-4">
+                      <div className="my-4">
+                        <label className="block text-sm font-medium text-gray-700">
+                          Payment Method
+                        </label>
+                        <div className="flex items-center justify-between mb-4">
+                          <div>
+                            <input
+                              type="radio"
+                              name="paymentMethod"
+                              className="mr-2"
+                            />
+                            <span>Card</span>
+                          </div>
+                          <img
+                            src="/paystack.png"
+                            alt="Paystack"
+                            className=" "
+                          />
+
+                        </div>
+                        {/* <div className="flex items-center mb-4">
                       <input
                         type="radio"
                         name="paymentMethod"
@@ -384,6 +373,8 @@ const Checkout = () => {
                       />
                       <span>Cash on delivery</span>
                     </div> */}
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -391,6 +382,9 @@ const Checkout = () => {
           </div>
         </div>
       </div>
+
+      {/* Conditionally render LoadingScreen */}
+      {loading && <LoadingScreen />}
     </HomeLayout>
   );
 };

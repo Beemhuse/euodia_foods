@@ -3,9 +3,11 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { client } from "@/utils/sanity/client";
 import { toast } from "react-toastify";
+import useCurrencyFormatter from '@/hooks/useCurrencyFormatter';
 
 export default function BestSellers() {
   const [bestSellers, setBestSellers] = useState([]);
+  const formatCurrency = useCurrencyFormatter();
 
   useEffect(() => {
     const fetchBestSellers = async () => {
@@ -119,7 +121,7 @@ export default function BestSellers() {
               </div>
             </div>
             <div className="text-right">
-              <h2 className="font-bold">NGN{meal.total_amount}</h2>
+              <h2 className="font-bold">{formatCurrency(meal.total_amount)}</h2>
               <p className="text-gray-500">{meal.total_sales} sales</p>
               <button
                 onClick={() => addToBestSellers(meal)}

@@ -67,6 +67,11 @@ const Success = () => {
                         Track your Order Here
                     </button>
                 </Link>
+                <Link href="/">
+                    <button type="button" className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors duration-300">
+                        Back to Homepage
+                    </button>
+                </Link>
             </div>
         </div>
     );
