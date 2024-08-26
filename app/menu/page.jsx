@@ -33,7 +33,11 @@ export default function Page() {
         setDishes(result);
 
         // Extract unique categories from the fetched dishes
-        const uniqueCategories = [...new Set(result.map(dish => dish.category))];
+        const uniqueCategories = Array.from(new Set(result.map(dish => dish.category._id)))
+          .map(id => {
+            return result.find(dish => dish.category._id === id).category;
+          });
+
         setCategories(uniqueCategories);
 
         // Automatically select the first category on load
@@ -50,6 +54,7 @@ export default function Page() {
   const handleCategorySelect = (categoryTitle) => {
     setSelectedCategory(categoryTitle);
   };
+
   return (
     <HomeLayout>
       <div className='bg-white min-h-screen border border-t-2'>
