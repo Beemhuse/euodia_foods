@@ -13,12 +13,12 @@ const mealSchema = yup.object().shape({
   description: yup.string().required("Description is required"),
   price: yup.number().required("Price is required").positive("Price must be a positive number"),
   category: yup.string().required("Category is required"),
-  status: yup.string().required("Status is required"),
+  status: yup.bool().required("Status is required"),
 });
 
 const statusOptions = [
-  { value: "true", label: "Available" },
-  { value: "false", label: "Unavailable" },
+  { value: "true", label: "Active" },
+  { value: "false", label: "Inactive" },
 ];
 
 

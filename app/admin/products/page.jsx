@@ -28,7 +28,7 @@ const useCategories = () => {
 // Fetch products using SWR
 const useProducts = () => {
   const { data, error, mutate } = useSWR(
-    `*[_type == "dish" && status == true && !(_id in path("drafts.*"))] | order(sortOrder asc) {
+    `*[_type == "dish" && !(_id in path("drafts.*"))] | order(sortOrder asc) {
       _id,
       title,
       slug,
