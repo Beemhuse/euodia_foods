@@ -35,16 +35,16 @@ const DishModal = ({ dish, onClose, onAddToCart }) => {
           <div>
             <h3 className="text-xl font-semibold mb-2">{dish.title}</h3>
             <p className="text-green-500 text-xl font-bold mb-4">
-            {formatCurrency(dish.price)}
+            {/* {formatCurrency(dish.price)} */}
             </p>
             <p className="text-gray-700 mb-4">{dish.description}</p>
           </div>
-          <button
+          {/* <button
             className="bg-green-500 text-white px-6 py-3 rounded hover:bg-green-600"
             onClick={() => onAddToCart(dish)}
           >
             Add to Cart
-          </button>
+          </button> */}
         </div>
       </div>
     </div>
@@ -53,20 +53,10 @@ const DishModal = ({ dish, onClose, onAddToCart }) => {
 
 // Fetch dishes from Sanity
 async function getDishes() {
-  const query = `*[_type == "dish" && !(_id in path("drafts.*"))] | order(sortOrder asc) {
+  const query = `*[_type == "bestSellingDish" && !(_id in path("drafts.*"))] | order(sortOrder asc) {
     _id,
     title,
-    slug,
-    description,
-    price,
-    category->{
-      title
-    },
-    image {
-      asset->{
-        url
-      }
-    }
+    image
   }`;
 
   const dishes = await client.fetch(query);
@@ -176,15 +166,15 @@ const BestSellerDishes = () => {
                 <div className="flex justify-between items-center mb-2">
                   <h3 className="text-xl font-semibold leading-[1.10]">{dish.title}</h3>
                   <p className="text-green-500 text-lg font-bold">
-                    {formatCurrency(dish.price)}
+                    {/* {formatCurrency(dish.price)} */}
                   </p>
                 </div>
-                <div className="flex justify-between items-center">
+                {/* <div className="flex justify-between items-center">
                   <p className="text-gray-600 truncate">{dish.description}</p>
                   <button className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 ml-4 transition-colors duration-300">
                     View Details
                   </button>
-                </div>
+                </div> */}
               </div>
             ))
           ) : (
