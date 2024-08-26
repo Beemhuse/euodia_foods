@@ -3,8 +3,6 @@ import { client } from '@/utils/sanity/client';
 import slugify from 'slugify';
 import { isAdmin } from '@/utils/lib/auth';
 
-
-
 export async function POST(req) {
 
   if (!isAdmin(req.headers)) {
@@ -13,12 +11,16 @@ export async function POST(req) {
       headers: { "Content-Type": "application/json" },
     });
   }
+
   try {
     const body = await req.json();
-    const { title, description, price, category, status, image  } = body;
+    const { title, description, price, category, status, image } = body;
 
     // Ensure title is a string
     const slug = typeof title === 'string' ? slugify(title, { lower: true }) : 'default-slug';
+
+    // Convert status to boolean
+    const booleanStatus = status === "true" || status === true;
 
     // Generate sortOrder by finding the highest current sortOrder and adding 1
     const maxSortOrderResult = await client.fetch(`
@@ -36,12 +38,10 @@ export async function POST(req) {
       description,
       price: Number(price), // Ensure price is a number
       category: { _type: 'reference', _ref: category },
-      status,
+      status: booleanStatus, // Use the boolean value for status
       sortOrder,
-      image
+      image,
     });
-    
-
 
     return new NextResponse(JSON.stringify({ data: newMeal }), {
       status: 201,

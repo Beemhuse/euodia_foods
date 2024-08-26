@@ -13,7 +13,7 @@ export default function Page() {
   useEffect(() => {
     async function getDishes() {
       try {
-        const query = `*[_type == "dish" && !(_id in path("drafts.*"))] | order(sortOrder asc) {
+        const query = `*[_type == "dish" && status == true && !(_id in path("drafts.*"))] | order(sortOrder asc) {
           _id,
           title,
           description,
