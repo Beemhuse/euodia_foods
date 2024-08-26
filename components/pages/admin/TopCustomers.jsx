@@ -1,9 +1,11 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { client } from "@/utils/sanity/client";
+import useCurrencyFormatter from '@/hooks/useCurrencyFormatter';
 
 export default function TopCustomers() {
   const [topCustomers, setTopCustomers] = useState([]);
+  const formatCurrency = useCurrencyFormatter();
 
   useEffect(() => {
     const fetchTopCustomers = async () => {
@@ -72,7 +74,7 @@ export default function TopCustomers() {
               <p className="text-gray-500">{customer.total_orders} orders</p>
             </div>
             <div className="text-right">
-              <h2 className="font-bold">NGN{customer.total_amount}</h2>
+              <h2 className="font-bold">{formatCurrency(customer.total_amount)}</h2>
               <p className="text-gray-500">{customer.total_orders} orders</p>
             </div>
           </div>
