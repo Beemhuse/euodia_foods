@@ -73,7 +73,7 @@ const Checkout = () => {
   };
   const token = getCookie("euodia_token"); // Assuming the API returns a token if the user exists
   const id = getCookie("euodia_user"); // Assuming the API returns a token if the user exists
-  // const id = getCookie("euodia_user"); // Assuming the API returns a token if the user exists
+ 
 
   const handleCheckout = async (data) => {
     try {
@@ -82,9 +82,6 @@ const Checkout = () => {
 
 
         const userId = id
-        // if (!userId) {
-        //   throw new Error("User not found or could not be created");
-        // }
 
         // Combine the form data with the selected service fee object and user ID
         const orderData = {
@@ -102,7 +99,7 @@ const Checkout = () => {
         const config = token
           ? {
             headers: {
-              Authorization: `Bearer ${token}`, // Include the token in the Authorization header
+              Authorization: `Bearer ${token}`, 
             },
           }
           : {};
@@ -271,19 +268,6 @@ const Checkout = () => {
                       <p className="text-red-600">{errors.email.message}</p>
                     )}
                   </div>
-                  {/* <div className="my-4">
-                    <label className="block text-sm font-medium text-gray-700">
-                      Shipping/Delivery
-                    </label>
-                    <input
-                      type="text"
-                      {...register("deliveryAddress", {
-                        required: "Delivery Address is required",
-                      })}
-                      className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                      placeholder="Enter your delivery address "
-                    />
-                  </div> */}
                   <div className="mb-4">
                     <label
                       className="block text-sm font-medium text-gray-700"

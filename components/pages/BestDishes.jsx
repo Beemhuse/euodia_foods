@@ -33,7 +33,7 @@ const DishModal = ({ dish, onClose, onAddToCart }) => {
         </div>
         <div className="w-full md:w-1/2 md:pl-4 flex flex-col justify-between">
           <div>
-            <h3 className="text-2xl font-bold mb-2">{dish.title}</h3>
+            <h3 className="text-xl font-semibold mb-2">{dish.title}</h3>
             <p className="text-green-500 text-xl font-bold mb-4">
             {formatCurrency(dish.price)}
             </p>
@@ -174,7 +174,7 @@ const BestSellerDishes = () => {
                   />
                 </div>
                 <div className="flex justify-between items-center mb-2">
-                  <h3 className="text-xl font-bold">{dish.title}</h3>
+                  <h3 className="text-xl font-semibold leading-[1.10]">{dish.title}</h3>
                   <p className="text-green-500 text-lg font-bold">
                     {formatCurrency(dish.price)}
                   </p>
