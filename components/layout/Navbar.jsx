@@ -156,11 +156,11 @@ const Navbar = () => {
             ) : (
               <Button
                 title="Login"
-                color="accent"
+                color="gray"
                 isBorder
                 onClick={() => {
                   toggleSidebar();
-                  router.push("/auth/login");
+                  router.push("/login");
                 }}
                 className="w-full"
               />
