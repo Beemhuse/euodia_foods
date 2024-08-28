@@ -3,60 +3,16 @@ import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { client } from '@/utils/sanity/client';
-import { useDispatch } from 'react-redux';
-import { addCartItem } from '@/store/reducers/cartReducer';
-import useCurrencyFormatter from '@/hooks/useCurrencyFormatter';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
-// Modal Component
-const DishModal = ({ dish, onClose, onAddToCart }) => {
-  const formatCurrency = useCurrencyFormatter();
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-70 overflow-auto">
-      <div className="bg-white rounded-lg w-full max-w-3xl p-4 sm:p-6 md:p-8 relative flex flex-col md:flex-row max-h-[90vh] overflow-y-auto">
-        <button
-          className="absolute top-4 right-4 text-3xl font-bold text-white md:text-gray-600 lg:text-gray-600"
-          onClick={onClose}
-        >
-          &times;
-        </button>
-        <div className="w-full md:w-1/2 mb-4 md:mb-0">
-          <Image
-            src={dish.image.asset.url}
-            alt={dish.title}
-            layout="responsive"
-            width={500}
-            height={500}
-            className="rounded-lg"
-          />
-        </div>
-        <div className="w-full md:w-1/2 md:pl-4 flex flex-col justify-between">
-          <div>
-            <h3 className="text-xl font-semibold mb-2">{dish.title}</h3>
-            <p className="text-green-500 text-xl font-bold mb-4">
-            {/* {formatCurrency(dish.price)} */}
-            </p>
-            <p className="text-gray-700 mb-4">{dish.description}</p>
-          </div>
-          {/* <button
-            className="bg-green-500 text-white px-6 py-3 rounded hover:bg-green-600"
-            onClick={() => onAddToCart(dish)}
-          >
-            Add to Cart
-          </button> */}
-        </div>
-      </div>
-    </div>
-  );
-};
 
 // Fetch dishes from Sanity
 async function getDishes() {
   const query = `*[_type == "bestSellingDish" && !(_id in path("drafts.*"))] | order(sortOrder asc) {
     _id,
     title,
-    image
+    image,
+    description
   }`;
 
   const dishes = await client.fetch(query);
@@ -66,9 +22,6 @@ async function getDishes() {
 // Main BestSellerDishes Component
 const BestSellerDishes = () => {
   const [dishes, setDishes] = useState([]);
-  const [selectedDish, setSelectedDish] = useState(null);
-  const dispatch = useDispatch();
-  const formatCurrency = useCurrencyFormatter();
 
   useEffect(() => {
     const fetchDishes = async () => {
@@ -91,104 +44,58 @@ const BestSellerDishes = () => {
     fetchDishes();
   }, []);
 
-  const handleDishClick = (dish) => {
-    setSelectedDish(dish);
-  };
-
-  const handleCloseModal = () => {
-    setSelectedDish(null);
-  };
-
-  const handleAddToCart = (dish) => {
-    try{
-      
-      dispatch(addCartItem({ dish }));
-      toast.success("Item added to cart", {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
-      handleCloseModal();
-    }
-    catch(err){
-      toast.error(err.message || "Failed to add item to cart", {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
-    }
-  };
-
   const containerVariants = {
-    hidden: { opacity: 0, x: -100 },
-    visible: { opacity: 1, x: 0, transition: { duration: 1 } }
+    hidden: { opacity: 0, y: 50 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.8 } }
   };
 
   return (
     <motion.div
-      className="py-12 bg-white"
+      className="py-16 bg-gradient-to-b from-gray-100 to-gray-50"
       initial="hidden"
       animate="visible"
       variants={containerVariants}
     >
-      <div className="container mx-auto px-4">
-        <h2 className="text-3xl font-bold text-center mb-5">Popular Dishes</h2>
-        <p className="text-center text-gray-700 mb-8">
-          Enjoy our vibrant garden salad, a refreshing choice featuring a blend
-          of crisp lettuce, juicy tomatoes, and your favorite dressing.
+      <div className="container mx-auto px-6">
+        <h2 className="text-4xl font-extrabold text-center mb-10 text-gray-800">Popular Dishes</h2>
+        <p className="text-center text-gray-600 mb-12 max-w-2xl mx-auto">
+          Discover our top-selling dishes, crafted with the freshest ingredients and bursting with rich flavors. Every dish is a feast for the senses.
         </p>
 
-        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
           {dishes.length > 0 ? (
             dishes.map((dish) => (
-              <div
+              <motion.div
                 key={dish._id}
-                className="bg-white p-6 rounded-lg shadow-lg cursor-pointer"
-                onClick={() => handleDishClick(dish)}
+                className="relative bg-white rounded-lg shadow-lg overflow-hidden transform transition-transform hover:scale-105 hover:shadow-2xl"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
               >
-                <div className="relative h-48 mb-4">
+                <div className="relative h-56">
                   <Image
                     src={dish.image.asset.url}
                     alt={dish.title}
-                    fill
-                    style={{ objectFit: 'cover' }}
+                    layout="fill"
+                    objectFit="cover"
                     className="rounded-t-lg"
                   />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-70"></div>
+                  <h3 className="absolute bottom-4 left-4 text-xl font-semibold text-white">
+                    {dish.title}
+                  </h3>
                 </div>
-                <div className="flex justify-between items-center mb-2">
-                  <h3 className="text-xl font-semibold leading-[1.10]">{dish.title}</h3>
-                  <p className="text-green-500 text-lg font-bold">
-                    {/* {formatCurrency(dish.price)} */}
+                <div className="p-6">
+                  <p className="text-gray-600 leading-relaxed line-clamp-3">
+                    {dish.description}
                   </p>
                 </div>
-                {/* <div className="flex justify-between items-center">
-                  <p className="text-gray-600 truncate">{dish.description}</p>
-                  <button className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 ml-4 transition-colors duration-300">
-                    View Details
-                  </button>
-                </div> */}
-              </div>
+              </motion.div>
             ))
           ) : (
-            <p>No dishes available at the moment.</p>
+            <p className="text-center col-span-full">No dishes available at the moment.</p>
           )}
         </div>
       </div>
-      {selectedDish && (
-        <DishModal
-          dish={selectedDish}
-          onClose={handleCloseModal}
-          onAddToCart={handleAddToCart}
-        />
-      )}
       <ToastContainer />
     </motion.div>
   );

@@ -63,12 +63,13 @@ const Success = () => {
                    Track your order on Whatsapp{' '}
                 </p>
                 <Link href="https://wa.link/91mtgr">
-                    <button type="button" className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors duration-300">
+                    <button type="button" className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition-colors duration-300">
                         Track your Order Here
                     </button>
                 </Link>
+                <br />
                 <Link href="/">
-                    <button type="button" className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors duration-300">
+                    <button type="button" className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition-colors duration-300">
                         Back to Homepage
                     </button>
                 </Link>

@@ -89,7 +89,7 @@ export default function CustomersPage() {
     {
       title: "Total Spent",
       key: "totalSpent",
-      render: (data) => <span>{`$${data.totalSpent.toFixed(2)}`}</span>,
+      render: (data) => <span>{`₦${data.totalSpent.toFixed(2)}`}</span>,
     },
     {
       title: "Date Joined",
