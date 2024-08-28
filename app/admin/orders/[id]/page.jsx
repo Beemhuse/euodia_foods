@@ -7,6 +7,8 @@ import { client } from "@/utils/sanity/client";
 import useCurrencyFormatter from "@/hooks/useCurrencyFormatter";
 import { AiOutlineCheckCircle, AiOutlineWarning } from "react-icons/ai";
 import { MdCancel, MdLocalShipping } from "react-icons/md";
+import Link from "next/link";
+import { toast } from "react-toastify";
 
 // Status options list
 const statusOptions = [
@@ -102,11 +104,11 @@ export default function Page() {
     try {
       await client.patch(order._id).set({ status: selectedStatus }).commit();
       setLoading(false);
-      alert("Order status updated successfully!");
+      toast.success("Order status updated successfully!");
     } catch (error) {
       setLoading(false);
       console.error("Failed to update order status:", error);
-      alert("Failed to update order status.");
+      toast.error("Failed to update order status.");
     }
   };
 
@@ -138,12 +140,12 @@ export default function Page() {
       <nav className="flex mb-4" aria-label="Breadcrumb">
         <ol className="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
           <li className="inline-flex items-center">
-            <a
-              href="#"
+            <Link
+              href="/admin/orders/"
               className="text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white"
             >
               Home
-            </a>
+            </Link>
           </li>
           <li>
             <span className="text-sm font-medium text-gray-500 md:mx-2 dark:text-gray-400">

@@ -5,9 +5,10 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import InputComponent from "@/components/reusables/input/InputComponent";
 import SelectComponent from "@/components/reusables/input/SelectComponent";
 import Button from "@/components/reusables/buttons/Button";
-import { client } from "@/utils/sanity/client";
 import { uploadImageToSanity } from "@/utils/sanity/uploadImageToSanity";
-import { mutate } from "swr";
+import { getCookie } from "@/utils/getCookie";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 const mealSchema = yup.object().shape({
   title: yup.string().required("Title is required"),
@@ -17,14 +18,15 @@ const mealSchema = yup.object().shape({
 });
 
 const statusOptions = [
-  { value: "true", label: "Available" },
-  { value: "false", label: "Unavailable" },
+  { value: true, label: "Active" },
+  { value: false, label: "Inactive" },
 ];
 
-const EditMealModal = ({ isOpen, onClose, meal }) => {
+const EditMealModal = ({ isOpen, onClose, meal, mutate }) => {
   const { register, handleSubmit, reset, setValue, formState: { errors } } = useForm({
     resolver: yupResolver(mealSchema),
   });
+  const token = getCookie('admineu_token'); // Retrieve the token
 
   const [selectedImage, setSelectedImage] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -34,7 +36,7 @@ const EditMealModal = ({ isOpen, onClose, meal }) => {
       setValue("title", meal.title);
       setValue("description", meal.description);
       setValue("price", meal.price);
-      setValue("status", meal.status ? "true" : "false");
+      setValue("status", meal.status);
       setSelectedImage(meal.image?.asset?.url || null);
     }
   }, [meal, setValue]);
@@ -47,49 +49,44 @@ const EditMealModal = ({ isOpen, onClose, meal }) => {
   const onSubmit = async (data) => {
     try {
       setLoading(true);
-
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`, // Set the Bearer token
+        },
+      };
+      // Upload the new image if selected
       let imageAssetId = meal.image?.asset?._ref;
-      
-      // Only upload a new image if the user selected a new one
       if (selectedImage && typeof selectedImage !== 'string') {
         imageAssetId = await uploadImageToSanity(selectedImage);
       }
-
-      const updatedMeal = {
-        _type: 'dish', // Make sure this matches the type in your schema
+  
+      const updatedMealData = {
+        mealId: meal._id,
         title: data.title,
         description: data.description,
         price: data.price,
-        status: data.status === "true",
-        // Only include image if it exists (either new or existing one)
-        ...(imageAssetId && {
-          image: {
-            _type: 'image',
-            asset: {
-              _type: 'reference',
-              _ref: imageAssetId,
-            },
-          },
-        }),
+        status: data.status,
+        selectedImage: selectedImage, // Pass selected image if new
+        existingImageAssetId: imageAssetId, // Pass existing image ID if not new
       };
-
-      await client.patch(meal._id).set(updatedMeal).commit();
-      
-      // Trigger re-fetch or update data after mutation
-    //   if (mutate) {
-    // }
-    mutate(`*[_type == "dish" && status == true && !(_id in path("drafts.*"))]`); // Re-fetch or re-render in the parent component
-
+  
+      // Make API call to update the meal
+      const res = await axios.patch('/api/admin/update-meal', updatedMealData, config);
+  
+      console.log(res.data.message);
+      toast.success("Meal updated successfully!");
+      mutate(); // Refresh the data
+  
       reset(); // Reset the form after successful submission
       setSelectedImage(null); // Clear the selected image
       onClose(); // Close the modal
     } catch (error) {
       console.error("Error editing meal:", error);
+      toast.error("Failed to update meal.");
     } finally {
       setLoading(false);
     }
   };
-
   if (!isOpen) return null;
 
   return (

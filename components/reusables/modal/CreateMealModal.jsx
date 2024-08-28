@@ -8,27 +8,31 @@ import Button from "@/components/reusables/buttons/Button";
 import { getCookie } from "@/utils/getCookie";
 import { uploadImageToSanity } from "@/utils/sanity/uploadImageToSanity";
 
+// Define the validation schema using yup
 const mealSchema = yup.object().shape({
   title: yup.string().required("Title is required"),
   description: yup.string().required("Description is required"),
   price: yup.number().required("Price is required").positive("Price must be a positive number"),
   category: yup.string().required("Category is required"),
-  status: yup.bool().required("Status is required"),
+  status: yup.boolean().required("Status is required"),
 });
 
+// Options for the status select dropdown
 const statusOptions = [
-  { value: "true", label: "Active" },
-  { value: "false", label: "Inactive" },
+  { value: true, label: "Active" },
+  { value: false, label: "Inactive" },
 ];
 
-
 const CreateMealModal = ({ isOpen, onClose, categories, mutate }) => {
+  // Form management using react-hook-form
   const { register, handleSubmit, reset, formState: { errors } } = useForm({
     resolver: yupResolver(mealSchema),
   });
+
+  // Map category options for the select dropdown
   const categoryOptions = categories?.map((category) => ({
-    value: category?._id, // Use the category ID as the value
-    label: category?.title, // Use the category title as the label
+    value: category?._id,
+    label: category?.title,
   }));
   
   const adminToken = getCookie("admineu_token");
@@ -43,35 +47,31 @@ const CreateMealModal = ({ isOpen, onClose, categories, mutate }) => {
   const onSubmit = async (data) => {
     try {
       setLoading(true);
-
       let imageAssetId = "";
       if (selectedImage) {
         imageAssetId = await uploadImageToSanity(selectedImage);
       }
 
+      // Convert the status to a boolean value
+      const formData = {
+        ...data,
+        image: imageAssetId ? { _type: 'image', asset: { _type: 'reference', _ref: imageAssetId } } : null,
+      };
+
       const response = await fetch('/api/admin/create-meal', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${adminToken}`, // Include your token here
+          'Authorization': `Bearer ${adminToken}`,
         },
-        body: JSON.stringify({
-          ...data,
-          image: {
-            _type: 'image',
-            asset: {
-              _type: 'reference',
-              _ref: imageAssetId, // Use the image asset ID
-            },
-          },        }),
+        body: JSON.stringify(formData),
       });
 
       if (response.ok) {
-        const result = await response.json();
-        mutate()
-        reset(); // Reset the form after successful submission
-        setSelectedImage(null); // Clear the selected image
-        onClose(); // Close the modal
+        mutate();  // Refresh data after creation
+        reset();  // Reset the form
+        setSelectedImage(null);  // Clear the selected image
+        onClose();  // Close the modal
       } else {
         const errorData = await response.json();
         console.error("Failed to create meal:", errorData);
@@ -88,7 +88,7 @@ const CreateMealModal = ({ isOpen, onClose, categories, mutate }) => {
       <div className="fixed inset-0 bg-black opacity-50" onClick={onClose}></div>
       <div className="flex items-center justify-center min-h-screen">
         <div className="bg-white rounded-lg overflow-hidden shadow-xl max-w-2xl w-full p-6 relative z-50">
-          <h2 className="text-xl font-bold mb-4">Create a New Meal</h2>
+          <h2 className="text-xl font-bold mb-4 border-b-2 border-green-600 py-4">Create a New Meal</h2>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div className="flex gap-x-6 w-full">
               <div className="w-full">

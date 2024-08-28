@@ -28,7 +28,7 @@ const useCategories = () => {
 // Fetch products using SWR
 const useProducts = () => {
   const { data, error, mutate } = useSWR(
-    `*[_type == "dish" && !(_id in path("drafts.*"))] | order(sortOrder asc) {
+    `*[_type == "dish" && status == true && !(_id in path("drafts.*"))] | order(sortOrder asc) {
       _id,
       title,
       slug,
@@ -62,19 +62,11 @@ export default function Page() {
   const { categories, isLoading: categoriesLoading, isError: categoriesError } = useCategories();
   const { products, isLoading: productsLoading, isError: productsError, mutate } = useProducts();
 
-  const handleEditProduct = async (updatedProduct) => {
-    // Since useSWR is used, you might need to manually mutate the cache after editing
-    mutate(`*[_type == "dish" && status == true && !(_id in path("drafts.*"))]`);
-  };
 
-  const handleDeleteProduct = async (productId) => {
-    // Similarly, mutate the cache after deletion
-    mutate(`*[_type == "dish" && status == true && !(_id in path("drafts.*"))]`);
-  };
 
   // if (productsLoading ) return <div>Loading...</div>;
   // if (productsError ) return <div>Error loading data</div>;
-
+console.log("products ==>>>>>", products)
   return (
     <section className="p-4">
       <div className="flex flex-col md:flex-row w-full justify-between items-center mb-6">
@@ -145,8 +137,7 @@ export default function Page() {
         <ProductCard
           key={product._id}
           product={product}
-          onEdit={handleEditProduct}
-          onDelete={handleDeleteProduct}
+          mutate={mutate}
         />
       ))}
       </div>

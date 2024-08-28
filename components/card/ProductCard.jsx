@@ -1,14 +1,20 @@
 import Image from "next/image";
 import PropTypes from "prop-types";
 import { BsThreeDots } from "react-icons/bs";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { client } from '@/utils/sanity/client'; // Assuming the client is set up for Sanity
 import EditMealModal from "../reusables/modal/EditMealModal";
+import axios from "axios";
+import { toast } from "react-toastify";
+import { getCookie } from "@/utils/getCookie";
 
-const ProductCard = ({ product, onEdit, onDelete, categories, mutate }) => {
+const ProductCard = ({ product,  mutate }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isEditMealModalOpen, setIsEditMealModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const token = getCookie('admineu_token'); // Retrieve the token
+  const menuRef = useRef(null); // Ref for the menu
+  const buttonRef = useRef(null); // Ref for the button to toggle menu
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -22,11 +28,17 @@ const ProductCard = ({ product, onEdit, onDelete, categories, mutate }) => {
   const handleDelete = async () => {
     setIsLoading(true);
     try {
-      await client.patch(product._id)
-        .set({ isActive: false })
-        .commit();
-      onDelete(product._id); // Update the product list in the parent component
-      alert("Product deleted successfully!");
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`, // Set the Bearer token
+        },
+      };
+    const res =  await axios.delete(`/api/admin/delete-meal?productId=${product._id}`,config)
+       
+    console.log(res)
+    // onDelete(product._id); // Update the product list in the parent component
+    toast.success("Product deleted successfully!");
+    mutate()
     } catch (error) {
       console.error("Failed to delete product:", error);
       alert("Failed to delete product.");
@@ -35,7 +47,22 @@ const ProductCard = ({ product, onEdit, onDelete, categories, mutate }) => {
     }
     setIsMenuOpen(false); // Close menu after selecting delete
   };
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        menuRef.current &&
+        !menuRef.current.contains(event.target) &&
+        !buttonRef.current.contains(event.target)
+      ) {
+        setIsMenuOpen(false); // Close menu when clicking outside
+      }
+    };
 
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
   return (
     <div className="bg-[#F9FAFB] shadow-md rounded-lg p-4 w-full max-w-sm relative">
       <div className="flex items-center gap-6 justify-between">
@@ -54,13 +81,17 @@ const ProductCard = ({ product, onEdit, onDelete, categories, mutate }) => {
           <p className="text-md font-bold">₦{product.price}</p>
         </div>
         <button
+          ref={buttonRef} // Reference for the button
           onClick={toggleMenu}
           className="text-[#374151] p-4 rounded-md bg-[#E5E7EB] hover:text-gray-600 relative"
         >
           <BsThreeDots />
         </button>
         {isMenuOpen && (
-          <div className="absolute right-0 top-0 mt-2 w-32 bg-white shadow-lg rounded-lg py-2 z-10">
+          <div
+            ref={menuRef} // Reference for the menu
+            className="absolute right-16 top-10 mt-2 w-32 bg-white shadow-lg rounded-lg py-2 z-10"
+          >
             <button
               onClick={handleEdit}
               className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100"
@@ -80,13 +111,16 @@ const ProductCard = ({ product, onEdit, onDelete, categories, mutate }) => {
         <h3 className="text-md font-semibold">Description</h3>
         <p className="text-gray-600">{product.description}</p>
       </div>
-    
-      {isLoading && <div className="absolute inset-0 bg-white opacity-50 flex items-center justify-center">Loading...</div>}
+
+      {isLoading && (
+        <div className="absolute inset-0 bg-white opacity-50 flex items-center justify-center">
+          Loading...
+        </div>
+      )}
 
       <EditMealModal
         isOpen={isEditMealModalOpen}
         onClose={() => setIsEditMealModalOpen(false)}
-        // categories={categories}
         meal={product}
         mutate={mutate}
       />
