@@ -7,18 +7,18 @@ import 'react-toastify/dist/ReactToastify.css';
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: "Euodia Foods",
+  title: "Euodia Whole Foods",
   description:
-    "Welcome to Euodia foods, get your next meal with just a click of a button",
+    "Welcome to Euodia Whole foods, get your next meal with just a click of a button",
   openGraph: {
-    title: "Euodia Foods",
+    title: "Euodia Whole Foods",
     description:
-      "Welcome to Euodia foods, get your next meal with just a click of a button",
-    url: "https://euodiafoods.com",
+      "Welcome to Euodia Whole foods, get your next meal with just a click of a button",
+    url: "https://euodiawholefoods.com",
     siteName: "Euodia Services",
     images: [
       {
-        url: "https://euodiafoods.com",
+        url: "https://euodiawholefoods.com",
         width: 800,
         height: 600,
         alt: "Euodia OpenGraph Image",

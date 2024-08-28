@@ -7,11 +7,11 @@ import 'react-toastify/dist/ReactToastify.css';
 
 function MyApp({ Component, pageProps }) {
   return (
-   
+
     <Provider store={store}>
       <SWRProvider>
-<ToastContainer />
-      <Component {...pageProps} />
+        <ToastContainer />
+        <Component {...pageProps} />
       </SWRProvider>
     </Provider>
   );
