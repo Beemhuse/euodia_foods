@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import useSWR from "swr";
 import CreateMealModal from "@/components/reusables/modal/CreateMealModal";
 import ProductCard from "@/components/card/ProductCard";
@@ -8,7 +8,6 @@ import Image from "next/image";
 import Typography from "@/components/reusables/typography/Typography";
 import CreateCategoryModal from "@/components/reusables/modal/CreateCategoryModal";
 import { client } from "@/utils/sanity/client";
-import EditMealModal from "@/components/reusables/modal/EditMealModal";
 
 // Fetch function for SWR
 const fetcher = async (query) => {
@@ -72,9 +71,6 @@ export default function Page() {
     mutate(`*[_type == "dish" && status == true && !(_id in path("drafts.*"))]`);
   };
 
-  // if (productsLoading ) return <div>Loading...</div>;
-  // if (productsError ) return <div>Error loading data</div>;
-
   return (
     <section className="p-4">
       <div className="flex flex-col md:flex-row w-full justify-between items-center mb-6">
@@ -92,7 +88,7 @@ export default function Page() {
                   <svg
                     className="w-3 h-3 me-2.5"
                     aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
+                    xmlns="http://www.w.org/2000/svg"
                     fill="currentColor"
                     viewBox="0 0 20 20"
                   >
@@ -164,5 +160,29 @@ export default function Page() {
         onClose={() => setIsCategoryModalOpen(false)}
       />
     </section>
+  );
+}
+
+// CreateMealModal Component
+function CreateMealModal({ isOpen, onClose, categories, ingredients, mutate }) {
+  if (!isOpen) return null;
+
+  const handleSave = () => {
+    // Logic to save the meal
+    mutate();
+    onClose();
+  };
+
+  return (
+    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+      <div className="bg-white rounded-lg shadow-lg w-full max-w-2xl max-h-[80vh] overflow-y-auto p-4">
+        {/* Modal content, form fields, etc. */}
+        
+        <div className="flex justify-end gap-2 mt-4">
+          <Button onClick={onClose} title="Cancel" />
+          <Button onClick={handleSave} title="Save" primary />
+        </div>
+      </div>
+    </div>
   );
 }
