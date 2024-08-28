@@ -1,5 +1,5 @@
-"use client";
-import React, { useState, useEffect } from "react";
+"use client"
+import React, { useState } from "react";
 import useSWR from "swr";
 import CreateMealModal from "@/components/reusables/modal/CreateMealModal";
 import ProductCard from "@/components/card/ProductCard";
@@ -8,7 +8,6 @@ import Image from "next/image";
 import Typography from "@/components/reusables/typography/Typography";
 import CreateCategoryModal from "@/components/reusables/modal/CreateCategoryModal";
 import { client } from "@/utils/sanity/client";
-import EditMealModal from "@/components/reusables/modal/EditMealModal";
 
 // Fetch function for SWR
 const fetcher = async (query) => {
@@ -28,14 +27,15 @@ const useCategories = () => {
 // Fetch products using SWR
 const useProducts = () => {
   const { data, error, mutate } = useSWR(
-    `*[_type == "dish" && status == true && !(_id in path("drafts.*"))] | order(sortOrder asc) {
+    `*[_type == "dish" && !(_id in path("drafts.*"))] | order(sortOrder asc) {
       _id,
       title,
       slug,
       description,
       price,
       category->{
-        title
+        title,
+        _id
       },
       status,
       sortOrder,
@@ -51,22 +51,41 @@ const useProducts = () => {
     products: data,
     isLoading: !error && !data,
     isError: error,
-    mutate
+    mutate,
   };
 };
 
 export default function Page() {
   const [isMealModalOpen, setIsMealModalOpen] = useState(false);
   const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [productStatus, setProductStatus] = useState("All");
 
   const { categories, isLoading: categoriesLoading, isError: categoriesError } = useCategories();
   const { products, isLoading: productsLoading, isError: productsError, mutate } = useProducts();
 
+  // Filter out duplicate category names
+  const uniqueCategories = categories?.reduce((acc, category) => {
+    if (!acc.find((cat) => cat.title.toLowerCase() === category.title.toLowerCase())) {
+      acc.push(category);
+    }
+    return acc;
+  }, []);
 
+  const filteredProducts = products
+    ?.filter((product) => {
+      if (selectedCategory !== "All" && product.category?.title !== selectedCategory) {
+        return false;
+      }
+      if (productStatus === "Active" && product.status !== true) {
+        return false;
+      }
+      if (productStatus === "Inactive" && product.status !== false) {
+        return false;
+      }
+      return true;
+    });
 
-  // if (productsLoading ) return <div>Loading...</div>;
-  // if (productsError ) return <div>Error loading data</div>;
-console.log("products ==>>>>>", products)
   return (
     <section className="p-4">
       <div className="flex flex-col md:flex-row w-full justify-between items-center mb-6">
@@ -132,14 +151,44 @@ console.log("products ==>>>>>", products)
         </div>
       </div>
       
+      <div className="flex flex-wrap gap-2 mb-6">
+        <button
+          className={`px-4 py-2  ${selectedCategory === "All" ? "bg-green-500 text-white" : ""}`}
+          onClick={() => setSelectedCategory("All")}
+        >
+          All
+        </button>
+        {uniqueCategories?.map((category) => (
+          <button
+            key={category._id}
+            className={`px-4 py-2 capitalize  ${selectedCategory === category.title ? "bg-green-500 border-b py-2 text-white" : "border-b "}`}
+            onClick={() => setSelectedCategory(category.title)}
+          >
+            {category.title}
+          </button>
+        ))}
+      </div>
+
+      <div className="mb-6">
+        <select
+          className="px-4 py-2 rounded-lg bg-gray-200"
+          value={productStatus}
+          onChange={(e) => setProductStatus(e.target.value)}
+        >
+          <option value="All">All Products</option>
+          <option value="Active">Active Products</option>
+          <option value="Inactive">Inactive Products</option>
+        </select>
+      </div>
+
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-      {products?.map((product) => (
-        <ProductCard
-          key={product._id}
-          product={product}
-          mutate={mutate}
-        />
-      ))}
+        {filteredProducts?.map((product) => (
+          <ProductCard
+            key={product._id}
+            product={product}
+            mutate={mutate}
+          />
+        ))}
       </div>
 
       <CreateMealModal

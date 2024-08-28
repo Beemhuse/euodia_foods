@@ -13,6 +13,7 @@ export const handleLoginError = (error) => {
   return error.message;
 };
 export const handleGenericError = (error) => {
+  console.log(error)
   if (error?.response) {
     // The request was made, but the server responded with an error
     return (

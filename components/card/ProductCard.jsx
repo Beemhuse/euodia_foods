@@ -8,7 +8,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { getCookie } from "@/utils/getCookie";
 
-const ProductCard = ({ product,  mutate }) => {
+const ProductCard = ({ product, mutate }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isEditMealModalOpen, setIsEditMealModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -33,12 +33,11 @@ const ProductCard = ({ product,  mutate }) => {
           Authorization: `Bearer ${token}`, // Set the Bearer token
         },
       };
-    const res =  await axios.delete(`/api/admin/delete-meal?productId=${product._id}`,config)
-       
-    console.log(res)
-    // onDelete(product._id); // Update the product list in the parent component
-    toast.success("Product deleted successfully!");
-    mutate()
+      const res = await axios.delete(`/api/admin/delete-meal?productId=${product._id}`, config);
+
+      console.log(res);
+      toast.success("Product deleted successfully!");
+      mutate();
     } catch (error) {
       console.error("Failed to delete product:", error);
       alert("Failed to delete product.");
@@ -47,6 +46,7 @@ const ProductCard = ({ product,  mutate }) => {
     }
     setIsMenuOpen(false); // Close menu after selecting delete
   };
+
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (
@@ -63,6 +63,10 @@ const ProductCard = ({ product,  mutate }) => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
+
+  // Determine status color based on product status
+  const statusColor = product.status ? "bg-green-500" : "bg-gray-400";
+
   return (
     <div className="bg-[#F9FAFB] shadow-md rounded-lg p-4 w-full max-w-sm relative">
       <div className="flex items-center gap-6 justify-between">
@@ -76,7 +80,10 @@ const ProductCard = ({ product,  mutate }) => {
           />
         </div>
         <div className="mt-4 space-y-4 flex-grow">
-          <h2 className="text-md font-semibold">{product.title}</h2>
+          <h2 className="text-md font-semibold flex items-center">
+            {product.title}
+            <span className={`ml-2 w-3 h-3 rounded-full ${statusColor}`} />
+          </h2>
           <p className="text-gray-600">{product.category.title}</p>
           <p className="text-md font-bold">₦{product.price}</p>
         </div>
@@ -136,10 +143,8 @@ ProductCard.propTypes = {
     category: PropTypes.object.isRequired,
     price: PropTypes.number.isRequired,
     description: PropTypes.string.isRequired,
+    status: PropTypes.bool.isRequired, // Ensure status is provided
   }).isRequired,
-  onEdit: PropTypes.func.isRequired,
-  onDelete: PropTypes.func.isRequired,
-  categories: PropTypes.array.isRequired,
   mutate: PropTypes.func.isRequired,
 };
 

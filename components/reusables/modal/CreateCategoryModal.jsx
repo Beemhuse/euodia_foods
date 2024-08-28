@@ -6,48 +6,47 @@ import InputComponent from "@/components/reusables/input/InputComponent";
 import Button from "@/components/reusables/buttons/Button";
 import { getCookie } from "@/utils/getCookie";
 import { toast } from "react-toastify";
+import axios from "axios";
+import { handleGenericError } from "@/utils/errorHandler";
 
 const categorySchema = yup.object().shape({
   title: yup.string().required("Title is required"),
   description: yup.string().required("Description is required"),
 });
 
-const CreateCategoryModal = ({ isOpen, onClose, categories }) => {
+const CreateCategoryModal = ({ isOpen, onClose }) => {
   const { register, handleSubmit, reset, formState: { errors } } = useForm({
     resolver: yupResolver(categorySchema),
   });
   const adminToken = getCookie("admineu_token");
   const [loading, setLoading] = useState(false);
 
+  
   const onSubmit = async (data) => {
     try {
       setLoading(true);
-
-      const response = await fetch('/api/admin/category', {
-        method: 'POST',
+  
+      const response = await axios.post('/api/admin/category', data, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${adminToken}`, // Include your token here
         },
-        body: JSON.stringify(data),
       });
-
-      if (response.ok) {
-        const result = await response.json();
-        toast.success("Category created successfully")
+  
+      if (response.status === 201) {
+        toast.success("Category created successfully");
         reset(); // Reset the form after successful submission
         onClose(); // Close the modal
-      } else {
-        const errorData = await response.json();
-        console.error("Failed to create category:", errorData);
-      }
+      } 
     } catch (error) {
-      console.error("Error creating category:", error);
+      const errMsg = handleGenericError(error)
+      toast.error(errMsg);
+      console.log("Error creating category:", error);
     } finally {
       setLoading(false);
     }
   };
-
+  
   return (
     <div className={`fixed inset-0 z-50 ${isOpen ? "block" : "hidden"}`}>
       <div className="fixed inset-0 bg-black opacity-50" onClick={onClose}></div>
@@ -82,21 +81,4 @@ const CreateCategoryModal = ({ isOpen, onClose, categories }) => {
   );
 };
 
-
-
-// export async function getServerSideProps() {
-//     try {
-//       const query = `*[_type == "category"]`;
-//       const categories = await client.fetch(query);
-//       console.log(categories)
-      
-//       return {
-//         props: { categories },
-//       };
-//     } catch (error) {
-//       return {
-//         props: { error: error.message },
-//       };
-//     }
-//   }
 export default CreateCategoryModal;
