@@ -89,7 +89,7 @@ export default function BestSellers() {
       toast.success(`${meal.meal} has been added to Best Selling Dishes.`);
     } catch (error) {
       console.error("Error adding dish to Best Selling Dishes:", error);
-      alert("Failed to add dish to Best Selling Dishes.");
+      toast.error("Failed to add dish to Best Selling Dishes.");
     }
   };
 

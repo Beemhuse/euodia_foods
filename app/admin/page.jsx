@@ -7,6 +7,9 @@ import OrdersSummary from "@/components/pages/admin/OrderSummary";
 import { useEffect, useState } from "react";
 import { client } from "@/utils/sanity/client";
 import TopCustomers from "@/components/pages/admin/TopCustomers";
+import ProfitBarChart from "@/components/charts/ProfitBarChart";
+import OrdersDoughnutChart from "@/components/charts/OrdersDoughnutChart";
+import NewCustomerLineChart from "@/components/charts/NewCustomerLineChart";
 
 export default function Dashboard() {
   const [orders, setOrders] = useState([]);
@@ -135,18 +138,32 @@ export default function Dashboard() {
       {/* Total Orders */}
       <OrdersSummary />
       <div className="grid grid-cols-3 gap-4 ">
-        <TopCustomers />
-        <div className="col-span-2">
+        <div className="flex items-center col-span-2">
+          <NewCustomerLineChart />
+        </div>
+        <div className="col-span-1">
           <BestSellers />
         </div>
       </div>
-
+      <div className="grid grid-cols-3 gap-5 ">
+        <div className="col-span-2">
+          {/* Profit Chart */}
+          <ProfitBarChart />
+        </div>
+        <div className="col-spa-1">
+          {/* Orders Status Doughnut Chart */}
+          <OrdersDoughnutChart />
+        </div>
+      </div>
       {/* Recent Orders */}
-      <div className="bg-white p-6 shadow-lg rounded-lg">
-        <h2 className="font-bold text-lg border-b-2 pb-4 mb-4">
-          Recent Orders
-        </h2>
-        <Table columns={customerColumn} data={mappedOrders} isGray={false} />
+      <div className="grid grid-cols-3 gap-5">
+        <div className=" col-span-2 bg-white p-6 shadow-lg rounded-lg">
+          <h2 className="font-bold text-lg border-b-2 pb-4 mb-4">
+            Recent Orders
+          </h2>
+          <Table columns={customerColumn} data={mappedOrders} isGray={false} />
+        </div>
+        <TopCustomers />
       </div>
     </div>
   );
