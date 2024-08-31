@@ -9,6 +9,11 @@ const quality = [
         icon: "/Frame 35.png"
     },
     {
+        title: "Healthy and Whole Foods",
+        description: "Tasty and organic meals made without SMG or preservatives.",
+        icon: "/Frame 37.png"
+    },
+    {
         title: "Variety of Options",
         description: "From hearty meals to light snacks, we offer a wide range of options to suit every taste and craving.",
         icon: "/Frame 36.png"
@@ -44,7 +49,7 @@ const Qualities = () => {
             </div>
             <div className="flex-1 px-4 lg:px-8">
                 <motion.h2
-                    className="text-4xl lg:text-5xl text-center font-bold text-gray-900 mb-8 lg:mb-16"
+                    className="text-3xl lg:text-4xl text-center font-bold text-gray-900 mb-8 lg:mb-16"
                     initial={{ opacity: 0, y: -20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6 }}
