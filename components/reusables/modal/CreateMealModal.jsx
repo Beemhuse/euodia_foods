@@ -34,7 +34,7 @@ const CreateMealModal = ({ isOpen, onClose, categories, mutate }) => {
     value: category?._id,
     label: category?.title,
   }));
-  
+
   const adminToken = getCookie("admineu_token");
   const [selectedImage, setSelectedImage] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -89,7 +89,7 @@ const CreateMealModal = ({ isOpen, onClose, categories, mutate }) => {
       <div className="flex items-center justify-center min-h-screen">
         <div className="bg-white rounded-lg overflow-hidden shadow-xl max-w-2xl w-full p-6 relative z-50">
           <h2 className="text-xl font-bold mb-4 border-b-2 border-green-600 py-4">Create a New Meal</h2>
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 overflow-y-auto max-h-[75vh]">
             <div className="flex gap-x-6 w-full">
               <div className="w-full">
                 <InputComponent
