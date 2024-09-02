@@ -73,7 +73,6 @@ const EditMealModal = ({ isOpen, onClose, meal, mutate }) => {
       // Make API call to update the meal
       const res = await axios.patch('/api/admin/update-meal', updatedMealData, config);
   
-      console.log(res.data.message);
       toast.success("Meal updated successfully!");
       mutate(); // Refresh the data
   
