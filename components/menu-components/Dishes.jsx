@@ -12,8 +12,20 @@ import { getCookie } from '@/utils/getCookie';
 // Modal Component
 const DishModal = ({ dish, onClose, onAddToCart }) => {
   const formatCurrency = useCurrencyFormatter();
+
+  // Close modal when clicking outside of it
+  const handleOutsideClick = (event) => {
+    if (event.target.id === 'modalOverlay') {
+      onClose();
+    }
+  };
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 md:p-8 bg-black bg-opacity-70">
+    <div
+      id="modalOverlay"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 md:p-8 bg-black bg-opacity-70"
+      onClick={handleOutsideClick}
+    >
       <div className="bg-white rounded-lg w-full max-w-4xl h-auto p-4 sm:p-6 md:p-8 relative">
         <button className="absolute top-4 right-4 text-3xl font-bold text-white md:text-gray-600 lg:text-gray-600" onClick={onClose}>&times;</button>
         <div className="flex flex-col md:flex-row">
@@ -46,6 +58,7 @@ const DishModal = ({ dish, onClose, onAddToCart }) => {
   );
 };
 
+// Fetch content from Sanity
 async function getContent() {
   const query = `*[_type == "dish" && !(_id in path("drafts.*"))] | order(sortOrder asc) {
     _id,
@@ -70,17 +83,17 @@ async function getContent() {
 }
 
 // Main Dishes Component
-// Main Dishes Component
 const Dishes = ({ selectedCategory }) => {
   const [dishes, setDishes] = useState([]);
   const [loading, setLoading] = useState(false);
   const [selectedDish, setSelectedDish] = useState(null);
   const dispatch = useDispatch();
   const formatCurrency = useCurrencyFormatter();
-const userId = getCookie("euodia_user")
+  const userId = getCookie("euodia_user");
+
   const handleAddToCart = (dish) => {
     try {
-      dispatch(addCartItem({ dish, userId: userId}));
+      dispatch(addCartItem({ dish, userId }));
       toast.success("Item added to cart", {
         position: "top-right",
         autoClose: 5000,
@@ -105,14 +118,13 @@ const userId = getCookie("euodia_user")
 
   useEffect(() => {
     const fetchDishes = async () => {
-      setLoading(true)
+      setLoading(true);
       try {
         const fetchedDishes = await getContent();
         setDishes(fetchedDishes);
-        setLoading(false)
-
+        setLoading(false);
       } catch (error) {
-        setLoading(false)
+        setLoading(false);
         toast.error("Failed to load dishes", {
           position: "top-right",
           autoClose: 5000,
@@ -128,10 +140,6 @@ const userId = getCookie("euodia_user")
     fetchDishes();
   }, []);
 
-useEffect(()=>{
-handleDishClick
-}, [selectedCategory])
-
   const handleDishClick = (dish) => {
     setSelectedDish(dish);
   };
@@ -140,7 +148,7 @@ handleDishClick
     setSelectedDish(null);
   };
 
-  // Filter dishes based on the selected category, fallback to empty array if dishes is undefined or null
+  // Filter dishes based on the selected category
   const filteredDishes = dishes?.filter((dish) =>
     dish?.category?.title === selectedCategory
   ) || [];
@@ -148,46 +156,41 @@ handleDishClick
   return (
     <div className="py-12 bg-white">
       <div className="container mx-auto px-4">
-      <div className="grid gap-8 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1">
-  {
-    loading ? (
-      <div className="col-span-full flex justify-center items-center">
-        <div className="w-16 h-16 border-t-4 border-b-4 border-accent rounded-full animate-spin"></div>
-      </div>
-    ) : (
-      filteredDishes.length > 0 ? (
-        filteredDishes.map((dish) => (
-          <div
-            key={dish._id}
-            className="bg-white p-6 rounded-lg shadow-lg cursor-pointer"
-            onClick={() => handleDishClick(dish)}
-          >
-            <div className="relative h-48 mb-4 border-3 border-green-600">
-              <Image
-                src={dish.image.asset.url}
-                alt={dish.title}
-                layout="fill"
-                objectFit="cover"
-                className="rounded-lg"
-              />
+        <div className="grid gap-8 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1">
+          {loading ? (
+            <div className="col-span-full flex justify-center items-center">
+              <div className="w-16 h-16 border-t-4 border-b-4 border-accent rounded-full animate-spin"></div>
             </div>
-            <div className="flex justify-between items-center mb-2">
-              <h3 className="text-xl font-semibold leading-[1.10]">{dish.title}</h3>
-              <p className="text-green-500 text-lg font-bold">{formatCurrency(dish.price)}</p>
-            </div>
-            <p className="text-gray-600 mb-2">{dish.description}</p>
-            <button className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
-              View Details
-            </button>
-          </div>
-        ))
-      ) : (
-        <p className="col-span-full text-center">No dishes available in this category.</p>
-      )
-    )
-  }
-</div>
-
+          ) : filteredDishes.length > 0 ? (
+            filteredDishes.map((dish) => (
+              <div
+                key={dish._id}
+                className="bg-white p-6 rounded-lg shadow-lg cursor-pointer"
+                onClick={() => handleDishClick(dish)}
+              >
+                <div className="relative h-48 mb-4 border-3 border-green-600">
+                  <Image
+                    src={dish.image.asset.url}
+                    alt={dish.title}
+                    layout="fill"
+                    objectFit="cover"
+                    className="rounded-lg"
+                  />
+                </div>
+                <div className="flex justify-between items-center mb-2">
+                  <h3 className="text-xl font-semibold leading-[1.10]">{dish.title}</h3>
+                  <p className="text-green-500 text-lg font-bold">{formatCurrency(dish.price)}</p>
+                </div>
+                <p className="text-gray-600 mb-2">{dish.description}</p>
+                <button className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+                  View Details
+                </button>
+              </div>
+            ))
+          ) : (
+            <p className="col-span-full text-center">No dishes available in this category.</p>
+          )}
+        </div>
       </div>
       {selectedDish && (
         <DishModal
