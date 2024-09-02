@@ -11,7 +11,29 @@ export async function POST(req) {
 
     // Retrieve the admin by email
     const admin = await getAdminByEmail(email);
-    if (!admin || admin.role !== 'admin') {
+    if (!admin) {
+      return new Response(
+        JSON.stringify({ error: 'User does not exist' }),
+        {
+          status: 404,
+          headers: { 'Content-Type': 'application/json' },
+        }
+      );
+    }
+
+    // Check if the user is verified
+    if (!admin.isVerified) {
+      return new Response(
+        JSON.stringify({ error: 'User is not verified' }),
+        {
+          status: 403,
+          headers: { 'Content-Type': 'application/json' },
+        }
+      );
+    }
+
+    // Check if the user has an admin role
+    if (admin.role !== 'admin') {
       return new Response(
         JSON.stringify({ error: 'Invalid credentials' }),
         {
