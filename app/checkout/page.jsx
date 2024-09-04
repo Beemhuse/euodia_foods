@@ -1,4 +1,3 @@
-
 "use client";
 import HomeLayout from "@/components/layout/HomeLayout";
 import { clearCart } from "@/store/reducers/cartReducer";
@@ -12,21 +11,30 @@ import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { getCookie } from "@/utils/getCookie";
 import LoadingScreen from "@/components/reusables/LoadingScreen";
+import { useRouter } from "next/navigation"; // Import useRouter for redirection
 
 const Checkout = () => {
   const { cartItems } = useSelector((state) => state.cart);
   const formatCurrency = useCurrencyFormatter();
   const [serviceFees, setServiceFees] = useState([]);
   const [selectedServiceFee, setSelectedServiceFee] = useState(0);
-
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
+  const router = useRouter(); // Initialize the router
+
   const {
     register,
     handleSubmit,
     watch,
     formState: { errors },
   } = useForm();
+
+  // Redirect to /menu if cart is empty
+  useEffect(() => {
+    if (cartItems.length === 0) {
+      router.push('/menu'); // Redirect to /menu if the cart is empty
+    }
+  }, [cartItems, router]);
 
   // Watch the selected location
   const selectedLocation = watch("serviceFee");
@@ -272,109 +280,58 @@ const Checkout = () => {
                       <option value="">Select your closest Delivery area</option>
                       {serviceFees.map((fee) => (
                         <option key={fee._id} value={fee._id}>
-                          {fee.location}
+                          {fee.location} - {formatCurrency(fee.fee)}
                         </option>
                       ))}
                     </select>
-                    {errors.location && (
+                    {errors.serviceFee && (
                       <p className="text-red-600">{errors.serviceFee.message}</p>
                     )}
                   </div>
-                  <div className="mb-4">
-                    <label
-                      className="block text-sm font-medium text-gray-700"
-                      htmlFor="orderNotes"
+
+                  <div className="text-right">
+                    <button
+                      type="submit"
+                      className="px-6 py-2 text-white bg-blue-600 rounded-md hover:bg-blue-700"
                     >
-                      ORDER NOTES (OPTIONAL)
-                    </label>
-                    <textarea
-                      id="orderNotes"
-                      {...register("orderNotes")}
-                      className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                    />
+                      Place Order
+                    </button>
                   </div>
-                  <button
-                    type="submit"
-                    className="w-full bg-green-600 text-white p-2 rounded-md"
-                  >
-                    {loading ? "loading..." : "Place Order"}
-                  </button>
                 </form>
               </div>
 
-              {/* Order details */}
               <div>
-                <h2 className="text-2xl font-bold mb-6">Your Order</h2>
-                <div className="border p-4 rounded-lg">
-                  {/* Order Summary */}
-                  <div>
-                    <h2 className="text-2xl font-bold mb-6">Your Order</h2>
-                    <div className="border p-4 rounded-lg">
-                      <div className="mb-4">
-                        {cartItems.map((item) => (
-                          <div key={item._id} className="flex justify-between">
-                            <span>
-                              {item.title} x {item.quantity}
-                            </span>
-                            <span>
-                              ₦{(item.price * item.quantity).toLocaleString()}
-                            </span>
-                          </div>
-                        ))}
+                <h2 className="text-2xl font-bold mb-6">Order Summary</h2>
+                <div className="space-y-4">
+                  {/* Render Cart Items */}
+                  {cartItems.map((item, index) => (
+                    <div key={index} className="flex justify-between">
+                      <div>
+                        <h3 className="text-sm font-medium">{item.name}</h3>
+                        <p className="text-sm text-gray-500">
+                          {item.quantity} x {formatCurrency(item.price)}
+                        </p>
                       </div>
-                      <hr />
-                      <div className="my-4">
-                        <div className="flex justify-between">
-                          <span>Subtotal:</span>
-                          <span>₦{calculateSubtotal().toLocaleString()}</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span>Service Fee:</span>
-                          <span>₦{selectedServiceFee}</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span>VAT:</span>
-                          <span>
-                            {formatCurrency(vat.toFixed(2))}
-                          </span>
-                        </div>
-                        <div className="flex justify-between font-bold">
-                          <span>Total:</span>
-                          <span>{calculateTotal().toLocaleString()}</span>
-                        </div>
-                      </div>
-                      <hr />
-
-                      <div className="my-4">
-                        <label className="block text-sm font-medium text-gray-700">
-                          Payment Method
-                        </label>
-                        <div className="flex items-center justify-between mb-4">
-                          <div>
-                            <input
-                              type="radio"
-                              name="paymentMethod"
-                              className="mr-2"
-                            />
-                            <span>Card</span>
-                          </div>
-                          <img
-                            src="/paystack.png"
-                            alt="Paystack"
-                            className=" "
-                          />
-
-                        </div>
-                        {/* <div className="flex items-center mb-4">
-                      <input
-                        type="radio"
-                        name="paymentMethod"
-                        className="mr-2"
-                      />
-                      <span>Cash on delivery</span>
-                    </div> */}
-                      </div>
+                      <div>{formatCurrency(item.price * item.quantity)}</div>
                     </div>
+                  ))}
+                  <hr />
+                  <div className="flex justify-between font-bold">
+                    <div>Subtotal</div>
+                    <div>{formatCurrency(subtotal)}</div>
+                  </div>
+                  <div className="flex justify-between font-bold">
+                    <div>VAT (7.5%)</div>
+                    <div>{formatCurrency(vat)}</div>
+                  </div>
+                  <div className="flex justify-between font-bold">
+                    <div>Service Fee</div>
+                    <div>{formatCurrency(selectedServiceFee)}</div>
+                  </div>
+                  <hr />
+                  <div className="flex justify-between text-xl font-bold">
+                    <div>Total</div>
+                    <div>{formatCurrency(calculateTotal())}</div>
                   </div>
                 </div>
               </div>
@@ -383,7 +340,6 @@ const Checkout = () => {
         </div>
       </div>
 
-      {/* Conditionally render LoadingScreen */}
       {loading && <LoadingScreen />}
     </HomeLayout>
   );
