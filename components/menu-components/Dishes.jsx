@@ -8,6 +8,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import useCurrencyFormatter from '@/hooks/useCurrencyFormatter';
 import { getCookie } from '@/utils/getCookie';
+import Pagination from '../reusables/Pagination';
 
 // Modal Component
 const DishModal = ({ dish, onClose, onAddToCart }) => {
@@ -31,7 +32,7 @@ const DishModal = ({ dish, onClose, onAddToCart }) => {
         <div className="flex flex-col md:flex-row">
           <div className="w-full md:w-1/2 mb-4 md:mb-0 md:pr-4">
             <Image
-              src={dish.image.asset.url}
+              src={dish?.image?.asset?.url}
               alt={dish.title}
               layout="responsive"
               width={500}
@@ -87,6 +88,8 @@ const Dishes = ({ selectedCategory }) => {
   const [dishes, setDishes] = useState([]);
   const [loading, setLoading] = useState(false);
   const [selectedDish, setSelectedDish] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1); // State for current page
+  const itemsPerPage = 9; // Define the number of items per page
   const dispatch = useDispatch();
   const formatCurrency = useCurrencyFormatter();
   const userId = getCookie("euodia_user");
@@ -107,11 +110,6 @@ const Dishes = ({ selectedCategory }) => {
       toast.error(err.message || "Failed to add item to cart", {
         position: "top-right",
         autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
       });
     }
   };
@@ -128,11 +126,6 @@ const Dishes = ({ selectedCategory }) => {
         toast.error("Failed to load dishes", {
           position: "top-right",
           autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
         });
       }
     };
@@ -148,10 +141,18 @@ const Dishes = ({ selectedCategory }) => {
     setSelectedDish(null);
   };
 
-  // Filter dishes based on the selected category
+  // Handle page change
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
+  // Filter dishes based on the selected category and apply pagination
   const filteredDishes = dishes?.filter((dish) =>
     dish?.category?.title === selectedCategory
   ) || [];
+
+  const totalPages = Math.ceil(filteredDishes?.length / itemsPerPage);
+  const displayedDishes = filteredDishes?.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   return (
     <div className="py-12 bg-white">
@@ -161,8 +162,8 @@ const Dishes = ({ selectedCategory }) => {
             <div className="col-span-full flex justify-center items-center">
               <div className="w-16 h-16 border-t-4 border-b-4 border-accent rounded-full animate-spin"></div>
             </div>
-          ) : filteredDishes.length > 0 ? (
-            filteredDishes.map((dish) => (
+          ) : displayedDishes.length > 0 ? (
+            displayedDishes.map((dish) => (
               <div
                 key={dish._id}
                 className="bg-white p-6 rounded-lg shadow-lg cursor-pointer"
@@ -170,7 +171,7 @@ const Dishes = ({ selectedCategory }) => {
               >
                 <div className="relative h-48 mb-4 border-3 border-green-600">
                   <Image
-                    src={dish.image.asset.url}
+                    src={dish?.image?.asset?.url}
                     alt={dish.title}
                     layout="fill"
                     objectFit="cover"
@@ -178,7 +179,7 @@ const Dishes = ({ selectedCategory }) => {
                   />
                 </div>
                 <div className="flex justify-between items-center mb-2">
-                  <h3 className="text-xl font-semibold leading-[1.10]">{dish.title}</h3>
+                  <h3 className="text-xl font-semibold sentence leading-[1.10]">{dish.title}</h3>
                   <p className="text-green-500 text-lg font-bold">{formatCurrency(dish.price)}</p>
                 </div>
                 <p className="text-gray-600 mb-2">{dish.description}</p>
@@ -190,6 +191,15 @@ const Dishes = ({ selectedCategory }) => {
           ) : (
             <p className="col-span-full text-center">No dishes available in this category.</p>
           )}
+        </div>
+
+        {/* Pagination Component */}
+        <div className="my-6 flex justify-center">
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+          />
         </div>
       </div>
       {selectedDish && (
