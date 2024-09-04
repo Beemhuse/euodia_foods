@@ -7,7 +7,7 @@ export async function PATCH(req) {
   try {
     // Parse the request body
     const body = await req.json();
-    const { mealId, title, description, price, status, selectedImage, existingImageAssetId } = body;
+    const { mealId, title, description, price, status, image, existingImageAssetId } = body;
 
     // Check if the user is an admin (authentication/authorization)
     if (!isAdmin(req.headers)) {
@@ -18,29 +18,16 @@ export async function PATCH(req) {
       return NextResponse.json({ error: 'Meal ID is required' }, { status: 400 });
     }
 
-    let imageAssetId = existingImageAssetId; // Use existing image ID if available
 
-    // Only upload a new image if the user selected a new one
-    if (selectedImage && typeof selectedImage !== 'string') {
-      imageAssetId = await uploadImageToSanity(selectedImage);
-    }
 
     const updatedMeal = {
       _type: 'dish', // Ensure this matches the type in your schema
       title,
       description,
       price: Number(price),
-      status: status === "true", // Convert string "true"/"false" to a boolean
-      // Only include image if it exists (either new or existing one)
-      ...(imageAssetId && {
-        image: {
-          _type: 'image',
-          asset: {
-            _type: 'reference',
-            _ref: imageAssetId,
-          },
-        },
-      }),
+      status, 
+      image,
+
     };
 
     // Update the meal in Sanity

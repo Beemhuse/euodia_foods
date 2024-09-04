@@ -13,7 +13,10 @@ import { toast } from "react-toastify";
 const mealSchema = yup.object().shape({
   title: yup.string().required("Title is required"),
   description: yup.string().required("Description is required"),
-  price: yup.number().required("Price is required").positive("Price must be a positive number"),
+  price: yup
+    .number()
+    .required("Price is required")
+    .positive("Price must be a positive number"),
   status: yup.string().required("Status is required"),
 });
 
@@ -23,12 +26,19 @@ const statusOptions = [
 ];
 
 const EditMealModal = ({ isOpen, onClose, meal, mutate }) => {
-  const { register, handleSubmit, reset, setValue, formState: { errors } } = useForm({
+  const {
+    register,
+    handleSubmit,
+    reset,
+    setValue,
+    formState: { errors },
+  } = useForm({
     resolver: yupResolver(mealSchema),
   });
-  const token = getCookie('admineu_token'); // Retrieve the token
+  const token = getCookie("admineu_token"); // Retrieve the token
 
   const [selectedImage, setSelectedImage] = useState(null);
+  const [displayImage, setDisplayImage] = useState(null); // State to handle the image to be displayed
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -37,13 +47,14 @@ const EditMealModal = ({ isOpen, onClose, meal, mutate }) => {
       setValue("description", meal.description);
       setValue("price", meal.price);
       setValue("status", meal.status);
-      setSelectedImage(meal.image?.asset?.url || null);
+      setDisplayImage(meal.image?.asset?.url || null); // Display the existing image URL
     }
   }, [meal, setValue]);
 
   const handleImageChange = (event) => {
     const file = event.target.files[0];
     setSelectedImage(file);
+    setDisplayImage(URL.createObjectURL(file)); // Update the displayed image with the newly selected image
   };
 
   const onSubmit = async (data) => {
@@ -54,28 +65,34 @@ const EditMealModal = ({ isOpen, onClose, meal, mutate }) => {
           Authorization: `Bearer ${token}`, // Set the Bearer token
         },
       };
-      // Upload the new image if selected
-      let imageAssetId = meal.image?.asset?._ref;
-      if (selectedImage && typeof selectedImage !== 'string') {
-        imageAssetId = await uploadImageToSanity(selectedImage);
-      }
-  
-      const updatedMealData = {
+
+      // Check if a new image is selected, otherwise do not include the image field
+      let updatedMealData = {
         mealId: meal._id,
         title: data.title,
         description: data.description,
         price: data.price,
         status: data.status,
-        selectedImage: selectedImage, // Pass selected image if new
-        existingImageAssetId: imageAssetId, // Pass existing image ID if not new
       };
-  
+
+      if (selectedImage && typeof selectedImage !== "string") {
+        const imageAssetId = await uploadImageToSanity(selectedImage); // Upload new image if it is a file object
+        updatedMealData.image = {
+          _type: "image",
+          asset: { _type: "reference", _ref: imageAssetId },
+        };
+      }
+
       // Make API call to update the meal
-      const res = await axios.patch('/api/admin/update-meal', updatedMealData, config);
-  
+      const res = await axios.patch(
+        "/api/admin/update-meal",
+        updatedMealData,
+        config
+      );
+
       toast.success("Meal updated successfully!");
       mutate(); // Refresh the data
-  
+
       reset(); // Reset the form after successful submission
       setSelectedImage(null); // Clear the selected image
       onClose(); // Close the modal
@@ -86,11 +103,15 @@ const EditMealModal = ({ isOpen, onClose, meal, mutate }) => {
       setLoading(false);
     }
   };
+
   if (!isOpen) return null;
 
   return (
     <div className={`fixed inset-0 z-50 ${isOpen ? "block" : "hidden"}`}>
-      <div className="fixed inset-0 bg-black opacity-50" onClick={onClose}></div>
+      <div
+        className="fixed inset-0 bg-black opacity-50"
+        onClick={onClose}
+      ></div>
       <div className="flex items-center justify-center min-h-screen">
         <div className="bg-white rounded-lg overflow-hidden shadow-xl max-w-2xl w-full p-6 relative z-50">
           <h2 className="text-xl font-bold mb-4">Edit Meal</h2>
@@ -138,9 +159,9 @@ const EditMealModal = ({ isOpen, onClose, meal, mutate }) => {
                 onChange={handleImageChange}
                 className="w-full py-1 px-3 outline-none bg-inherit rounded-md border border-accent text-sm"
               />
-              {selectedImage && (
+              {displayImage && (
                 <img
-                  src={typeof selectedImage === 'string' ? selectedImage : URL.createObjectURL(selectedImage)}
+                  src={displayImage}
                   alt="Selected"
                   className="mt-2 h-32 w-32 object-cover rounded-md"
                 />

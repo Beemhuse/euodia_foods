@@ -59,7 +59,8 @@ export async function getAdminByEmail(email) {
     name,
     email,
     password,
-    role
+    role,
+    isVerified
   }`;
   return client.fetch(query, { email });
 }

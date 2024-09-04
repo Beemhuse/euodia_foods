@@ -7,6 +7,7 @@ import SelectComponent from "@/components/reusables/input/SelectComponent";
 import Button from "@/components/reusables/buttons/Button";
 import { getCookie } from "@/utils/getCookie";
 import { uploadImageToSanity } from "@/utils/sanity/uploadImageToSanity";
+import { toast } from "react-toastify";
 
 // Define the validation schema using yup
 const mealSchema = yup.object().shape({
@@ -53,6 +54,12 @@ const CreateMealModal = ({ isOpen, onClose, categories, mutate }) => {
       }
 
       // Convert the status to a boolean value
+      if(imageAssetId === ""){
+        toast.error("upload image");
+        setLoading(false);
+        return
+
+      }
       const formData = {
         ...data,
         image: imageAssetId ? { _type: 'image', asset: { _type: 'reference', _ref: imageAssetId } } : null,
@@ -68,6 +75,8 @@ const CreateMealModal = ({ isOpen, onClose, categories, mutate }) => {
       });
 
       if (response.ok) {
+        toast.error("Dish created successfully");
+
         mutate();  // Refresh data after creation
         reset();  // Reset the form
         setSelectedImage(null);  // Clear the selected image

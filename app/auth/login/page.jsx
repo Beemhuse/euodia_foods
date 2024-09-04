@@ -49,11 +49,6 @@ export default function Login() {
       toast.success("Welcome back Admin", {
         position: "top-right",
         autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
       });
       router.push("/admin");
     } catch (error) {
@@ -61,11 +56,6 @@ export default function Login() {
       toast.error(errMsg, {
         position: "top-right",
         autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
       });
       setLoading(false);
     }

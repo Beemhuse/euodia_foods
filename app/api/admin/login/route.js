@@ -20,7 +20,6 @@ export async function POST(req) {
         }
       );
     }
-
     // Check if the user is verified
     if (!admin.isVerified) {
       return new Response(
