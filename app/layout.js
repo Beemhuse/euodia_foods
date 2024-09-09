@@ -7,13 +7,13 @@ import "react-toastify/dist/ReactToastify.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: "Euodia Whole Foods",
+  title: "Euodia Whole Foods - Healthy, Therapeutic Meals for Wellness and Longevity",
   description:
-    "Welcome to Euodia Whole foods, get your next meal with just a click of a button",
+  "Discover Euodia Whole Foods: your partner for wellness and longevity with sustainably sourced, great-tasting, healthy, and therapeutic meals. Order your next meal with a click!",
   openGraph: {
-    title: "Euodia Whole Foods",
+    title: "Euodia Whole Foods - Healthy, Therapeutic Meals for Wellness and Longevity",
     description:
-      "Welcome to Euodia Whole foods, get your next meal with just a click of a button",
+    "Discover Euodia Whole Foods: your partner for wellness and longevity with sustainably sourced, great-tasting, healthy, and therapeutic meals. Order your next meal with a click!",
     url: "https://euodiawholefoods.com",
     siteName: "Euodia Services",
     images: [
