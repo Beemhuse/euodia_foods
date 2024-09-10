@@ -15,14 +15,14 @@ const mealSchema = yup.object().shape({
   description: yup.string().required("Description is required"),
   price: yup.number().required("Price is required").positive("Price must be a positive number"),
   category: yup.string().required("Category is required"),
-  status: yup.boolean().required("Status is required"),
+  // status: yup.boolean().required("Status is required"),
 });
 
 // Options for the status select dropdown
-const statusOptions = [
-  { value: true, label: "Active" },
-  { value: false, label: "Inactive" },
-];
+// const statusOptions = [
+//   { value: true, label: "Active" },
+//   { value: false, label: "Inactive" },
+// ];
 
 const CreateMealModal = ({ isOpen, onClose, categories, mutate }) => {
   // Form management using react-hook-form
@@ -75,7 +75,7 @@ const CreateMealModal = ({ isOpen, onClose, categories, mutate }) => {
       });
 
       if (response.ok) {
-        toast.error("Dish created successfully");
+        toast.success("Dish created successfully");
 
         mutate();  // Refresh data after creation
         reset();  // Reset the form
@@ -132,13 +132,13 @@ const CreateMealModal = ({ isOpen, onClose, categories, mutate }) => {
               error={errors.category?.message}
               register={register}
             />
-            <SelectComponent
+            {/* <SelectComponent
               label="Status"
               options={statusOptions}
               name="status"
               error={errors.status?.message}
               register={register}
-            />
+            /> */}
             <div className="grid">
               <p className="font-medium text-sm">Image</p>
               <input

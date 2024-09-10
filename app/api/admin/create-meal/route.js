@@ -37,7 +37,7 @@ export async function POST(req) {
       description,
       price: Number(price), // Ensure price is a number
       category: { _type: 'reference', _ref: category },
-      status, // Use the boolean value for status
+      status: true, // Use the boolean value for status
       sortOrder,
       image,
     });

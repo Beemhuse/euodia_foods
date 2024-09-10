@@ -169,13 +169,13 @@ const Dishes = ({ selectedCategory }) => {
                 className="bg-white p-6 rounded-lg shadow-lg cursor-pointer"
                 onClick={() => handleDishClick(dish)}
               >
-                <div className="relative h-48 mb-4 border-3 border-green-600">
+                <div className="relative h-60 mb-4 border-3 border-green-600">
                   <Image
                     src={dish?.image?.asset?.url}
                     alt={dish.title}
                     layout="fill"
                     objectFit="cover"
-                    className="rounded-lg"
+                    className="rounded-lg aspect-square"
                   />
                 </div>
                 <div className="flex justify-between items-center mb-2">

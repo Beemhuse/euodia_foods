@@ -69,6 +69,7 @@ export default function Page() {
   );
   const totalPages = Math.ceil(filteredDishes.length / itemsPerPage);
   const displayedDishes = filteredDishes.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+console.log(categories);
 
   return (
     <HomeLayout>
