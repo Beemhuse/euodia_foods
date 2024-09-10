@@ -342,6 +342,9 @@ const Checkout = () => {
 
       {loading && <LoadingScreen />}
     </HomeLayout>
+
+
+  
   );
 };
 
