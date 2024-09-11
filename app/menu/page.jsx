@@ -7,11 +7,8 @@ import { client } from '@/utils/sanity/client';
 import Pagination from '@/components/reusables/Pagination';
 
 export default function Page() {
-  const [dishes, setDishes] = useState([]);
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
-  const [currentPage, setCurrentPage] = useState(1); // State for the current page
-  const itemsPerPage = 4; // Number of items per page
 
   useEffect(() => {
     async function getDishes() {
@@ -33,7 +30,6 @@ export default function Page() {
         }`;
         const result = await client.fetch(query);
 
-        setDishes(result);
 
         // Extract unique categories from the fetched dishes
         const uniqueCategories = Array.from(new Set(result.map(dish => dish.category._id)))
@@ -56,20 +52,9 @@ export default function Page() {
 
   const handleCategorySelect = (categoryTitle) => {
     setSelectedCategory(categoryTitle);
-    setCurrentPage(1); // Reset to first page when changing categories
   };
+  
 
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
-  };
-
-  // Filter dishes by selected category and apply pagination
-  const filteredDishes = dishes.filter(dish => 
-    !selectedCategory || dish.category.title === selectedCategory
-  );
-  const totalPages = Math.ceil(filteredDishes.length / itemsPerPage);
-  const displayedDishes = filteredDishes.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
-console.log(categories);
 
   return (
     <HomeLayout>
@@ -80,7 +65,7 @@ console.log(categories);
         <div className='container mx-auto'>
           <Category onCategorySelect={handleCategorySelect} categories={categories} />
         </div>
-        <Dishes selectedCategory={selectedCategory} dishes={displayedDishes} />
+        <Dishes selectedCategory={selectedCategory}  />
 
       
       </div>

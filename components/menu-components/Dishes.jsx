@@ -90,6 +90,8 @@ const Dishes = ({ selectedCategory }) => {
   const [selectedDish, setSelectedDish] = useState(null);
   const [currentPage, setCurrentPage] = useState(1); // State for current page
   const itemsPerPage = 9; // Define the number of items per page
+  const [searchQuery, setSearchQuery] = useState(""); // State for the search input
+
   const dispatch = useDispatch();
   const formatCurrency = useCurrencyFormatter();
   const userId = getCookie("euodia_user");
@@ -136,6 +138,10 @@ const Dishes = ({ selectedCategory }) => {
   const handleDishClick = (dish) => {
     setSelectedDish(dish);
   };
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value.toLowerCase());
+    setCurrentPage(1); // Reset to the first page on search change
+  };
 
   const handleCloseModal = () => {
     setSelectedDish(null);
@@ -146,10 +152,14 @@ const Dishes = ({ selectedCategory }) => {
     setCurrentPage(page);
   };
 
-  // Filter dishes based on the selected category and apply pagination
-  const filteredDishes = dishes?.filter((dish) =>
-    dish?.category?.title === selectedCategory
-  ) || [];
+  
+  // Combine category and search filtering
+  const filteredDishes = dishes.filter((dish) =>
+    (!selectedCategory || dish.category.title === selectedCategory) &&
+    (dish.title.toLowerCase().includes(searchQuery) ||
+     dish.description.toLowerCase().includes(searchQuery) ||
+     dish.price.toString().includes(searchQuery))
+  );
 
   const totalPages = Math.ceil(filteredDishes?.length / itemsPerPage);
   const displayedDishes = filteredDishes?.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
@@ -157,6 +167,14 @@ const Dishes = ({ selectedCategory }) => {
   return (
     <div className="py-12 bg-white">
       <div className="container mx-auto px-4">
+          {/* Search input */}
+          <input
+          type="text"
+          placeholder="Search dishes..."
+          value={searchQuery}
+          onChange={handleSearchChange}
+          className="w-full px-4 py-2 mb-4 text-gray-700 bg-white border rounded-md focus:border-green-500 focus:ring focus:ring-green-300 focus:ring-opacity-40"
+        />
         <div className="grid gap-8 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1">
           {loading ? (
             <div className="col-span-full flex justify-center items-center">

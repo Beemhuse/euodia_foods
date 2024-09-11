@@ -33,8 +33,8 @@ const sideData = [
   },
   {
     icon: <MdOutlineLocationOn />,
-    title: "Location",
-    link: "/admin/location",
+    title: "Miscellaneous",
+    link: "/admin/misc",
   },
   {
     icon: <GrTransaction />,

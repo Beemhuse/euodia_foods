@@ -17,6 +17,7 @@ export default function BestSellers() {
           title,
           image {
             asset->{
+            _id,
               url
             }
           }, 
@@ -25,7 +26,7 @@ export default function BestSellers() {
       }`;
 
       const results = await client.fetch(query);
-
+console.log(results)
       // Aggregate sales data for each dish
       const dishSales = {};
       results?.forEach((order) => {
@@ -70,6 +71,7 @@ export default function BestSellers() {
   // Function to add a dish to the Best Selling Dishes document
   const addToBestSellers = async (meal) => {
     const exists = await checkIfExists(meal);
+console.log(meal);
 
     if (exists) {
       toast.error(`${meal.meal} is already in Best Selling Dishes.`);
@@ -79,9 +81,17 @@ export default function BestSellers() {
     const newBestSeller = {
       _type: "bestSellingDish",
       title: meal.meal,
-      image: meal.img,
+      image: {
+        _type: 'image',
+        asset: {
+          _type: 'reference',
+          _ref: meal.img.asset._id  // Assuming meal.img.asset._id is where the asset ID is stored
+        }
+      },
       total_sales: meal.total_sales,
       total_amount: meal.total_amount,
+      isActive: true,
+
     };
 
     try {

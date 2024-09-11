@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import { getCookie } from "@/utils/getCookie";
 import { useServiceFees } from '@/hooks/swr/useServiceFee';
 import useCurrencyFormatter from '@/hooks/useCurrencyFormatter';
+import PopularMeals from '@/components/reusables/category/PopularMeals';
 
 export default function AdminPage() {
   const adminToken = getCookie("admineu_token");
@@ -63,6 +64,12 @@ export default function AdminPage() {
             className={`px-4 py-2 border-b-2 ${activeTab === 'serviceFees' ? 'border-green-600 text-black-600' : 'border-transparent text-gray-600 hover:text-gray-800'}`}
           >
             Service Fees
+          </button>
+          <button
+            onClick={() => setActiveTab('popularMeals')}
+            className={`px-4 py-2 border-b-2 ${activeTab === 'popularMeals' ? 'border-green-600 text-black-600' : 'border-transparent text-gray-600 hover:text-gray-800'}`}
+          >
+            Popular Meals
           </button>
         </nav>
       </div>
@@ -136,6 +143,10 @@ export default function AdminPage() {
               </div>
             )}
           </div>
+        )}
+
+{activeTab === 'popularMeals' && (
+          <PopularMeals />
         )}
       </div>
     </div>
