@@ -7,7 +7,6 @@ import Button from "@/components/reusables/buttons/Button";
 import Image from "next/image";
 import Typography from "@/components/reusables/typography/Typography";
 import CreateCategoryModal from "@/components/reusables/modal/CreateCategoryModal";
-// import Pagination from "@/components/reusables/pagination/Pagination"; // Import your Pagination component
 import { client } from "@/utils/sanity/client";
 import Pagination from "@/components/reusables/Pagination";
 
