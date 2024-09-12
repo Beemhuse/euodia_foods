@@ -273,7 +273,7 @@ const Checkout = () => {
                     <select
                       id="serviceFee"
                       {...register("serviceFee", {
-                        required: "Service Area is required",
+                        required: "Delivery Area is required",
                       })}
                       className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                     >
@@ -289,10 +289,10 @@ const Checkout = () => {
                     )}
                   </div>
 
-                  <div className="text-right">
+                  <div className="text-center">
                     <button
                       type="submit"
-                      className="px-6 py-2 text-white bg-blue-600 rounded-md hover:bg-blue-700"
+                      className="w-full py-2  text-white bg-green-600 rounded-md hover:bg-green-700"
                     >
                       Place Order
                     </button>
@@ -307,8 +307,8 @@ const Checkout = () => {
                   {cartItems.map((item, index) => (
                     <div key={index} className="flex justify-between">
                       <div>
-                        <h3 className="text-sm font-medium">{item.name}</h3>
-                        <p className="text-sm text-gray-500">
+                        <p className="text-sm font-medium">{item.name}</p>
+                        <p className="text-sm ">
                           {item.quantity} x {formatCurrency(item.price)}
                         </p>
                       </div>
@@ -316,20 +316,20 @@ const Checkout = () => {
                     </div>
                   ))}
                   <hr />
-                  <div className="flex justify-between font-bold">
+                  <div className="flex justify-between font-semibold">
                     <div>Subtotal</div>
                     <div>{formatCurrency(subtotal)}</div>
                   </div>
-                  <div className="flex justify-between font-bold">
+                  <div className="flex justify-between font-semibold">
                     <div>VAT (7.5%)</div>
                     <div>{formatCurrency(vat)}</div>
                   </div>
-                  <div className="flex justify-between font-bold">
+                  <div className="flex justify-between font-semibold">
                     <div>Service Fee</div>
                     <div>{formatCurrency(selectedServiceFee)}</div>
                   </div>
                   <hr />
-                  <div className="flex justify-between text-xl font-bold">
+                  <div className="flex justify-between text-base font-semibold">
                     <div>Total</div>
                     <div>{formatCurrency(calculateTotal())}</div>
                   </div>
