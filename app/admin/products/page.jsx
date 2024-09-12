@@ -120,7 +120,7 @@ export default function Page() {
 
       {/* Category and Status Filters */}
       <div className="flex flex-wrap gap-2 mb-6">
-        <button className={`px-4 py-2 ${selectedCategory === "All" ? "bg-green-500 text-white" : ""}`} onClick={() => setSelectedCategory("All")}>
+        <button className={`px-4 py-2 ${selectedCategory === "All" ? "bg-green-500 text-white" : "capitalize"}`} onClick={() => setSelectedCategory("All")}>
           All
         </button>
         {uniqueCategories?.map((category) => (
