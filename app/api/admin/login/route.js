@@ -58,7 +58,7 @@ export async function POST(req) {
     const token = jwt.sign(
       { userId: admin._id, role: 'admin' },
       secretKey,
-      { expiresIn: '5min' }
+      { expiresIn: '5h' }
     );
 
     return new Response(
