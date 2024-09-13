@@ -10,7 +10,7 @@ const quality = [
     },
     {
         title: "Healthy and Whole Foods",
-        description: "Tasty and organic meals made without SMG or preservatives.",
+        description: "Tasty and organic meals made without MSG or preservatives.",
         icon: "/Frame 37.png"
     },
     {
