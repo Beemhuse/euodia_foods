@@ -82,7 +82,7 @@ const ContactUs = () => {
                   Fill out our form and we will contact you within 24 hours.
                 </p>
                 <p className="mb-2 text-gray-700 font-medium">
-                  Email: euodiawholefoods@gmail.com
+                  Email: contact.euodiawholefoods@gmail.com
                 </p>
                 <hr className="my-6 border-gray-200" />
                 <h3 className="text-2xl font-bold mb-4 text-green-600">
