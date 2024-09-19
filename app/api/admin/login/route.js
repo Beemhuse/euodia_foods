@@ -3,10 +3,9 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { getAdminByEmail } from '@/utils/sanity/client';
 
-const secretKey = process.env.JWT_SECRET_KEY;
+const secretKey = process.env.NEXT_PRIVATE_JWT_SECRET_KEY;
 
 export async function POST(req) {
-  console.log(secretKey);
   try {
     const { email, password } = await req.json();
 
@@ -43,10 +42,6 @@ export async function POST(req) {
       );
     }
 
-    console.log('JWT Secret Key:', secretKey);
-    if (!secretKey) {
-      throw new Error("JWT secret key is missing");
-    }
     // Validate password
     const passwordMatch = await bcrypt.compare(password, admin.password);
     if (!passwordMatch) {
