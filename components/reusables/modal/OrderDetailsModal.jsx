@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import Image from "next/image";
 
 const OrderDetailsModal = ({ order, onClose }) => {
   if (!order) return null;
@@ -58,7 +59,7 @@ const OrderDetailsModal = ({ order, onClose }) => {
           <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {order.products.map((product, index) => (
               <li key={index} className="p-4 bg-gray-50 rounded-lg shadow flex items-center">
-                <img
+                <Image
                   src={product.imageUrl} // Assuming the image URL is provided in product object
                   alt={product.title}
                   className="w-16 h-16 object-cover rounded-md mr-4"

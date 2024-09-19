@@ -8,6 +8,7 @@ import Button from "@/components/reusables/buttons/Button";
 import { getCookie } from "@/utils/getCookie";
 import { uploadImageToSanity } from "@/utils/sanity/uploadImageToSanity";
 import { toast } from "react-toastify";
+import Image from "next/image";
 
 // Define the validation schema using yup
 const mealSchema = yup.object().shape({
@@ -148,7 +149,7 @@ const CreateMealModal = ({ isOpen, onClose, categories, mutate }) => {
                 className="w-full py-1 px-3 outline-none bg-inherit rounded-md border border-accent text-sm"
               />
               {selectedImage && (
-                <img
+                <Image
                   src={URL.createObjectURL(selectedImage)}
                   alt="Selected"
                   className="mt-2 h-32 w-32 object-cover rounded-md"

@@ -9,6 +9,7 @@ import { uploadImageToSanity } from "@/utils/sanity/uploadImageToSanity";
 import { getCookie } from "@/utils/getCookie";
 import axios from "axios";
 import { toast } from "react-toastify";
+import Image from "next/image";
 
 const mealSchema = yup.object().shape({
   title: yup.string().required("Title is required"),
@@ -160,7 +161,7 @@ const EditMealModal = ({ isOpen, onClose, meal, mutate }) => {
                 className="w-full py-1 px-3 outline-none bg-inherit rounded-md border border-accent text-sm"
               />
               {displayImage && (
-                <img
+                <Image
                   src={displayImage}
                   alt="Selected"
                   className="mt-2 h-32 w-32 object-cover rounded-md"

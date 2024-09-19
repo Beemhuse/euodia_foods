@@ -21,13 +21,14 @@ const Hero = () => {
       });
     }, options);
 
-    if (videoRef.current) {
-      observer.observe(videoRef.current);
+    const currentVideoRef = videoRef.current;
+    if (currentVideoRef) {
+      observer.observe(currentVideoRef);
     }
 
     return () => {
-      if (videoRef.current) {
-        observer.unobserve(videoRef.current);
+      if (currentVideoRef) {
+        observer.unobserve(currentVideoRef);
       }
     };
   }, []);

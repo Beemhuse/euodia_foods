@@ -59,7 +59,7 @@ export default function Page() {
           Admin Reset Your Password
         </h2>
         <p className="text-center text-gray-700 mb-4">
-          Enter your email address and we'll send you a link to reset your
+          Enter your email address and we&apos;ll send you a link to reset your
           password.
         </p>
 
