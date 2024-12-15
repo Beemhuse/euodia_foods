@@ -57,7 +57,7 @@ const BestSellerDishes = () => {
     hidden: { opacity: 0, y: 50 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.8 } }
   };
-console.log(dishes)
+
   return (
     <motion.div
       className="py-16 bg-gradient-to-b from-gray-100 to-gray-50"
