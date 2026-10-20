@@ -111,8 +111,7 @@ export default function SideNav({ ...props }) {
 
       </nav>
 
-
-      <button onClick={toggleSidebar} className="my-4 bg-green-500 p-2 rounded">
+<button onClick={toggleSidebar} className="my-4 bg-green-500 p-2 rounded">
         {isExpanded ? <div  onClick={handleLogout} className="flex items-center text-white gap-4"><TbLogout /> <span>Logout</span> </div>  : <TbLogout />}
       </button>
     </menu>

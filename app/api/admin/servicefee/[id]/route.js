@@ -43,7 +43,6 @@ import { NextResponse } from "next/server";
 //   }
 // }
 
-
 export async function PATCH(req, { params }) {
   if (!isAdmin(req.headers)) {
     return new Response(JSON.stringify({ error: "Forbidden" }), {
@@ -85,7 +84,6 @@ export async function PATCH(req, { params }) {
     );
   }
 }
-
 
 export async function DELETE(req,{ params }) {
   if (!isAdmin(req.headers)) {

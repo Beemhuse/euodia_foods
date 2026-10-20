@@ -9,9 +9,9 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { handleGenericError } from "@/utils/errorHandler";
 import useCookies from "@/hooks/useCookies";
-import 'react-toastify/dist/ReactToastify.css';
-import { toast, ToastContainer } from "react-toastify";
-import "@/app/globals.css"
+
+import { toast } from "react-toastify";
+
 import LoadingScreen from "@/components/reusables/LoadingScreen";
 
 const schema = yup.object().shape({
@@ -43,6 +43,9 @@ export default function Signup() {
     try {
       setLoading(true);
       const response = await axios.post('/api/signup', { name, email, password });
+      if (!response.data?.user?._id || !response.data?.token) {
+        throw new Error('Registration did not complete. Please try again.');
+      }
       setLoading(false);
       toast.success("Signup successful");
       setCookie("euodia_token", response?.data?.token);
@@ -117,7 +120,6 @@ export default function Signup() {
         </p>
       </form>
 
-      <ToastContainer />
-    </div>
+</div>
   );
 }

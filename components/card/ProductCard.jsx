@@ -2,7 +2,7 @@ import Image from "next/image";
 import PropTypes from "prop-types";
 import { BsThreeDots } from "react-icons/bs";
 import { useEffect, useRef, useState } from "react";
-import { client } from '@/utils/sanity/client'; // Assuming the client is set up for Sanity
+ // Assuming the client is set up for Sanity
 import EditMealModal from "../reusables/modal/EditMealModal";
 import axios from "axios";
 import { toast } from "react-toastify";

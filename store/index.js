@@ -1,6 +1,6 @@
 // src/redux/store.js
 import { configureStore, combineReducers } from '@reduxjs/toolkit';
-import storage from 'redux-persist/lib/storage'; // defaults to localStorage for web
+ // defaults to localStorage for web
 import cartReducer from './reducers/cartReducer';
 import {
   FLUSH,

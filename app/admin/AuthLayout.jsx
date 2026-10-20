@@ -1,6 +1,5 @@
 "use client"
 
-
 import checkTokenExpirationMiddleware from '@/middleware/checkTokenMiddleware';
 import React, { Fragment, useEffect } from 'react'
 

@@ -1,6 +1,6 @@
 "use client"
 import React, { useEffect, useState } from "react";
-import Link from "next/link";
+
 import { FcNext, FcPrevious } from "react-icons/fc";
 import { client } from "@/utils/sanity/client";
 import OrderTable from "@/components/OrderTable";

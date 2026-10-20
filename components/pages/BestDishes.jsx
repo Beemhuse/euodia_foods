@@ -3,10 +3,9 @@ import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { client } from '@/utils/sanity/client';
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import imageUrlBuilder from '@sanity/image-url';
+import { toast } from 'react-toastify';
 
+import imageUrlBuilder from '@sanity/image-url';
 
 // Configure the image URL builder
 const builder = imageUrlBuilder(client);
@@ -107,7 +106,7 @@ const BestSellerDishes = () => {
           )}
         </div>
       </div>
-      <ToastContainer />
+
     </motion.div>
   );
 };

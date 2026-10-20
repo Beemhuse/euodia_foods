@@ -21,8 +21,7 @@ const CreateCategoryModal = ({ isOpen, onClose }) => {
   const adminToken = getCookie("admineu_token");
   const [loading, setLoading] = useState(false);
 
-  
-  const onSubmit = async (data) => {
+const onSubmit = async (data) => {
     try {
       setLoading(true);
   

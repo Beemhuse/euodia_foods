@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server';
 import { client } from '@/utils/sanity/client';
 import { isAdmin } from '@/utils/lib/auth';
-import { uploadImageToSanity } from '@/utils/sanity/uploadImageToSanity';
 
 export async function PATCH(req) {
   try {
@@ -18,9 +17,7 @@ export async function PATCH(req) {
       return NextResponse.json({ error: 'Meal ID is required' }, { status: 400 });
     }
 
-
-
-    const updatedMeal = {
+const updatedMeal = {
       _type: 'dish', // Ensure this matches the type in your schema
       title,
       description,

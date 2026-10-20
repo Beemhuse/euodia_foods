@@ -12,10 +12,13 @@ export async function POST(req) {
   try {
     const body = await req.json();
     const { email, password } = body;
-const formattedEmail = email.toLowerCase();
+    if (typeof email !== 'string' || !email.trim() || typeof password !== 'string' || !password) {
+      return Response.json({ error: 'Email and password are required' }, { status: 400 });
+    }
+    const formattedEmail = email.trim().toLowerCase();
     // Retrieve user from Sanity (implement this function)
     const user = await getUserIdByEmail(formattedEmail);
-    if (!user) {
+    if (!user || typeof user.password !== 'string' || !user.password) {
       return new Response(JSON.stringify({ error: 'Invalid credentials' }), {
         status: 401,
         headers: { 'Content-Type': 'application/json' }
@@ -35,7 +38,7 @@ const formattedEmail = email.toLowerCase();
 
     // Generate JWT token
     const token = jwt.sign({ userId: user._id }, process.env.NEXT_PRIVATE_JWT_SECRET_KEY, { expiresIn: '7d' });
-    return new Response(JSON.stringify({ message: 'User signed in successfully!', user, token }), {
+    return new Response(JSON.stringify({ message: 'User signed in successfully!', user: { _id: user._id, email: user.email }, token }), {
       status: 200,
       headers: { 'Content-Type': 'application/json' }
     });

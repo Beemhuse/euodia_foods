@@ -66,7 +66,7 @@ const Checkout = () => {
   };
 
   const subtotal = calculateSubtotal();
-  const vat = subtotal * 0.07;
+  const vat = subtotal * 0.075;
   const calculateTotal = () => {
     const subtotal = calculateSubtotal();
     const serviceFee = selectedServiceFee ?? 0;
@@ -220,8 +220,7 @@ const Checkout = () => {
                     )}
                   </div>
 
-
-                  <div className="mb-4">
+<div className="mb-4">
                     <label
                       className="block text-sm font-medium text-gray-700"
                       htmlFor="phoneNumber"
@@ -243,8 +242,7 @@ const Checkout = () => {
                     )}
                   </div>
 
-
-                  <div className="mb-4">
+<div className="mb-4">
                     <label
                       className="block text-sm font-medium text-gray-700"
                       htmlFor="email"
@@ -343,9 +341,7 @@ const Checkout = () => {
       {loading && <LoadingScreen />}
     </HomeLayout>
 
-
-  
-  );
+);
 };
 
 export default Checkout;

@@ -47,9 +47,7 @@ const useCookies = () => {
     setCookiesState(getAllCookies());
   }, [getAllCookies]);
 
-
-
-  useEffect(() => {
+useEffect(() => {
     setCookiesState(getAllCookies());
   }, [getAllCookies]);
 

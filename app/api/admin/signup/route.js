@@ -3,10 +3,14 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { v4 as uuidv4 } from 'uuid';
 import { createAdmin, getAdminByEmail } from '@/utils/sanity/client';
+import { isAdmin } from '@/utils/lib/auth';
 
 const secretKey = process.env.NEXT_PRIVATE_JWT_SECRET_KEY;
 
 export async function POST(req) {
+  if (!isAdmin(req.headers)) {
+    return Response.json({ error: 'Forbidden' }, { status: 403 });
+  }
   try {
     const { name, email, password } = await req.json();
 

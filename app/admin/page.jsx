@@ -1,5 +1,4 @@
 "use client";
-import "../globals.css";
 
 import Table from "@/components/reusables/table/Table";
 import BestSellers from "@/components/pages/admin/BestSellers";

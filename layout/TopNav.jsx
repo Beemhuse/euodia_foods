@@ -36,8 +36,7 @@ export default function TopNav({ title, openSideBar, ...props }) {
     setIsDropdownOpen(!isDropdownOpen);
   };
 
- 
-  const handleLogout = () => {
+const handleLogout = () => {
     removeCookies("admineu_token");
     router.push("/auth/login");
   };
@@ -55,14 +54,12 @@ export default function TopNav({ title, openSideBar, ...props }) {
       document.removeEventListener('mousedown', handleClickOutside);
     }
 
-
-    return () => {
+return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [isDropdownOpen]);
 
-  
-  return (
+return (
     <menu className="flex bg-white dark:text-white dark:bg-black items-center justify-between px-4 py-6 md:px-12" {...props}>
       <div className="flex items-center gap-2">
         <Image src="/logo.svg" width={60} height={60} alt="logo" />
