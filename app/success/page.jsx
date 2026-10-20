@@ -11,9 +11,6 @@ const Success = () => {
     const [loading, setLoading] = useState(true);
     const [paymentStatus, setPaymentStatus] = useState(null);
 
-    const urlSearchParams = new URLSearchParams(window.location.search);
-    const trxref = urlSearchParams.get("trxref");
-
     useEffect(() => {
         if (paymentStatus === 200) {
             runFireworks();
@@ -21,11 +18,12 @@ const Success = () => {
     }, [paymentStatus]);
 
     useEffect(() => {
+        const trxref = new URLSearchParams(window.location.search).get('trxref');
         if (trxref) {
             const fetchVerificationResult = async () => {
                 try {
                     const response = await axios.get(`/api/verify?trxref=${trxref}`);
-                    setPaymentStatus(response?.data?.status);
+                    setPaymentStatus(response.data.success ? response.status : null);
                 } catch (error) {
                     console.error("Error verifying payment:", error);
                 } finally {
@@ -37,7 +35,7 @@ const Success = () => {
         } else {
             setLoading(false);
         }
-    }, [trxref]);
+    }, []);
 
     if (loading) {
         return (
@@ -49,6 +47,16 @@ const Success = () => {
                     </svg>
                     <p className="mt-4 text-lg text-gray-700">Verifying your payment...</p>
                 </div>
+            </div>
+        );
+    }
+
+    if (paymentStatus !== 200) {
+        return (
+            <div className="min-h-screen flex flex-col items-center justify-center gap-4 p-6 text-center">
+                <h1 className="text-2xl font-bold">Payment could not be confirmed</h1>
+                <p>Please check your payment reference or contact support before trying again.</p>
+                <Link href="/contact-us" className="text-green-700 underline">Contact support</Link>
             </div>
         );
     }

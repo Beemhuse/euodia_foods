@@ -21,9 +21,8 @@ export async function GET(req) {
           }
         }
       }`;
-  
 
-    // Fetch dishes from Sanity
+// Fetch dishes from Sanity
     const dishes = await client.fetch(query);
     return new NextResponse(JSON.stringify({ data: dishes }), {
       status: 200,

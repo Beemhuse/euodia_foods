@@ -1,5 +1,4 @@
 import nodemailer from 'nodemailer';
-import { logoBase64 } from './imageBase';
 
 export default async function sendResetMailToUser(to, token) {
   const transporter = nodemailer.createTransport({
@@ -12,8 +11,7 @@ export default async function sendResetMailToUser(to, token) {
 
   const resetLink = `${process.env.NEXT_PUBLIC_BASE_URL}/reset-password?token=${token}`;
 
-
-  const mailOptions = {
+const mailOptions = {
     from: process.env.NEXT_PRIVATE_EMAIL,
     to,
     subject: 'Password Reset',

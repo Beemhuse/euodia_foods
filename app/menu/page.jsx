@@ -4,7 +4,6 @@ import Dishes from '@/components/menu-components/Dishes';
 import Category from '@/components/reusables/category/page';
 import React, { useEffect, useState } from 'react';
 import { client } from '@/utils/sanity/client';
-import Pagination from '@/components/reusables/Pagination';
 
 export default function Page() {
   const [categories, setCategories] = useState([]);
@@ -30,8 +29,7 @@ export default function Page() {
         }`;
         const result = await client.fetch(query);
 
-
-        // Extract unique categories from the fetched dishes
+// Extract unique categories from the fetched dishes
         const uniqueCategories = Array.from(new Set(result.map(dish => dish.category._id)))
           .map(id => {
             return result.find(dish => dish.category._id === id).category;
@@ -53,10 +51,8 @@ export default function Page() {
   const handleCategorySelect = (categoryTitle) => {
     setSelectedCategory(categoryTitle);
   };
-  
 
-
-  return (
+return (
     <HomeLayout>
       <div className='bg-white min-h-screen border border-t-2'>
         <h1 className="text-center font-bold text-4xl text-green-600 mb-5 pt-5">
@@ -67,8 +63,7 @@ export default function Page() {
         </div>
         <Dishes selectedCategory={selectedCategory}  />
 
-      
-      </div>
+</div>
     </HomeLayout>
   );
 }

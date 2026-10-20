@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Table from "@/components/reusables/table/Table";
 import { client } from "@/utils/sanity/client";
-import { FcNext, FcPrevious } from "react-icons/fc";
+
 import Pagination from '@/components/reusables/Pagination';
 import useCurrencyFormatter from '@/hooks/useCurrencyFormatter';
 

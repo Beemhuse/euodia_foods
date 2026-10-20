@@ -3,11 +3,11 @@ import { ensureUserExists } from '../lib/checkUser';
 import { v4 as uuidv4 } from 'uuid'; // Import the UUID library for generating unique IDs
 
 export const client = createClient({
-  projectId: '8bms2xqg',
-  dataset: 'main',
+  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || '8bms2xqg',
+  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'main',
   apiVersion: '2024-03-11',
   useCdn: false,
-  token: process.env.NEXT_PUBLIC_SANITY_TOKEN
+  token: typeof window === 'undefined' ? process.env.SANITY_API_TOKEN : undefined
 });
 
 export const getUserByEmail = async (email) => {
@@ -18,10 +18,9 @@ export const getUserByEmail = async (email) => {
     return user;
   } catch (error) {
     console.error('Error fetching user by email:', error);
-    return null;
+    throw error;
   }
 };
-
 
 export const createAnonymousUser = async (email, fullName) => {
   try {
@@ -65,13 +64,12 @@ export async function getAdminByEmail(email) {
   return client.fetch(query, { email });
 }
 
-
 export const createUser = async (user) => {
   try {
     const sanityResponse = await client.create({ _type: 'customer', ...user });
     return sanityResponse;
   } catch (sanityError) {
-    return { error: 'Internal Server Error', message: sanityError.message };
+    throw sanityError;
   }
 };
 export const createAdmin = async (user) => {
@@ -84,7 +82,6 @@ export const createAdmin = async (user) => {
     return { error: 'Internal Server Error', message: sanityError.message };
   }
 };
-
 
 export const createOrder = async ({
   products,
@@ -102,7 +99,7 @@ export const createOrder = async ({
 }) => {
   try {
     // Ensure the user exists or create a new one if necessary
-    const ensuredUserId = await ensureUserExists(customer?._ref);
+    await ensureUserExists(customer?._ref);
 
     // Map products to an array of references with unique keys
     const cartItemsWithKeys = products.map((item, index) => ({
@@ -113,7 +110,6 @@ export const createOrder = async ({
 
     // Ensure that the serviceFee and user references are valid strings
     const serviceFeeRef = typeof serviceFee === 'string' ? serviceFee : serviceFee._ref;
-    const userRef = typeof ensuredUserId === 'string' ? ensuredUserId : ensuredUserId._id;
     // Create the order document in Sanity
     const order = await client.create({
       _type: 'order',
@@ -145,7 +141,6 @@ export const createOrder = async ({
   }
 };
 
-
 export const createTransaction = async ({
   order,
   amount,
@@ -155,15 +150,13 @@ export const createTransaction = async ({
   method
 }) => {
   
-  console.log("transaction ==>>>", order)
   try {
     // Your logic to create a transaction document in Sanity
     // Generate a shorter custom ID for the transaction
     const shortUuid = uuidv4().split('-')[0]; // Take only the first segment of the UUID
     const customTransactionId = `txn-${shortUuid}`;
 
-
-    const transaction = await client.create({
+const transaction = await client.create({
       _type: 'transaction',
       id: customTransactionId,
       order,
@@ -175,31 +168,12 @@ export const createTransaction = async ({
       method
     });
 
-    console.log('Transaction saved to Sanity:', transaction);
-
-    
-    return transaction;
+return transaction;
   } catch (sanityError) {
     console.error('Error saving transaction to Sanity:', sanityError);
     return { error: 'Internal Server Error', message: sanityError.message };
   }
 };
-
-export const getTransactionRefs = async () => {
-  try {
-    // Query Sanity to fetch all transactions and select the transactionRef field
-    const transactions = await client.fetch(`*[_type == 'transaction']{transactionRef}`);
-
-    // Extract and return an array of transactionRef values
-    const transactionRefs = transactions.map(transaction => transaction.transactionRef);
-    
-    return transactionRefs;
-  } catch (error) {
-    console.error('Error fetching transaction references:', error);
-    throw error;
-  }
-};
-
 
 export const updateTransactionStatus = async (transactionRef, newStatus) => {
   try {

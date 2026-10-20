@@ -22,16 +22,3 @@ export const runFireworks = () => {
     confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
   }, 250);
 }
-
-
-
-
-export const getNextMonth = () => {
-  let d = new Date();
-  const year = d.getFullYear();
-  const month = d.getMonth();
-  const day = d.getDate();
-  const nextMonth = new Date(year, month + 1, day);
-
-  return nextMonth;
-};

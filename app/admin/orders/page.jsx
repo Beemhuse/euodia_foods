@@ -5,15 +5,13 @@ import { client } from '@/utils/sanity/client';
 import Pagination from '@/components/reusables/Pagination';
 import { useRouter } from 'next/navigation';
 
-
 export default function Page() {
   const router = useRouter();
   const [orders, setOrders] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10); // Set the number of items per page
-  
 
-  useEffect(() => {
+useEffect(() => {
     const fetchOrders = async () => {
       const query = `*[_type == "order"]{
         _id,

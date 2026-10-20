@@ -1,19 +1,14 @@
 "use client"
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import InputComponent from "@/components/reusables/input/InputComponent";
 import { useForm } from "react-hook-form";
 import Button from "@/components/reusables/buttons/Button";
 import axios from "axios";
-import { useRouter } from "next/navigation";
 import { handleGenericError } from "@/utils/errorHandler";
 import useCookies from "@/hooks/useCookies";
-import { toast, ToastContainer } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
-import "@/app/globals.css"
-import LoadingScreen from "@/components/reusables/LoadingScreen";
-
+import { toast } from "react-toastify";
 
 const schema = yup.object().shape({
   email: yup.string().email("Invalid email").required("Email is required"),
@@ -25,9 +20,10 @@ const schema = yup.object().shape({
 
 export default function Login() {
   const [loading, setLoading] = useState(false);
+  const submitting = useRef(false);
   // const [success, setSuccess] = useState('');
   // const [error, setError] = useState('');
-  const { setCookie } = useCookies();
+  const { setCookie, getCookie } = useCookies();
 
   const {
     register,
@@ -35,32 +31,33 @@ export default function Login() {
     formState: { errors },
   } = useForm({ resolver: yupResolver(schema) });
 
-  const router = useRouter();
-
   const onSubmit = async (data) => {
+    if (submitting.current) return;
+    submitting.current = true;
     const { email, password } = data;
     try {
       setLoading(true);
       const response = await axios.post('/api/login', { email, password });
       
-      if (response) {
-        setCookie("euodia_token", response?.data?.token)
-        setCookie("euodia_user", response?.data?.user._id)
+      const { token, user } = response.data ?? {};
+      if (!token || !user?._id) {
+        throw new Error('Login did not complete. Please try again.');
       }
-
-      setLoading(false);
-      toast.success('Login successful');
-      router.push('/');
+      setCookie("euodia_token", token);
+      setCookie("euodia_user", user._id);
+      if (getCookie("euodia_token") !== token || getCookie("euodia_user") !== user._id) {
+        throw new Error('Unable to save your login. Please allow cookies for this site.');
+      }
+      // Reload the destination with the saved session; keep submission locked until navigation.
+      window.location.replace('/');
     } catch (error) {
       const errMsg = handleGenericError(error);
       toast.error(errMsg)
       // setError(errMsg);
+      submitting.current = false;
       setLoading(false);
     }
   };
-  // if (loading) {
-  //   return <LoadingScreen />;
-  // }
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <form
@@ -115,7 +112,6 @@ export default function Login() {
         </p>
       </form>
 
-      <ToastContainer />
-    </div>
+</div>
   );
 }

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { client } from "@/utils/sanity/client";
 import { useCategories } from '@/hooks/swr/useCategories';
 import { toast } from 'react-toastify';

@@ -5,9 +5,8 @@ import { useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { handleGenericError } from "@/utils/errorHandler";
-import "react-toastify/dist/ReactToastify.css";
-import { getCookie } from "@/utils/getCookie";
 
+import { getCookie } from "@/utils/getCookie";
 
 export default function ServiceFeeForm({ serviceFee, onClose,mutate, onSuccess }) {
   const {
@@ -79,11 +78,9 @@ export default function ServiceFeeForm({ serviceFee, onClose,mutate, onSuccess }
       });
     }
   };
-  
 
-  return (
+return (
     <div className="max-w-md mx-auto mt-10">
-      {/* <ToastContainer /> */}
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div>
           <label

@@ -1,36 +1,52 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Euodia Foods
 
-## Getting Started
+Next.js App Router storefront and admin dashboard using React, Redux Persist,
+Sanity, Paystack, and Gmail SMTP. Sanity Studio/schema source is not included.
 
-First, run the development server:
+## Local setup
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+1. Install Node.js 24.x and npm. This checkout was inspected with Node 24.14.0 and npm 11.9.0.
+2. Run `npm ci` to install locked dependencies.
+3. Copy `.env.example` to `.env.local` and fill in server credentials.
+   Generate a JWT secret with `node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"`.
+4. Run `npm run dev` and open http://localhost:3000.
+5. Run `npm run lint` and `npm run build` before deploying. `npm start` serves a production build.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The storefront can start without payment/email credentials; those features require
+configuration. Content requires access to Sanity. Allow http://localhost:3000 in the
+Sanity project's CORS settings for browser reads. Use a development dataset and
+Paystack test credentials for integration work.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+## Environment
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+See `.env.example`. `NEXT_PUBLIC_*` values are browser-visible.
+`SANITY_API_TOKEN` must stay server-only. Remove and rotate any previously deployed
+`NEXT_PUBLIC_SANITY_TOKEN`. Existing browser admin mutations need authenticated server
+routes and will not work with a server-only token. Review Sanity dataset visibility:
+customer passwords, reset tokens, addresses, and orders must not be publicly readable.
 
-## Learn More
+Email uses Gmail SMTP. `NEXT_PRIVATE_PASS` should be an app password for the mailbox
+in `NEXT_PRIVATE_EMAIL`. `NEXT_PUBLIC_BASE_URL` controls password-reset links.
+Provision the first admin through a trusted Sanity/server workflow;
+`/api/admin/signup` now requires an existing admin token.
 
-To learn more about Next.js, take a look at the following resources:
+See [PROJECT_REVIEW.md](PROJECT_REVIEW.md) for remaining defects and validation results.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Deployment runtime
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+`package.json` selects Node.js `24.x` for Vercel; CI and `.nvmrc` use Node 24 too.
+Deploy this change for the runtime selection to take effect. If configuring Vercel
+manually, choose **Project Settings > Build and Deployment > Node.js Version > 24.x**.
+The hosted project settings and deployment have not been changed from this workspace.
 
-## Deploy on Vercel
+## Repository layout
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- `app/`: pages, layouts, and API routes (Next.js App Router).
+- `components/`, `layout/`: shared storefront and admin UI.
+- `hooks/`, `store/`, `utils/`: client state and service helpers.
+- `public/`: referenced site media, icons, manifest, and SEO files.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Global CSS and the toast container are defined once in `app/layout.js`.
+The active Git hook is `.husky/pre-commit`; it runs lint before a commit.
+Generate dependency reports when needed with `npm audit --omit=dev --json`;
+the generated `dependency-audit.json` file is ignored.

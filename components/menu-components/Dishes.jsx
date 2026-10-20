@@ -4,8 +4,8 @@ import Image from 'next/image';
 import { client } from '@/utils/sanity/client';
 import { addCartItem } from '@/store/reducers/cartReducer';
 import { useDispatch } from 'react-redux';
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { toast } from 'react-toastify';
+
 import useCurrencyFormatter from '@/hooks/useCurrencyFormatter';
 import { getCookie } from '@/utils/getCookie';
 import Pagination from '../reusables/Pagination';
@@ -152,13 +152,12 @@ const Dishes = ({ selectedCategory }) => {
     setCurrentPage(page);
   };
 
-
-  // Combine category and search filtering
+// Combine category and search filtering
   const filteredDishes = dishes.filter((dish) =>
-    (!selectedCategory || dish.category.title === selectedCategory) &&
-    (dish.title.toLowerCase().includes(searchQuery) ||
-      dish.description.toLowerCase().includes(searchQuery) ||
-      dish.price.toString().includes(searchQuery))
+    (!selectedCategory || dish.category?.title === selectedCategory) &&
+    ((dish.title ?? '').toLowerCase().includes(searchQuery) ||
+      (dish.description ?? '').toLowerCase().includes(searchQuery) ||
+      String(dish.price ?? '').includes(searchQuery))
   );
 
   const totalPages = Math.ceil(filteredDishes?.length / itemsPerPage);
@@ -176,8 +175,7 @@ const Dishes = ({ selectedCategory }) => {
           className="w-full sm:w-2/3 md:w-1/2 lg:w-1/3 px-4 py-2 mb-4 text-gray-700 bg-white border rounded-md focus:border-green-500 focus:ring focus:ring-green-300 focus:ring-opacity-40"
         />
 
-
-        <div className="grid gap-8 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1">
+<div className="grid gap-8 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1">
           {loading ? (
             <div className="col-span-full flex justify-center items-center">
               <div className="w-16 h-16 border-t-4 border-b-4 border-accent rounded-full animate-spin"></div>
@@ -229,7 +227,7 @@ const Dishes = ({ selectedCategory }) => {
           onAddToCart={handleAddToCart}
         />
       )}
-      <ToastContainer />
+
     </div>
   );
 };

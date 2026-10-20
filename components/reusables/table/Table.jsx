@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import CircularLoader from '@/components/layout/loader/CirclarLoader';
-import DottedLoader from '@/components/layout/loader/DottedLoader';
 
 const Table = ({ columns, data, onRowClick, isLoading }) => {
   const colHeaders = columns?.map(({ title, key }) => (

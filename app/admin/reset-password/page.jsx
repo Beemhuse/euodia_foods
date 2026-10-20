@@ -3,8 +3,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import InputComponent from "@/components/reusables/input/InputComponent";
 import Button from "@/components/reusables/buttons/Button";
-import { toast, ToastContainer } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
+import { toast } from "react-toastify";
 
 export default function ResetPassword() {
   const router = useRouter();
@@ -68,7 +67,6 @@ export default function ResetPassword() {
         {success && <p className="text-green-500 text-center">{success}</p>}
       </form>
 
-      <ToastContainer />
-    </div>
+</div>
   );
 }

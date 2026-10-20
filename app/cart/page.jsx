@@ -62,8 +62,7 @@ const Cart = () => {
     })
   }
 
-
-  return (
+return (
     <HomeLayout>
       <div className="bg-white border-t border-gray-200">
         <div className="container mx-auto py-20 lg:py-20 ">

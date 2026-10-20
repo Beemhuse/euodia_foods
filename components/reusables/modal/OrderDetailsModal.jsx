@@ -74,8 +74,7 @@ const OrderDetailsModal = ({ order, onClose }) => {
           </ul>
         </div>
 
-      
-      </div>
+</div>
     </div>
   );
 };

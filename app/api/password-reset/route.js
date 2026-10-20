@@ -8,7 +8,7 @@ export async function POST(req) {
     const { email } = await req.json();
 const formattedEmail = email.toLowerCase();
     // 1. Find the user by email
-    const user = await client.fetch(`*[_type == "customer" && email == $email][0]`, { formattedEmail });
+    const user = await client.fetch(`*[_type == "customer" && email == $email][0]`, { email: formattedEmail });
 
     if (!user) {
       return NextResponse.json({ message: 'User with this email does not exist.' }, { status: 404 });

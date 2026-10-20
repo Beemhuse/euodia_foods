@@ -3,7 +3,6 @@ import StoreProvider from "./StoreProvider";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-
 export const metadata = {
   title: "Euodia Whole Foods - Healthy, Therapeutic Meals for Wellness and Longevity",
   description:
@@ -30,26 +29,21 @@ export const metadata = {
   },
   icons: {
     icon: "/favicon.ico", // Correct the path to start from the root
-    apple: "/apple-touch-icon.png",
+    apple: "/icon/apple-touch-icon.png",
     other: [
       {
         rel: "icon",
-        url: "/favicon-32x32.png",
+        url: "/icon/favicon-32x32.png",
         sizes: "32x32",
       },
       {
         rel: "icon",
-        url: "/favicon-16x16.png",
+        url: "/icon/favicon-16x16.png",
         sizes: "16x16",
       },
       {
         rel: "manifest",
         url: "/site.webmanifest",
-      },
-      {
-        rel: "mask-icon",
-        url: "/safari-pinned-tab.svg",
-        color: "#5bbad5",
       },
     ],
   },

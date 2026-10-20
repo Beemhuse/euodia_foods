@@ -25,16 +25,14 @@ export async function updateUserAfterOrder(userId, amount, order, isSuccess = tr
       return updatedUser;
     } else {
       // If the user does not exist, create a new user document with the provided data
-     
 
-      return null;
+return null;
     }
   } catch (error) {
     console.error('Error updating or creating user:', error);
     throw new Error('Failed to update or create user after order');
   }
 }
-
 
 export async function updateTransaction(customerId, transaction) {
   try {
@@ -47,7 +45,6 @@ export async function updateTransaction(customerId, transaction) {
     throw error;
   }
 }
-
 
 // import { client } from "./client";
 // import { v4 as uuidv4 } from 'uuid';

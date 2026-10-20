@@ -10,8 +10,6 @@ import { useRouter } from "next/navigation";
 import { handleGenericError } from "@/utils/errorHandler";
 import useCookies from "@/hooks/useCookies";
 import { toast } from "react-toastify";
-import Link from "next/link";
-import "@/app/globals.css";
 
 const schema = yup.object().shape({
   email: yup.string().email("Invalid email").required("Email is required"),

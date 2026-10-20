@@ -36,9 +36,8 @@ export default function PopularMeals() {
   
     fetchBestSellers();
   }, []);
-  
 
-  // Function to add a dish to the Best Selling Dishes document
+// Function to add a dish to the Best Selling Dishes document
   const addToBestSellers = async (meal) => {
 BestSeller = {
       _type: 'bestSellingDish',
@@ -91,12 +90,8 @@ BestSeller = {
       toast.error('Failed to permanently delete dish from Best Selling Dishes.');
     }
   };
-  
-  
-  
-  
 
-  return (
+return (
     <div className="grid grid-cols-4 gap-6">
     {bestSellers.length === 0 && <div>No available content</div>}
     {bestSellers.map((meal) => (

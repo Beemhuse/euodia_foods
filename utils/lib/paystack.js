@@ -30,15 +30,12 @@ export const initializePaystack = async (email, amount) => {
     const amountInKobo = parseInt(amount, 10) * 100;
     const transactionRef = generateTransactionRef(7);
 
-    // Log for potential debugging
-
     const response = await axios.post(
       "https://api.paystack.co/transaction/initialize",
       {
         email,
-        amount: amount * 100,
+        amount: amountInKobo,
         reference: `Euodia-${transactionRef}`,
-        // callback_url: callbackUrl,
 
       },
       {

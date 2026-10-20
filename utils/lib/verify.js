@@ -1,5 +1,4 @@
 import axios from "axios";
-import { updateTransactionStatus } from "../sanity/client";
 // import { updateTransactionStatus } from "./client";
 
 export const verifyPaystackPayment = async (trxref) => {
@@ -21,10 +20,8 @@ export const verifyPaystackPayment = async (trxref) => {
     }
 
     if (responseData.data.status === 'success') {
-      await updateTransactionStatus(trxref, "success");
       return true; // Payment is successfully verified
     } else if (responseData.data.status === 'failed') {
-      await updateTransactionStatus(trxref, "success");
 
       console.error('Payment verification failed:', responseData.data.gateway_response);
       return false;
